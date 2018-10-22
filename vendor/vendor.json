@@ -1,0 +1,42 @@
+{
+	"comment": "",
+	"ignore": "test",
+	"package": [
+		{
+			"checksumSHA1": "BBgnSsP98pZ3vmg8j9PyYDTmZXs=",
+			"path": "github.com/wesleyholiveira/punchbot",
+			"revision": ""
+		},
+		{
+			"checksumSHA1": "a/nWvPhAE7jHAxJFU5g9gmOP+1A=",
+			"path": "github.com/wesleyholiveira/punchbot/commands",
+			"revision": ""
+		},
+		{
+			"checksumSHA1": "J9zZocDzyTcbPlC4aRDsDrXcA6c=",
+			"path": "github.com/wesleyholiveira/punchbot/configs",
+			"revision": ""
+		},
+		{
+			"checksumSHA1": "0ptEaafljQnEamyVfMD8UXsuUqg=",
+			"path": "github.com/wesleyholiveira/punchbot/helpers",
+			"revision": ""
+		},
+		{
+			"checksumSHA1": "CvWyy0hLlb7NPeukZNv+IaBgiVw=",
+			"path": "github.com/wesleyholiveira/punchbot/models",
+			"revision": ""
+		},
+		{
+			"checksumSHA1": "0UwnHzCOzy7qC+pYoxGd9y7hEeg=",
+			"path": "github.com/wesleyholiveira/punchbot/parallelism",
+			"revision": ""
+		},
+		{
+			"checksumSHA1": "xqTP5EmLoh8EdkduIZzHloiBfrg=",
+			"path": "github.com/wesleyholiveira/punchbot/services",
+			"revision": ""
+		}
+	],
+	"rootPath": "github.com/wesleyholiveira/punchbot"
+}
