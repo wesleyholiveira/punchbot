@@ -8,32 +8,64 @@ import (
 	log "github.com/sirupsen/logrus"
 	"github.com/wesleyholiveira/punchbot/configs"
 	"github.com/wesleyholiveira/punchbot/models"
+	"github.com/wesleyholiveira/punchbot/services"
 )
 
 func Notifier(s *discordgo.Session, projects chan *[]models.Project) {
 	for p := range projects {
-		log.Info("Entrou no notifier")
+		log.Info("Notifier is on")
 
-		var msg string
+		ch, _ := s.Channel(configs.ChannelID)
+		guild, _ := s.Guild(ch.GuildID)
+
+		if guild != nil {
+			projectsPunch := models.GetProjects()
+			notify(s, p, PrevProject, *projectsPunch, ch.ID)
+		}
+
 		myNotifications := models.GetNotifyUser()
-
 		if myNotifications != nil {
 			for key := range myNotifications {
 				prjs := *myNotifications[key].Projects
-				myProjects := make([]models.Project, len(*p))
-				diff := int(math.Abs(float64(len(*p) - len(myProjects))))
-				copy(myProjects, prjs)
+				notify(s, p, PrevProject, prjs, key)
+			}
+		}
+	}
+}
 
-				log.Infof("Diff: %d, PUNCH PROJECTS: %d, MY PROJECTS: %d", diff, len(*p), len(myProjects))
+func notify(s *discordgo.Session, p *[]models.Project, prev *[]models.Project, prjs []models.Project, channelID string) error {
+	myProjects := make([]models.Project, len(prjs))
+	diff := int(math.Abs(float64(len(*p) - len(*prev))))
 
-				for _, project := range *p {
-					for i := 0; i < diff; i++ {
-						if project.IDProject == myProjects[i].IDProject {
-							msg += fmt.Sprintf("O **anime %s** acabou de sair no site da **__%s__**", project.IDProject, configs.PunchEndpoint)
-						}
-					}
+	if diff == 0 {
+		diff = 1
+	}
+
+	copy(myProjects, prjs)
+
+	projectsSlice := *p
+	projectsSlice = projectsSlice[0:diff]
+
+	log.Infof("Diff: %d, PREV PROJECTS: %d, CURRENT PROJECTS: %d, MY PROJECTS: %d", diff, len(*prev), len(*p), len(myProjects))
+
+	for _, myProject := range myProjects {
+		for _, project := range projectsSlice {
+			if project.IDProject == myProject.IDProject {
+				log.Info("PROJECT MATCHED!")
+				msg := fmt.Sprintf("O **%s** do anime **%s** acabou de ser lançado! -> %s\n",
+					project.Numero,
+					project.Project,
+					configs.PunchEndpoint+project.Link)
+
+				respImage := services.Get(project.Screen).Body
+				defer respImage.Close()
+
+				_, err := s.ChannelFileSendWithMessage(channelID, msg, "teste.jpg", respImage)
+				if err != nil {
+					log.Error(err)
 				}
 			}
 		}
 	}
+	return nil
 }
