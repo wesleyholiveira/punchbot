@@ -6,18 +6,17 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/wesleyholiveira/punchbot/redis"
-
 	"github.com/bwmarrin/discordgo"
 	log "github.com/sirupsen/logrus"
 	"github.com/wesleyholiveira/punchbot/commands"
 	"github.com/wesleyholiveira/punchbot/configs"
 	"github.com/wesleyholiveira/punchbot/parallelism"
+	"github.com/wesleyholiveira/punchbot/redis"
 )
 
 func main() {
 	rClient := redis.NewClient()
-	timer := time.NewTicker(15 * time.Second)
+	timer := time.NewTicker(configs.Timer * time.Millisecond)
 
 	log.SetOutput(os.Stdout)
 
@@ -36,6 +35,8 @@ func main() {
 	sc := make(chan os.Signal, 1)
 	signal.Notify(sc, syscall.SIGINT, syscall.SIGTERM, os.Interrupt, os.Kill)
 
+	go parallelism.GetProjects()
+	go parallelism.GetProjectsCalendar()
 	go parallelism.TickerHTTP(timer, commands.ProjectChan)
 	go parallelism.Notifier(d, commands.ProjectChan)
 
