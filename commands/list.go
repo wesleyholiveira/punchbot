@@ -25,11 +25,12 @@ func animeListFormat(id, projectName string) string {
 	return fmt.Sprintf("**%s** - %s\n", id, projectName)
 }
 
-func List(projects []models.Project, s *discordgo.Session, m *discordgo.MessageCreate, args []string) {
+func List(s *discordgo.Session, m *discordgo.MessageCreate, args []string) {
+	projects := models.GetCalendarProjects()
 	list := ""
 
 	if len(args) > 0 {
-		list = animeList(&projects, func(project *models.Project) bool {
+		list = animeList(projects, func(project *models.Project) bool {
 			for _, arg := range args {
 				if strings.Contains(strings.ToLower(project.Project), strings.ToLower(arg)) {
 					return true
@@ -37,15 +38,18 @@ func List(projects []models.Project, s *discordgo.Session, m *discordgo.MessageC
 			}
 			return false
 		})
-	} else {
-		list = animeList(&projects, func(project *models.Project) bool { return true })
+	} else if len(*projects) > 0 {
+		list = animeList(projects, func(project *models.Project) bool { return true })
 		rows := strings.Split(list, "\n")
 		list = strings.Join(rows[0:9], "\n")
+	}
+
+	if len(list) < 1 {
+		list = "Projeto não encontrado."
 	}
 
 	_, err := s.ChannelMessageSend(m.ChannelID, list)
 	if err != nil {
 		log.Error(err)
 	}
-
 }
