@@ -1,17 +1,21 @@
-version: "3.7"
+version: "3.3"
 services:
  app:
-  image: wesleyholiveira/punchbot:latest
+  image: punchbot_app:latest
+  build:
+    context: .
   volumes:
    - .:/go/src/github.com/wesleyholiveira/punchbot
   depends_on:
    - redis
   environment:
-   DISCORD_TOKEN: ""
+   DISCORD_TOKEN: "NTAzMDA1MzYxNDE5MzIxMzQ1.DrVkbQ.qBIWdw6MaLH6TtKHGTHo2t0OlYc"
+   DISCORD_CHANNEL: "505535058233393153"
    PUNCHSITE: "https://punchsubs.net"
    REDIS_HOST: "redis"
    REDIS_PORT: 6379
    REDIS_PASSWORD: ""
+   TIMER: 15000
   restart:
     always
 
