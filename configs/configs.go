@@ -2,9 +2,14 @@ package configs
 
 import (
 	"os"
+	"time"
 )
 
+// Settings
+var Timer time.Duration = 15000
+
 // Discord
+var ChannelID = os.Getenv("DISCORD_CHANNEL")
 var DiscordToken = os.Getenv("DISCORD_TOKEN")
 
 // Site
