@@ -10,27 +10,25 @@ import (
 	"github.com/wesleyholiveira/punchbot/services"
 )
 
-var firstTime bool
+var PrevProject *[]models.Project
 
 func init() {
-	firstTime = true
+	PrevProject = new([]models.Project)
 }
 
 func TickerHTTP(ticker *time.Ticker, project chan *[]models.Project) {
-	prjs := models.GetProjects()
 	var endpoint = configs.Home
-
-	if firstTime {
-		endpoint = configs.Calendar
-		firstTime = false
-	}
+	prjs := models.GetProjects()
 
 	for t := range ticker.C {
-		projects := services.GetProjects(endpoint)
+		projects := services.GetProjects(endpoint, models.Home)
 		currentContent, _ := structhash.Hash(projects, 0)
 		content, _ := structhash.Hash(*prjs, 0)
 
+		log.Infof("prev: [%s](%d), current: [%s](%d)", content, len(*prjs), currentContent, len(projects))
+
 		if currentContent != content {
+			*PrevProject = *prjs
 			*prjs = projects
 			project <- prjs
 		}
