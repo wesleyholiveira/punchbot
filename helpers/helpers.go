@@ -40,7 +40,6 @@ func Transverse(n *html.Node, projects *[]models.Project, projectMap map[string]
 			prj.Project = n.FirstChild.Data
 			*projects = append(*projects, prj)
 		}
-
 	}
 	for c := n.FirstChild; c != nil; c = c.NextSibling {
 		Transverse(c, projects, projectMap, key)
