@@ -4,14 +4,13 @@ import (
 	"encoding/json"
 	"fmt"
 
-	log "github.com/sirupsen/logrus"
-	"github.com/wesleyholiveira/punchbot/redis"
-
 	"github.com/bwmarrin/discordgo"
+	log "github.com/sirupsen/logrus"
 	"github.com/wesleyholiveira/punchbot/models"
+	"github.com/wesleyholiveira/punchbot/redis"
 )
 
-func Notify(projects []models.Project, s *discordgo.Session, m *discordgo.MessageCreate, args []string) {
+func Notify(s *discordgo.Session, m *discordgo.MessageCreate, args []string) {
 	redis := redis.GetClient()
 	notifyUser := models.GetNotifyUser()
 	notifyRedis := &models.Notify{}
@@ -35,7 +34,7 @@ func Notify(projects []models.Project, s *discordgo.Session, m *discordgo.Messag
 
 		msg := "Sua lista de animes a serem notificados:\n"
 
-		for key, _ := range notifyUser {
+		for key := range notifyUser {
 			for _, prj := range *notifyUser[key].Projects {
 				msg += fmt.Sprintf("**%s** - %s\n", prj.IDProject, prj.Project)
 			}
@@ -43,9 +42,10 @@ func Notify(projects []models.Project, s *discordgo.Session, m *discordgo.Messag
 
 		s.ChannelMessageSend(m.ChannelID, msg)
 	} else {
+		projects := models.GetCalendarProjects()
 		projectsUser := make([]models.Project, 0, len(args))
 
-		for _, project := range projects {
+		for _, project := range *projects {
 			for _, arg := range args {
 				if project.IDProject == arg {
 					projectsUser = append(projectsUser, project)
@@ -56,9 +56,8 @@ func Notify(projects []models.Project, s *discordgo.Session, m *discordgo.Messag
 		notify := &models.Notify{UserID: m.ChannelID, Projects: &projectsUser}
 
 		notifyUser[notify.UserID] = notify
-		ProjectChan <- &projectsUser
-
 		notifyMarshal, err := json.Marshal(notify)
+
 		if err != nil {
 			log.Errorln("Marshal", err)
 		}
