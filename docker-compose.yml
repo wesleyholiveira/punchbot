@@ -9,8 +9,8 @@ services:
   depends_on:
    - redis
   environment:
-   DISCORD_TOKEN: "NTAzMDA1MzYxNDE5MzIxMzQ1.DrVkbQ.qBIWdw6MaLH6TtKHGTHo2t0OlYc"
-   DISCORD_CHANNEL: "505535058233393153"
+   DISCORD_TOKEN: ""
+   DISCORD_CHANNEL: ""
    PUNCHSITE: "https://punchsubs.net"
    REDIS_HOST: "redis"
    REDIS_PORT: 6379
