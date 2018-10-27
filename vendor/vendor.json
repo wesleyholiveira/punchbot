@@ -3,39 +3,184 @@
 	"ignore": "test",
 	"package": [
 		{
-			"checksumSHA1": "BBgnSsP98pZ3vmg8j9PyYDTmZXs=",
+			"checksumSHA1": "8cFUIC7dY7m1yeCurLl1MdGSaPI=",
+			"path": "github.com/bwmarrin/discordgo",
+			"revision": "73f6772a2b7cc95e29c462e4f15bf07cbe0d3854",
+			"revisionTime": "2018-04-04T15:55:14Z"
+		},
+		{
+			"checksumSHA1": "ZMbDaUdj+oee4i07cuB9EJL4AMo=",
+			"path": "github.com/cnf/structhash",
+			"revision": "62a607eb02243845670f25a61cbc2d394c1ede10",
+			"revisionTime": "2018-01-04T16:16:10Z"
+		},
+		{
+			"checksumSHA1": "ftEeWuT17fk6hvz82ELmniaMbz0=",
+			"path": "github.com/go-redis/redis",
+			"revision": "b3d9bf10f6666b2ee5100a6f3f84f4caf3b4e37d",
+			"revisionTime": "2018-10-25T06:51:40Z"
+		},
+		{
+			"checksumSHA1": "z12gGj6VbVBcPOvof1aCM+DVGRU=",
+			"path": "github.com/go-redis/redis/internal",
+			"revision": "b3d9bf10f6666b2ee5100a6f3f84f4caf3b4e37d",
+			"revisionTime": "2018-10-25T06:51:40Z"
+		},
+		{
+			"checksumSHA1": "GQZsUVg/+6UpQAYpc4luMvMutSI=",
+			"path": "github.com/go-redis/redis/internal/consistenthash",
+			"revision": "b3d9bf10f6666b2ee5100a6f3f84f4caf3b4e37d",
+			"revisionTime": "2018-10-25T06:51:40Z"
+		},
+		{
+			"checksumSHA1": "l66eTZiJqueypc56HXCakGDm784=",
+			"path": "github.com/go-redis/redis/internal/hashtag",
+			"revision": "b3d9bf10f6666b2ee5100a6f3f84f4caf3b4e37d",
+			"revisionTime": "2018-10-25T06:51:40Z"
+		},
+		{
+			"checksumSHA1": "WoUjtqpn00RUnAgZLljk3lWfpSQ=",
+			"path": "github.com/go-redis/redis/internal/pool",
+			"revision": "b3d9bf10f6666b2ee5100a6f3f84f4caf3b4e37d",
+			"revisionTime": "2018-10-25T06:51:40Z"
+		},
+		{
+			"checksumSHA1": "zCo0t+gRBbctwyIpkDLrqRFtXew=",
+			"path": "github.com/go-redis/redis/internal/proto",
+			"revision": "b3d9bf10f6666b2ee5100a6f3f84f4caf3b4e37d",
+			"revisionTime": "2018-10-25T06:51:40Z"
+		},
+		{
+			"checksumSHA1": "sjbjSJrTdvyDwNjrWjTNeXgUhaU=",
+			"path": "github.com/go-redis/redis/internal/singleflight",
+			"revision": "b3d9bf10f6666b2ee5100a6f3f84f4caf3b4e37d",
+			"revisionTime": "2018-10-25T06:51:40Z"
+		},
+		{
+			"checksumSHA1": "1PH2NoAB/u3IZmLYyCrIbOzqLZ4=",
+			"path": "github.com/go-redis/redis/internal/util",
+			"revision": "b3d9bf10f6666b2ee5100a6f3f84f4caf3b4e37d",
+			"revisionTime": "2018-10-25T06:51:40Z"
+		},
+		{
+			"checksumSHA1": "+WvAFQYdExJNUjKDAtuSs8O7ELg=",
+			"path": "github.com/gorilla/websocket",
+			"revision": "76e4896901ef89d253d69b528d3701dd146fe2ae",
+			"revisionTime": "2018-10-12T02:01:31Z"
+		},
+		{
+			"checksumSHA1": "r6ZMyP/HsdeToXIxvgP3ntL6Bds=",
+			"path": "github.com/konsorten/go-windows-terminal-sequences",
+			"revision": "5c8c8bd35d3832f5d134ae1e1e375b69a4d25242",
+			"revisionTime": "2018-10-04T22:41:46Z"
+		},
+		{
+			"checksumSHA1": "1dd8tjW3xNUE6wV1T42Tmw/JN/s=",
+			"path": "github.com/sirupsen/logrus",
+			"revision": "4fabf2fffcecfd47f802869b7b92d75e43c5a095",
+			"revisionTime": "2018-10-21T10:09:20Z"
+		},
+		{
+			"checksumSHA1": "ihMFI2SsLMehp0VcQTIISionIdQ=",
 			"path": "github.com/wesleyholiveira/punchbot",
-			"revision": ""
+			"revision": "bac968d2a779cac7f501275b04c0c866bc01bae5",
+			"revisionTime": "2018-10-22T02:12:14Z"
 		},
 		{
-			"checksumSHA1": "a/nWvPhAE7jHAxJFU5g9gmOP+1A=",
+			"checksumSHA1": "3JQn6wlfCwBRHIAKzynwXhxYyDg=",
 			"path": "github.com/wesleyholiveira/punchbot/commands",
-			"revision": ""
+			"revision": "9d22a7123eda910a40ee93c600707aa9dc2316a5",
+			"revisionTime": "2018-10-22T01:41:16Z"
 		},
 		{
-			"checksumSHA1": "J9zZocDzyTcbPlC4aRDsDrXcA6c=",
+			"checksumSHA1": "pk7jMMnzcCZZ+bq6I+gkoWIirGY=",
 			"path": "github.com/wesleyholiveira/punchbot/configs",
-			"revision": ""
+			"revision": "9d22a7123eda910a40ee93c600707aa9dc2316a5",
+			"revisionTime": "2018-10-22T01:41:16Z"
 		},
 		{
-			"checksumSHA1": "0ptEaafljQnEamyVfMD8UXsuUqg=",
+			"checksumSHA1": "ocW6x9qeYzXOiCvulnLm686qJdU=",
 			"path": "github.com/wesleyholiveira/punchbot/helpers",
-			"revision": ""
+			"revision": "9d22a7123eda910a40ee93c600707aa9dc2316a5",
+			"revisionTime": "2018-10-22T01:41:16Z"
 		},
 		{
-			"checksumSHA1": "CvWyy0hLlb7NPeukZNv+IaBgiVw=",
+			"checksumSHA1": "koK+QYlXLbEbfkJCQRQqTH5MI2E=",
 			"path": "github.com/wesleyholiveira/punchbot/models",
-			"revision": ""
+			"revision": "9d22a7123eda910a40ee93c600707aa9dc2316a5",
+			"revisionTime": "2018-10-22T01:41:16Z"
 		},
 		{
-			"checksumSHA1": "0UwnHzCOzy7qC+pYoxGd9y7hEeg=",
+			"checksumSHA1": "2l1dIqujjCl4q1jYP6Wqz5zhVsU=",
 			"path": "github.com/wesleyholiveira/punchbot/parallelism",
-			"revision": ""
+			"revision": "9d22a7123eda910a40ee93c600707aa9dc2316a5",
+			"revisionTime": "2018-10-22T01:41:16Z"
 		},
 		{
-			"checksumSHA1": "xqTP5EmLoh8EdkduIZzHloiBfrg=",
+			"checksumSHA1": "3me4mc45SsccBnkGQ+JOZL9hY+0=",
+			"path": "github.com/wesleyholiveira/punchbot/redis",
+			"revision": "9d22a7123eda910a40ee93c600707aa9dc2316a5",
+			"revisionTime": "2018-10-22T01:41:16Z"
+		},
+		{
+			"checksumSHA1": "EjmKIQWwe0s1OWRA5SgtjPUMSMA=",
 			"path": "github.com/wesleyholiveira/punchbot/services",
-			"revision": ""
+			"revision": "9d22a7123eda910a40ee93c600707aa9dc2316a5",
+			"revisionTime": "2018-10-22T01:41:16Z"
+		},
+		{
+			"checksumSHA1": "/U7f2gaH6DnEmLguVLDbipU6kXU=",
+			"path": "golang.org/x/crypto/internal/subtle",
+			"revision": "e84da0312774c21d64ee2317962ef669b27ffb41",
+			"revisionTime": "2018-10-24T13:26:30Z"
+		},
+		{
+			"checksumSHA1": "/D0Q9baFJAeXy2an6mwni/FJHzw=",
+			"path": "golang.org/x/crypto/nacl/secretbox",
+			"revision": "e84da0312774c21d64ee2317962ef669b27ffb41",
+			"revisionTime": "2018-10-24T13:26:30Z"
+		},
+		{
+			"checksumSHA1": "vKbPb9fpjCdzuoOvajOJnYfHG2g=",
+			"path": "golang.org/x/crypto/poly1305",
+			"revision": "e84da0312774c21d64ee2317962ef669b27ffb41",
+			"revisionTime": "2018-10-24T13:26:30Z"
+		},
+		{
+			"checksumSHA1": "cRCpfAgTnlIDpdcfjivbiv+9YJU=",
+			"path": "golang.org/x/crypto/salsa20/salsa",
+			"revision": "e84da0312774c21d64ee2317962ef669b27ffb41",
+			"revisionTime": "2018-10-24T13:26:30Z"
+		},
+		{
+			"checksumSHA1": "BGm8lKZmvJbf/YOJLeL1rw2WVjA=",
+			"path": "golang.org/x/crypto/ssh/terminal",
+			"revision": "e84da0312774c21d64ee2317962ef669b27ffb41",
+			"revisionTime": "2018-10-24T13:26:30Z"
+		},
+		{
+			"checksumSHA1": "UrM9Sbp5q0sBFxqb5iMhqiPpXII=",
+			"path": "golang.org/x/net/html",
+			"revision": "9b4f9f5ad5197c79fd623a3638e70d8b26cef344",
+			"revisionTime": "2018-10-23T11:20:58Z"
+		},
+		{
+			"checksumSHA1": "xwhqe/igHQrY3IhqDwzo6j7qpm8=",
+			"path": "golang.org/x/net/html/atom",
+			"revision": "9b4f9f5ad5197c79fd623a3638e70d8b26cef344",
+			"revisionTime": "2018-10-23T11:20:58Z"
+		},
+		{
+			"checksumSHA1": "DW/qhXYGUUFCGxc5c+gSiPVCm6o=",
+			"path": "golang.org/x/sys/unix",
+			"revision": "d989b31c87461dc8ab2f1cac6792814e27fadea9",
+			"revisionTime": "2018-10-24T19:48:33Z"
+		},
+		{
+			"checksumSHA1": "Y7nctMxT58lRM78VtElPerhcnEs=",
+			"path": "golang.org/x/sys/windows",
+			"revision": "d989b31c87461dc8ab2f1cac6792814e27fadea9",
+			"revisionTime": "2018-10-24T19:48:33Z"
 		}
 	],
 	"rootPath": "github.com/wesleyholiveira/punchbot"

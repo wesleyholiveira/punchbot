@@ -8,9 +8,11 @@ import (
 )
 
 var cmds models.Commands
+var ProjectChan chan *[]models.Project
 
 func init() {
 	cmds = make(models.Commands)
+	ProjectChan = make(chan *[]models.Project, 0)
 
 	cmds["list"] = List
 	cmds["notify"] = Notify

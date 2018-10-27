@@ -1,10 +1,9 @@
 package services
 
 import (
-	"encoding/json"
-	"io/ioutil"
 	"net/http"
-	"regexp"
+
+	"golang.org/x/net/html"
 
 	log "github.com/sirupsen/logrus"
 	"github.com/wesleyholiveira/punchbot/helpers"
@@ -12,7 +11,9 @@ import (
 )
 
 func GetProjects(endpoint string) []models.Project {
-	var projects []models.Project
+
+	projectMap := make(map[string]models.Project)
+	projects := make([]models.Project, 0)
 
 	resp, err := http.Get(endpoint)
 	if err != nil {
@@ -23,14 +24,21 @@ func GetProjects(endpoint string) []models.Project {
 		log.Errorf("%s %d", resp.Status, resp.StatusCode)
 	}
 
-	sResponse, err := ioutil.ReadAll(resp.Body)
+	sResponse := resp.Body
 	defer resp.Body.Close()
 
 	if err != nil {
 		log.Error(err)
 	}
 
-	re := regexp.MustCompile(`(\[.+\];)`)
+	doc, err := html.Parse(sResponse)
+	if err != nil {
+		log.Error(err)
+	}
+
+	helpers.Transverse(doc, &projects, projectMap, "")
+
+	/* re := regexp.MustCompile(`(\[.+\];)`)
 	response := re.Find(sResponse)
 
 	re = regexp.MustCompile(`\\\/`)
@@ -40,7 +48,7 @@ func GetProjects(endpoint string) []models.Project {
 	err = json.Unmarshal(response, &projects)
 	if err != nil {
 		log.Error(err)
-	}
+	} */
 
 	return helpers.RemoveDuplicates(projects)
 }

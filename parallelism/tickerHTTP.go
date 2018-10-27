@@ -1,29 +1,40 @@
 package parallelism
 
 import (
-	"fmt"
 	"time"
 
 	"github.com/cnf/structhash"
-	config "github.com/wesleyholiveira/punchbot/configs"
+	log "github.com/sirupsen/logrus"
+	"github.com/wesleyholiveira/punchbot/configs"
 	"github.com/wesleyholiveira/punchbot/models"
 	"github.com/wesleyholiveira/punchbot/services"
 )
 
-func TickerHTTP(ticker *time.Ticker, notify chan bool) {
+var firstTime bool
+
+func init() {
+	firstTime = true
+}
+
+func TickerHTTP(ticker *time.Ticker, project chan *[]models.Project) {
 	prjs := models.GetProjects()
+	var endpoint = configs.Home
+
+	if firstTime {
+		endpoint = configs.Calendar
+		firstTime = false
+	}
+
 	for t := range ticker.C {
-		projects := services.GetProjects(config.PunchEndpoint)
+		projects := services.GetProjects(endpoint)
 		currentContent, _ := structhash.Hash(projects, 0)
 		content, _ := structhash.Hash(*prjs, 0)
 
-		if currentContent != content || len(*prjs) == 0 {
+		if currentContent != content {
 			*prjs = projects
-			notify <- true
-		} else {
-			notify <- false
+			project <- prjs
 		}
 
-		fmt.Println(t)
+		log.Info(t)
 	}
 }
