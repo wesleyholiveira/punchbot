@@ -6,6 +6,6 @@
 
 ## Running
 ```
-docker build -t wesleyholiveira/punchbot:latest
+docker-compose build
 docker-compose up -d
 ```
