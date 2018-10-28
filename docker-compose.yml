@@ -4,8 +4,6 @@ services:
   image: punchbot_app:latest
   build:
     context: .
-  volumes:
-   - .:/go/src/github.com/wesleyholiveira/punchbot
   depends_on:
    - redis
   environment:
