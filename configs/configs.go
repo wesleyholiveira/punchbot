@@ -9,6 +9,8 @@ import (
 var Timer time.Duration = 15000
 
 // Discord
+var AuthURL = os.Getenv("AUTH_URL")
+
 var ChannelID = os.Getenv("DISCORD_CHANNEL")
 var DiscordToken = os.Getenv("DISCORD_TOKEN")
 
