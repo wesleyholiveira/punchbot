@@ -5,6 +5,7 @@ COPY . .
 
 RUN apk add git && \
     go get -u github.com/kardianos/govendor && \
+    govendor sync && \
     go build -o /go/bin/punchbot
 
 ENTRYPOINT ["/go/bin/punchbot"]

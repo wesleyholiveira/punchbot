@@ -9,13 +9,13 @@ services:
   depends_on:
    - redis
   environment:
-   DISCORD_TOKEN: ""
-   DISCORD_CHANNEL: ""
-   PUNCHSITE: "https://punchsubs.net"
-   REDIS_HOST: "redis"
-   REDIS_PORT: 6379
-   REDIS_PASSWORD: ""
-   TIMER: 15000
+   - DISCORD_TOKEN=${DISCORD_TOKEN}
+   - DISCORD_CHANNEL=${DISCORD_CHANNEL}
+   - TIMER=${TIMER}
+   - PUNCHSITE=${PUNCHSITE}
+   - REDIS_HOST=${REDIS_HOST}
+   - REDIS_PORT=${REDIS_PORT}
+   - REDIS_PASSWORD=${REDIS_PASSWORD}
   restart:
     always
 
