@@ -36,11 +36,8 @@ func Entry(s *discordgo.Session, m *discordgo.MessageCreate) {
 			args := command[1:]
 
 			if guild == nil {
-
 				cmds[cmd](s, m, args)
-			}
-
-			if isException(cmd) {
+			} else if isException(cmd) {
 				cmds[cmd](s, m, args)
 			}
 
