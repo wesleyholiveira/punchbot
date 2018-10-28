@@ -16,8 +16,6 @@ services:
    - REDIS_HOST=${REDIS_HOST}
    - REDIS_PORT=${REDIS_PORT}
    - REDIS_PASSWORD=${REDIS_PASSWORD}
-  restart:
-    always
 
  redis:
   image: redis:latest
