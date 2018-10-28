@@ -3,6 +3,7 @@ package parallelism
 import (
 	"fmt"
 	"math"
+	"strings"
 
 	"github.com/bwmarrin/discordgo"
 	log "github.com/sirupsen/logrus"
@@ -51,18 +52,29 @@ func notify(s *discordgo.Session, p *[]models.Project, prev *[]models.Project, p
 	for _, myProject := range myProjects {
 		for _, project := range projectsSlice {
 			if project.IDProject == myProject.IDProject {
-				log.Info("PROJECT MATCHED!")
-				msg := fmt.Sprintf("O **%s** do anime **%s** acabou de ser lançado! -> %s\n",
-					project.Numero,
-					project.Project,
-					configs.PunchEndpoint+project.Link)
+				screen := project.Screen
 
-				respImage := services.Get(project.Screen).Body
-				defer respImage.Close()
+				if !strings.Contains(project.Screen, "http") {
+					screen = configs.PunchEndpoint + project.Screen
+				}
 
-				_, err := s.ChannelFileSendWithMessage(channelID, msg, "teste.jpg", respImage)
+				httpImage, err := services.Get(screen)
+
 				if err != nil {
-					log.Error(err)
+					log.Info("PROJECT MATCHED!")
+
+					respImage := httpImage.Body
+					defer respImage.Close()
+
+					msg := fmt.Sprintf("O **%s** do anime **%s** acabou de ser lançado! -> %s\n",
+						project.Numero,
+						project.Project,
+						configs.PunchEndpoint+project.Link)
+
+					_, err := s.ChannelFileSendWithMessage(channelID, msg, "punch.jpg", respImage)
+					if err != nil {
+						log.Error(err)
+					}
 				}
 			}
 		}
