@@ -27,7 +27,7 @@ func TickerHTTP(ticker *time.Ticker, project chan *[]models.Project) {
 
 		log.Infof("prev: [%s](%d), current: [%s](%d)", content, len(*prjs), currentContent, len(projects))
 
-		if currentContent != content {
+		if currentContent != content && len(projects) > 0 {
 			*PrevProject = *prjs
 			*prjs = projects
 			project <- prjs
