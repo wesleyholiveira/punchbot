@@ -52,6 +52,7 @@ func notify(s *discordgo.Session, p *[]models.Project, prev *[]models.Project, p
 	for _, myProject := range myProjects {
 		for _, project := range projectsSlice {
 			if project.IDProject == myProject.IDProject {
+				log.Info("PROJECT MATCHED!")
 				screen := project.Screen
 
 				if !strings.Contains(project.Screen, "http") {
@@ -60,8 +61,7 @@ func notify(s *discordgo.Session, p *[]models.Project, prev *[]models.Project, p
 
 				httpImage, err := services.Get(screen)
 
-				if err != nil {
-					log.Info("PROJECT MATCHED!")
+				if err == nil {
 
 					respImage := httpImage.Body
 					defer respImage.Close()
