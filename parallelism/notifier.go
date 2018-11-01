@@ -13,6 +13,7 @@ import (
 	"github.com/wesleyholiveira/punchbot/services"
 )
 
+var userMention string
 var channels map[string]string
 
 func init() {
@@ -26,10 +27,21 @@ func Notifier(s *discordgo.Session, projects chan *[]models.Project) {
 		for key, _ := range channels {
 
 			ch, _ := s.Channel(key)
-			fmt.Println(ch, key)
 
 			if ch != nil {
+				originalUsername := channels[key]
+				username := originalUsername[1:]
 				guild, _ := s.Guild(ch.GuildID)
+
+				if username != "everyone" {
+					for _, m := range guild.Members {
+						if m.User.Username == username {
+							userMention = m.User.Mention() + " "
+						}
+					}
+				} else {
+					userMention = originalUsername + " "
+				}
 
 				if guild != nil {
 					projectsPunch := models.GetProjects()
@@ -80,8 +92,8 @@ func notify(s *discordgo.Session, p *[]models.Project, prev *[]models.Project, p
 					respImage := httpImage.Body
 					defer respImage.Close()
 
-					msg := fmt.Sprintf("%s O **%s** do anime **%s** acabou de ser lançado! -> %s\n",
-						channels[channelID],
+					msg := fmt.Sprintf("%sO **%s** do anime **%s** acabou de ser lançado! -> %s\n",
+						userMention,
 						project.Numero,
 						project.Project,
 						configs.PunchEndpoint+project.Link)

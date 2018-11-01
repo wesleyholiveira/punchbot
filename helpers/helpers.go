@@ -1,7 +1,6 @@
 package helpers
 
 import (
-	"fmt"
 	"regexp"
 	"strings"
 
@@ -57,7 +56,6 @@ func ParseChannels(channels string) map[string]string {
 	aChannels := strings.Split(channels, ",")
 	for _, channel := range aChannels {
 		channelID := reChannel.ReplaceAllString(channel, "")
-		fmt.Println(channel, channelID)
 		tags := reTags.FindAllStringSubmatch(channel, len(channel))[0][1]
 		mChannels[channelID] = tags
 	}
