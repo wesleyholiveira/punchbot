@@ -3,6 +3,7 @@ package main
 import (
 	"os"
 	"os/signal"
+	"strconv"
 	"syscall"
 	"time"
 
@@ -19,7 +20,8 @@ func main() {
 	loc, _ := time.LoadLocation("America/Sao_Paulo")
 
 	now := time.Now().In(loc)
-	timer := time.NewTicker(configs.Timer * time.Millisecond)
+	timeDuration, err := strconv.Atoi(configs.Timer)
+	timer := time.NewTicker(time.Duration(timeDuration) * time.Millisecond)
 
 	log.SetOutput(os.Stdout)
 	log.WithTime(now)
