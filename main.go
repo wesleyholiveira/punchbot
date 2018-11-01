@@ -16,9 +16,13 @@ import (
 
 func main() {
 	rClient := redis.NewClient()
+	loc, _ := time.LoadLocation("America/Sao_Paulo")
+
+	now := time.Now().In(loc)
 	timer := time.NewTicker(configs.Timer * time.Millisecond)
 
 	log.SetOutput(os.Stdout)
+	log.WithTime(now)
 
 	d, err := discordgo.New("Bot " + configs.DiscordToken)
 	if err != nil {
