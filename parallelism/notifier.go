@@ -66,7 +66,7 @@ func notify(s *discordgo.Session, p *[]models.Project, prev *[]models.Project, p
 					respImage := httpImage.Body
 					defer respImage.Close()
 
-					msg := fmt.Sprintf("O **%s** do anime **%s** acabou de ser lançado! -> %s\n",
+					msg := fmt.Sprintf("@everyone O **%s** do anime **%s** acabou de ser lançado! -> %s\n",
 						project.Numero,
 						project.Project,
 						configs.PunchEndpoint+project.Link)
