@@ -50,7 +50,7 @@ func Transverse(n *html.Node, projects *[]models.Project, projectMap map[string]
 }
 
 func ParseChannels(channels string) map[string]string {
-	reChannel := regexp.MustCompile(`(\D+)?(\[.*\])`)
+	reChannel := regexp.MustCompile(`\D+`)
 	reTags := regexp.MustCompile(`\[(.*)\]`)
 	mChannels := make(map[string]string)
 	aChannels := strings.Split(channels, ",")
