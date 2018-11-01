@@ -3,3 +3,4 @@ vendor/!vendor.json
 punchbot
 debug
 .env
+configs/configs_dev.go

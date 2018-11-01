@@ -10,7 +10,8 @@ var Timer = os.Getenv("TIMER")
 // Discord
 var AuthURL = os.Getenv("AUTH_URL")
 
-var ChannelID = os.Getenv("DISCORD_CHANNEL")
+var NotificationChannelID = os.Getenv("NOTIFICATION_CHANNELS")
+var CommandChannelID = os.Getenv("COMMAND_CHANNELS")
 var DiscordToken = os.Getenv("DISCORD_TOKEN")
 
 // Site

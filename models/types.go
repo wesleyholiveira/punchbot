@@ -4,7 +4,7 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
-type FnCmd func(s *discordgo.Session, m *discordgo.MessageCreate, args []string)
+type FnCmd func(s *discordgo.Session, channel string, args []string)
 type Commands map[string]FnCmd
 type TNotify map[string]*Notify
 

@@ -25,7 +25,7 @@ func animeListFormat(id, projectName string) string {
 	return fmt.Sprintf("**%s** - %s\n", id, projectName)
 }
 
-func List(s *discordgo.Session, m *discordgo.MessageCreate, args []string) {
+func List(s *discordgo.Session, channel string, args []string) {
 	projects := models.GetCalendarProjects()
 	list := ""
 
@@ -48,7 +48,7 @@ func List(s *discordgo.Session, m *discordgo.MessageCreate, args []string) {
 		list = "Projeto não encontrado."
 	}
 
-	_, err := s.ChannelMessageSend(m.ChannelID, list)
+	_, err := s.ChannelMessageSend(channel, list)
 	if err != nil {
 		log.Error(err)
 	}

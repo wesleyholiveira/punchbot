@@ -10,12 +10,12 @@ import (
 	"github.com/wesleyholiveira/punchbot/redis"
 )
 
-func Notify(s *discordgo.Session, m *discordgo.MessageCreate, args []string) {
+func Notify(s *discordgo.Session, channel string, args []string) {
 	redis := redis.GetClient()
 	notifyUser := models.GetNotifyUser()
 	notifyRedis := &models.Notify{}
 
-	redisGet, err := redis.Get(m.ChannelID).Result()
+	redisGet, err := redis.Get(channel).Result()
 	if err != nil {
 		log.Errorln("Redis GET", err)
 	}
@@ -29,7 +29,7 @@ func Notify(s *discordgo.Session, m *discordgo.MessageCreate, args []string) {
 				log.Errorln("Unmarshal", err)
 			}
 
-			notifyUser[m.ChannelID] = notifyRedis
+			notifyUser[channel] = notifyRedis
 		}
 
 		msg := "Sua lista de animes a serem notificados:\n"
@@ -40,7 +40,7 @@ func Notify(s *discordgo.Session, m *discordgo.MessageCreate, args []string) {
 			}
 		}
 
-		s.ChannelMessageSend(m.ChannelID, msg)
+		s.ChannelMessageSend(channel, msg)
 	} else {
 		projects := models.GetCalendarProjects()
 		projectsUser := make([]models.Project, 0, len(args))
@@ -53,7 +53,7 @@ func Notify(s *discordgo.Session, m *discordgo.MessageCreate, args []string) {
 			}
 		}
 
-		notify := &models.Notify{UserID: m.ChannelID, Projects: &projectsUser}
+		notify := &models.Notify{UserID: channel, Projects: &projectsUser}
 
 		notifyUser[notify.UserID] = notify
 		notifyMarshal, err := json.Marshal(notify)
@@ -74,6 +74,6 @@ func Notify(s *discordgo.Session, m *discordgo.MessageCreate, args []string) {
 			log.Errorln("Redis SAVE", err)
 		}
 
-		s.ChannelMessageSend(m.ChannelID, "Você será notificado quando um episódio novo dos itens selecionados aparecerem no site.")
+		s.ChannelMessageSend(channel, "Você será notificado quando um episódio novo dos itens selecionados aparecerem no site.")
 	}
 }

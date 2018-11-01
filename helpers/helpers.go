@@ -1,6 +1,9 @@
 package helpers
 
 import (
+	"regexp"
+	"strings"
+
 	"github.com/wesleyholiveira/punchbot/models"
 	"golang.org/x/net/html"
 )
@@ -44,4 +47,17 @@ func Transverse(n *html.Node, projects *[]models.Project, projectMap map[string]
 	for c := n.FirstChild; c != nil; c = c.NextSibling {
 		Transverse(c, projects, projectMap, key)
 	}
+}
+
+func ParseChannels(channels string) map[string]string {
+	reChannel := regexp.MustCompile(`\D+`)
+	reTags := regexp.MustCompile(`\[(.*)\]`)
+	mChannels := make(map[string]string)
+	aChannels := strings.Split(channels, ",")
+	for _, channel := range aChannels {
+		channelID := reChannel.ReplaceAllString(channel, "")
+		tags := reTags.FindAllStringSubmatch(channel, len(channel))[0][1]
+		mChannels[channelID] = tags
+	}
+	return mChannels
 }

@@ -8,27 +8,41 @@ import (
 	"github.com/bwmarrin/discordgo"
 	log "github.com/sirupsen/logrus"
 	"github.com/wesleyholiveira/punchbot/configs"
+	"github.com/wesleyholiveira/punchbot/helpers"
 	"github.com/wesleyholiveira/punchbot/models"
 	"github.com/wesleyholiveira/punchbot/services"
 )
+
+var channels map[string]string
+
+func init() {
+	channels = helpers.ParseChannels(configs.NotificationChannelsID)
+}
 
 func Notifier(s *discordgo.Session, projects chan *[]models.Project) {
 	for p := range projects {
 		log.Info("Notifier is on")
 
-		ch, _ := s.Channel(configs.ChannelID)
-		guild, _ := s.Guild(ch.GuildID)
+		for key, _ := range channels {
 
-		if guild != nil {
-			projectsPunch := models.GetProjects()
-			notify(s, p, PrevProject, *projectsPunch, ch.ID)
-		}
+			ch, _ := s.Channel(key)
+			fmt.Println(ch, key)
 
-		myNotifications := models.GetNotifyUser()
-		if myNotifications != nil {
-			for key := range myNotifications {
-				prjs := *myNotifications[key].Projects
-				notify(s, p, PrevProject, prjs, key)
+			if ch != nil {
+				guild, _ := s.Guild(ch.GuildID)
+
+				if guild != nil {
+					projectsPunch := models.GetProjects()
+					notify(s, p, PrevProject, *projectsPunch, ch.ID)
+				} else {
+					myNotifications := models.GetNotifyUser()
+					if myNotifications != nil {
+						for key := range myNotifications {
+							prjs := *myNotifications[key].Projects
+							notify(s, p, PrevProject, prjs, key)
+						}
+					}
+				}
 			}
 		}
 	}
@@ -66,7 +80,8 @@ func notify(s *discordgo.Session, p *[]models.Project, prev *[]models.Project, p
 					respImage := httpImage.Body
 					defer respImage.Close()
 
-					msg := fmt.Sprintf("@everyone O **%s** do anime **%s** acabou de ser lançado! -> %s\n",
+					msg := fmt.Sprintf("%s O **%s** do anime **%s** acabou de ser lançado! -> %s\n",
+						channels[channelID],
 						project.Numero,
 						project.Project,
 						configs.PunchEndpoint+project.Link)
