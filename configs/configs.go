@@ -12,10 +12,10 @@ var Timer time.Duration = 15000
 var AuthURL = os.Getenv("AUTH_URL")
 
 var ChannelID = os.Getenv("DISCORD_CHANNEL")
-var DiscordToken = os.Getenv("DISCORD_TOKEN")
+var DiscordToken = "NTAzMDA1MzYxNDE5MzIxMzQ1.DrvaHA.TL8_hp9cWAIVVPz66VIf9JlbXvc"
 
 // Site
-var PunchEndpoint = os.Getenv("PUNCHSITE")
+var PunchEndpoint = "https://punchsubs.net"
 var Home = PunchEndpoint + "/home"
 var Calendar = PunchEndpoint + "/calendario"
 
