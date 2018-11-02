@@ -34,11 +34,15 @@ func Notifier(s *discordgo.Session, projects chan *[]models.Project) {
 				userMention = ""
 				if tag != "" {
 					username := tag[1:]
-					for _, m := range guild.Members {
-						if m.User.Username == username {
-							userMention = m.User.Mention()
-							break
+					if username != "everyone" {
+						for _, m := range guild.Members {
+							if m.User.Username == username {
+								userMention = m.User.Mention()
+								break
+							}
 						}
+					} else {
+						userMention = "@" + username
 					}
 					userMention += " "
 				}
