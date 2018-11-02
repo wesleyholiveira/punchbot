@@ -24,23 +24,23 @@ func Notifier(s *discordgo.Session, projects chan *[]models.Project) {
 	for p := range projects {
 		log.Info("Notifier is on")
 
-		for key, _ := range channels {
+		for key, tag := range channels {
 
 			ch, _ := s.Channel(key)
 
 			if ch != nil {
-				originalUsername := channels[key]
-				username := originalUsername[1:]
 				guild, _ := s.Guild(ch.GuildID)
 
-				if username != "everyone" {
+				userMention = ""
+				if tag != "" {
+					username := tag[1:]
 					for _, m := range guild.Members {
 						if m.User.Username == username {
-							userMention = m.User.Mention() + " "
+							userMention = m.User.Mention()
+							break
 						}
 					}
-				} else {
-					userMention = originalUsername + " "
+					userMention += " "
 				}
 
 				if guild != nil {
@@ -80,6 +80,8 @@ func notify(s *discordgo.Session, p *[]models.Project, prev *[]models.Project, p
 			if project.IDProject == myProject.IDProject {
 				log.Info("PROJECT MATCHED!")
 				screen := project.Screen
+				img := strings.Split(screen, "/")
+				imgName := img[len(img)-1]
 
 				if !strings.Contains(project.Screen, "http") {
 					screen = configs.PunchEndpoint + project.Screen
@@ -98,7 +100,7 @@ func notify(s *discordgo.Session, p *[]models.Project, prev *[]models.Project, p
 						project.Project,
 						configs.PunchEndpoint+project.Link)
 
-					_, err := s.ChannelFileSendWithMessage(channelID, msg, "punch.jpg", respImage)
+					_, err := s.ChannelFileSendWithMessage(channelID, msg, imgName, respImage)
 					if err != nil {
 						log.Error(err)
 					}

@@ -56,8 +56,12 @@ func ParseChannels(channels string) map[string]string {
 	aChannels := strings.Split(channels, ",")
 	for _, channel := range aChannels {
 		channelID := reChannel.ReplaceAllString(channel, "")
-		tags := reTags.FindAllStringSubmatch(channel, len(channel))[0][1]
-		mChannels[channelID] = tags
+		tags := reTags.FindAllStringSubmatch(channel, len(channel))
+		tag := ""
+		if len(tags) > 0 {
+			tag = tags[0][1]
+		}
+		mChannels[channelID] = tag
 	}
 	return mChannels
 }

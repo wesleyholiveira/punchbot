@@ -1,10 +1,8 @@
 package configs
 
-import "os"
-
-// import (
-// 	"os"
-// )
+import (
+	"os"
+)
 
 // Settings
 var Timer = os.Getenv("TIMER")
