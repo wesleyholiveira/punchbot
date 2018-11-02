@@ -50,15 +50,16 @@ func Notifier(s *discordgo.Session, projects chan *[]models.Project) {
 				if guild != nil {
 					projectsPunch := models.GetProjects()
 					notify(s, p, PrevProject, *projectsPunch, ch.ID)
-				} else {
-					myNotifications := models.GetNotifyUser()
-					if myNotifications != nil {
-						for key := range myNotifications {
-							prjs := *myNotifications[key].Projects
-							notify(s, p, PrevProject, prjs, key)
-						}
-					}
 				}
+			}
+		}
+
+		myNotifications := models.GetNotifyUser()
+		if myNotifications != nil {
+			userMention = ""
+			for key := range myNotifications {
+				prjs := *myNotifications[key].Projects
+				notify(s, p, PrevProject, prjs, key)
 			}
 		}
 	}

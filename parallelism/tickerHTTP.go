@@ -33,6 +33,6 @@ func TickerHTTP(ticker *time.Ticker, project chan *[]models.Project) {
 			project <- prjs
 		}
 
-		log.Info(t)
+		log.Infoln(t)
 	}
 }
