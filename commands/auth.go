@@ -7,6 +7,6 @@ import (
 	"github.com/wesleyholiveira/punchbot/configs"
 )
 
-func Auth(s *discordgo.Session, channel string, args []string) {
-	s.ChannelMessageSend(channel, fmt.Sprintf("Para receber notificações via DM, acesse o link: %s\n", configs.AuthURL))
+func Auth(s *discordgo.Session, m *discordgo.MessageCreate, args []string) {
+	s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("Para receber notificações via DM, acesse o link: %s\n", configs.AuthURL))
 }

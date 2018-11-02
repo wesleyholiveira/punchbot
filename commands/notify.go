@@ -10,7 +10,8 @@ import (
 	"github.com/wesleyholiveira/punchbot/redis"
 )
 
-func Notify(s *discordgo.Session, channel string, args []string) {
+func Notify(s *discordgo.Session, m *discordgo.MessageCreate, args []string) {
+	channel := m.ChannelID
 	redis := redis.GetClient()
 	notifyUser := models.GetNotifyUser()
 	notifyRedis := &models.Notify{}
@@ -53,9 +54,9 @@ func Notify(s *discordgo.Session, channel string, args []string) {
 			}
 		}
 
-		notify := &models.Notify{UserID: channel, Projects: &projectsUser}
+		notify := &models.Notify{UserID: m.Author.ID, Projects: &projectsUser}
 
-		notifyUser[notify.UserID] = notify
+		notifyUser[channel] = notify
 		notifyMarshal, err := json.Marshal(notify)
 
 		if err != nil {

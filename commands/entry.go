@@ -3,9 +3,8 @@ package commands
 import (
 	"strings"
 
-	"github.com/wesleyholiveira/punchbot/configs"
-
 	"github.com/bwmarrin/discordgo"
+	"github.com/wesleyholiveira/punchbot/configs"
 	"github.com/wesleyholiveira/punchbot/models"
 )
 
@@ -38,10 +37,10 @@ func Entry(s *discordgo.Session, m *discordgo.MessageCreate) {
 			args := command[1:]
 
 			if guild == nil {
-				cmds[cmd](s, m.ChannelID, args)
+				cmds[cmd](s, m, args)
 			} else if isException(cmd) &&
 				strings.Contains(m.ChannelID, configs.CommandChannelsID) {
-				cmds[cmd](s, m.ChannelID, args)
+				cmds[cmd](s, m, args)
 			}
 
 		} else {
