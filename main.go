@@ -21,6 +21,11 @@ func main() {
 
 	now := time.Now().In(loc)
 	timeDuration, err := strconv.Atoi(configs.Timer)
+
+	if err != nil {
+		log.Errorln(err)
+	}
+
 	timer := time.NewTicker(time.Duration(timeDuration) * time.Millisecond)
 
 	log.SetOutput(os.Stdout)

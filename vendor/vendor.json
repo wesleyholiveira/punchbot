@@ -63,10 +63,10 @@
 			"revisionTime": "2018-10-25T06:51:40Z"
 		},
 		{
-			"checksumSHA1": "+WvAFQYdExJNUjKDAtuSs8O7ELg=",
+			"checksumSHA1": "lnXCQ0W+TUrintwU69ljmXf5o+k=",
 			"path": "github.com/gorilla/websocket",
-			"revision": "76e4896901ef89d253d69b528d3701dd146fe2ae",
-			"revisionTime": "2018-10-12T02:01:31Z"
+			"revision": "483fb8d7c32fcb4b5636cd293a92e3935932e2f4",
+			"revisionTime": "2018-10-30T14:45:53Z"
 		},
 		{
 			"checksumSHA1": "r6ZMyP/HsdeToXIxvgP3ntL6Bds=",
@@ -75,112 +75,112 @@
 			"revisionTime": "2018-10-04T22:41:46Z"
 		},
 		{
-			"checksumSHA1": "1dd8tjW3xNUE6wV1T42Tmw/JN/s=",
+			"checksumSHA1": "2yvNhAflQkHA9AHpYktNZiZPn9k=",
 			"path": "github.com/sirupsen/logrus",
-			"revision": "4fabf2fffcecfd47f802869b7b92d75e43c5a095",
-			"revisionTime": "2018-10-21T10:09:20Z"
+			"revision": "7eeb7b7cbdeb0a582a5b7a1512d91f956f1674aa",
+			"revisionTime": "2018-11-01T07:55:17Z"
 		},
 		{
-			"checksumSHA1": "oquty0PYPfWIj1hQRCxzOXaaGmk=",
+			"checksumSHA1": "DbPoirHZWfFwo1Ea1S5BSPQQU2Y=",
 			"path": "github.com/wesleyholiveira/punchbot",
-			"revision": "73f5b271d7adab584c830b95a5acb08be23fad8c",
-			"revisionTime": "2018-11-02T00:13:59Z"
+			"revision": "3569eee3b21bf14f8060ccbd8f1a12db9b878e1b",
+			"revisionTime": "2018-11-02T04:27:10Z"
 		},
 		{
 			"checksumSHA1": "BsAc8a95rYsYTBHT5p57ro+TB2k=",
 			"path": "github.com/wesleyholiveira/punchbot/commands",
-			"revision": "73f5b271d7adab584c830b95a5acb08be23fad8c",
-			"revisionTime": "2018-11-02T00:13:59Z"
+			"revision": "3569eee3b21bf14f8060ccbd8f1a12db9b878e1b",
+			"revisionTime": "2018-11-02T04:27:10Z"
 		},
 		{
-			"checksumSHA1": "0REZEJjt+3mCpnBWy88meSO2HVQ=",
+			"checksumSHA1": "5Fn6P5E3lZqRCdFyy7EZcoJAFa4=",
 			"path": "github.com/wesleyholiveira/punchbot/configs",
-			"revision": "73f5b271d7adab584c830b95a5acb08be23fad8c",
-			"revisionTime": "2018-11-02T00:13:59Z"
+			"revision": "3569eee3b21bf14f8060ccbd8f1a12db9b878e1b",
+			"revisionTime": "2018-11-02T04:27:10Z"
 		},
 		{
 			"checksumSHA1": "zVJWVaNEG2m4/fdl9OZ8YPaxq4A=",
 			"path": "github.com/wesleyholiveira/punchbot/helpers",
-			"revision": "73f5b271d7adab584c830b95a5acb08be23fad8c",
-			"revisionTime": "2018-11-02T00:13:59Z"
+			"revision": "3569eee3b21bf14f8060ccbd8f1a12db9b878e1b",
+			"revisionTime": "2018-11-02T04:27:10Z"
 		},
 		{
-			"checksumSHA1": "Go/WFiw609HAjgHp7uWYUeYwdr0=",
+			"checksumSHA1": "7yXoLZEmb3o5MrF33DougSmZ60U=",
 			"path": "github.com/wesleyholiveira/punchbot/models",
-			"revision": "73f5b271d7adab584c830b95a5acb08be23fad8c",
-			"revisionTime": "2018-11-02T00:13:59Z"
+			"revision": "3569eee3b21bf14f8060ccbd8f1a12db9b878e1b",
+			"revisionTime": "2018-11-02T04:27:10Z"
 		},
 		{
-			"checksumSHA1": "taKsTxsWM2fZl/ccVn6eLrQfDng=",
+			"checksumSHA1": "GEnG2DlvhAi7eVahyhFLSph5o5w=",
 			"path": "github.com/wesleyholiveira/punchbot/parallelism",
-			"revision": "73f5b271d7adab584c830b95a5acb08be23fad8c",
-			"revisionTime": "2018-11-02T00:13:59Z"
+			"revision": "3569eee3b21bf14f8060ccbd8f1a12db9b878e1b",
+			"revisionTime": "2018-11-02T04:27:10Z"
 		},
 		{
 			"checksumSHA1": "3me4mc45SsccBnkGQ+JOZL9hY+0=",
 			"path": "github.com/wesleyholiveira/punchbot/redis",
-			"revision": "73f5b271d7adab584c830b95a5acb08be23fad8c",
-			"revisionTime": "2018-11-02T00:13:59Z"
+			"revision": "3569eee3b21bf14f8060ccbd8f1a12db9b878e1b",
+			"revisionTime": "2018-11-02T04:27:10Z"
 		},
 		{
 			"checksumSHA1": "5ID70syTvvMO59EmAxa5SmrHcYo=",
 			"path": "github.com/wesleyholiveira/punchbot/services",
-			"revision": "73f5b271d7adab584c830b95a5acb08be23fad8c",
-			"revisionTime": "2018-11-02T00:13:59Z"
+			"revision": "3569eee3b21bf14f8060ccbd8f1a12db9b878e1b",
+			"revisionTime": "2018-11-02T04:27:10Z"
 		},
 		{
 			"checksumSHA1": "/U7f2gaH6DnEmLguVLDbipU6kXU=",
 			"path": "golang.org/x/crypto/internal/subtle",
-			"revision": "e84da0312774c21d64ee2317962ef669b27ffb41",
-			"revisionTime": "2018-10-24T13:26:30Z"
+			"revision": "4d3f4d9ffa16a13f451c3b2999e9c49e9750bf06",
+			"revisionTime": "2018-10-23T16:52:47Z"
 		},
 		{
 			"checksumSHA1": "/D0Q9baFJAeXy2an6mwni/FJHzw=",
 			"path": "golang.org/x/crypto/nacl/secretbox",
-			"revision": "e84da0312774c21d64ee2317962ef669b27ffb41",
-			"revisionTime": "2018-10-24T13:26:30Z"
+			"revision": "4d3f4d9ffa16a13f451c3b2999e9c49e9750bf06",
+			"revisionTime": "2018-10-23T16:52:47Z"
 		},
 		{
 			"checksumSHA1": "vKbPb9fpjCdzuoOvajOJnYfHG2g=",
 			"path": "golang.org/x/crypto/poly1305",
-			"revision": "e84da0312774c21d64ee2317962ef669b27ffb41",
-			"revisionTime": "2018-10-24T13:26:30Z"
+			"revision": "4d3f4d9ffa16a13f451c3b2999e9c49e9750bf06",
+			"revisionTime": "2018-10-23T16:52:47Z"
 		},
 		{
 			"checksumSHA1": "cRCpfAgTnlIDpdcfjivbiv+9YJU=",
 			"path": "golang.org/x/crypto/salsa20/salsa",
-			"revision": "e84da0312774c21d64ee2317962ef669b27ffb41",
-			"revisionTime": "2018-10-24T13:26:30Z"
+			"revision": "4d3f4d9ffa16a13f451c3b2999e9c49e9750bf06",
+			"revisionTime": "2018-10-23T16:52:47Z"
 		},
 		{
 			"checksumSHA1": "BGm8lKZmvJbf/YOJLeL1rw2WVjA=",
 			"path": "golang.org/x/crypto/ssh/terminal",
-			"revision": "e84da0312774c21d64ee2317962ef669b27ffb41",
-			"revisionTime": "2018-10-24T13:26:30Z"
+			"revision": "4d3f4d9ffa16a13f451c3b2999e9c49e9750bf06",
+			"revisionTime": "2018-10-23T16:52:47Z"
 		},
 		{
 			"checksumSHA1": "UrM9Sbp5q0sBFxqb5iMhqiPpXII=",
 			"path": "golang.org/x/net/html",
-			"revision": "9b4f9f5ad5197c79fd623a3638e70d8b26cef344",
-			"revisionTime": "2018-10-23T11:20:58Z"
+			"revision": "e11730110bbd884bbf19550bfafe9d69519ce29e",
+			"revisionTime": "2018-11-01T15:35:12Z"
 		},
 		{
 			"checksumSHA1": "xwhqe/igHQrY3IhqDwzo6j7qpm8=",
 			"path": "golang.org/x/net/html/atom",
-			"revision": "9b4f9f5ad5197c79fd623a3638e70d8b26cef344",
-			"revisionTime": "2018-10-23T11:20:58Z"
+			"revision": "e11730110bbd884bbf19550bfafe9d69519ce29e",
+			"revisionTime": "2018-11-01T15:35:12Z"
 		},
 		{
-			"checksumSHA1": "jj/eU15RpGLEwyueuTzsS0r5ONw=",
+			"checksumSHA1": "b2oWuv1tpxlJBO7Dn8jh1iu8ZlA=",
 			"path": "golang.org/x/sys/unix",
-			"revision": "95b1ffbd15a57cc5abb3f04402b9e8ec0016a52c",
-			"revisionTime": "2018-10-26T08:28:59Z"
+			"revision": "9b800f95dbbc54abff0acf7ee32d88ba4e328c89",
+			"revisionTime": "2018-10-31T12:20:39Z"
 		},
 		{
 			"checksumSHA1": "Y7nctMxT58lRM78VtElPerhcnEs=",
 			"path": "golang.org/x/sys/windows",
-			"revision": "95b1ffbd15a57cc5abb3f04402b9e8ec0016a52c",
-			"revisionTime": "2018-10-26T08:28:59Z"
+			"revision": "9b800f95dbbc54abff0acf7ee32d88ba4e328c89",
+			"revisionTime": "2018-10-31T12:20:39Z"
 		}
 	],
 	"rootPath": "github.com/wesleyholiveira/punchbot"
