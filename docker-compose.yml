@@ -7,6 +7,7 @@ services:
   depends_on:
    - redis
   environment:
+   - AUTH_URL=${AUTH_URL}
    - DISCORD_TOKEN=${DISCORD_TOKEN}
    - NOTIFICATION_CHANNELS=${NOTIFICATION_CHANNELS}
    - COMMAND_CHANNELS=${COMMAND_CHANNELS}
