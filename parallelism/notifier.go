@@ -41,6 +41,14 @@ func Notifier(s *discordgo.Session, projects chan *[]models.Project) {
 								break
 							}
 						}
+						if userMention == "" {
+							for _, r := range guild.Roles {
+								if r.Name == username && r.Mentionable {
+									userMention = fmt.Sprintf("<@&%s>", r.ID)
+									break
+								}
+							}
+						}
 					} else {
 						userMention = "@" + username
 					}
