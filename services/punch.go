@@ -1,11 +1,8 @@
 package services
 
 import (
-	"encoding/json"
 	"errors"
-	"io/ioutil"
 	"net/http"
-	"regexp"
 
 	log "github.com/sirupsen/logrus"
 	"github.com/wesleyholiveira/punchbot/helpers"
@@ -49,18 +46,7 @@ func GetProjects(endpoint string, typ models.GetProjectsType) []models.Project {
 
 			helpers.Transverse(doc, &projects, projectMap, "")
 		} else {
-			r, _ := ioutil.ReadAll(body)
-			re := regexp.MustCompile(`(\[.+\];)`)
-			response := re.Find(r)
-
-			re = regexp.MustCompile(`\\\/`)
-			response = re.ReplaceAll(response, []byte(`/`))
-			response = response[:len(response)-1]
-
-			err := json.Unmarshal(response, &projects)
-			if err != nil {
-				log.Error(err)
-			}
+			helpers.JsonUpdateToStruct(body, &projects)
 		}
 	}
 	return helpers.RemoveDuplicates(projects)
