@@ -13,7 +13,6 @@ import (
 	"github.com/wesleyholiveira/punchbot/services"
 )
 
-var userMention string
 var channels map[string]string
 
 func init() {
@@ -33,7 +32,7 @@ func Notifier(s *discordgo.Session, projects chan *[]models.Project) {
 				guild, _ := s.Guild(ch.GuildID)
 				guildID = guild.ID
 
-				userMention = ""
+				userMention := ""
 				if tag != "" {
 					username := tag[1:]
 					if username != "everyone" {
@@ -58,14 +57,14 @@ func Notifier(s *discordgo.Session, projects chan *[]models.Project) {
 				}
 
 				projectsPunch := models.GetProjects()
-				go notify(s, p, PrevProject, *projectsPunch, ch.ID)
+				go notify(s, p, PrevProject, *projectsPunch, ch.ID, userMention)
 			}
 		}
 
 		myNotifications := models.GetNotifyUser()
 		if myNotifications != nil {
 			guild, _ := s.Guild(guildID)
-			userMention = ""
+			userMention := ""
 			for key := range myNotifications {
 				ch, _ := s.Channel(key)
 				myNots := myNotifications[key]
@@ -79,7 +78,7 @@ func Notifier(s *discordgo.Session, projects chan *[]models.Project) {
 									if role.Name == "VIP" && role.ID == userRoleID {
 										log.Info("The user is a vip!!")
 										log.Info("Sending notifications (if exists)")
-										go notify(s, p, PrevProject, *myNots.Projects, key)
+										go notify(s, p, PrevProject, *myNots.Projects, key, userMention)
 										break
 									}
 								}
@@ -93,7 +92,7 @@ func Notifier(s *discordgo.Session, projects chan *[]models.Project) {
 	}
 }
 
-func notify(s *discordgo.Session, p *[]models.Project, prev *[]models.Project, prjs []models.Project, channelID string) error {
+func notify(s *discordgo.Session, p *[]models.Project, prev *[]models.Project, prjs []models.Project, channelID, userMention string) error {
 	myProjects := make([]models.Project, len(prjs))
 	diff := int(math.Abs(float64(len(*p) - len(*prev))))
 
