@@ -64,7 +64,7 @@ func Notify(s *discordgo.Session, m *discordgo.MessageCreate, args []string) {
 		}
 
 		notifyMarshalStr := string(notifyMarshal)
-		err = redis.Set(notify.UserID, notifyMarshalStr, 0).Err()
+		err = redis.Set(channel, notifyMarshalStr, 0).Err()
 
 		if err != nil {
 			log.Errorln("Redis SET", err)
