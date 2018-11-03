@@ -58,7 +58,7 @@ func Notifier(s *discordgo.Session, projects chan *[]models.Project) {
 				}
 
 				projectsPunch := models.GetProjects()
-				notify(s, p, PrevProject, *projectsPunch, ch.ID)
+				go notify(s, p, PrevProject, *projectsPunch, ch.ID)
 			}
 		}
 
@@ -79,7 +79,7 @@ func Notifier(s *discordgo.Session, projects chan *[]models.Project) {
 									if role.Name == "VIP" && role.ID == userRoleID {
 										log.Info("The user is a vip!!")
 										log.Info("Sending notifications (if exists)")
-										notify(s, p, PrevProject, *myNots.Projects, key)
+										go notify(s, p, PrevProject, *myNots.Projects, key)
 										break
 									}
 								}
@@ -129,7 +129,7 @@ func notify(s *discordgo.Session, p *[]models.Project, prev *[]models.Project, p
 
 					msg := fmt.Sprintf("%sO **%s** do anime **%s** acabou de ser lançado! -> %s\n",
 						userMention,
-						project.Numero,
+						project.Number,
 						project.Project,
 						configs.PunchEndpoint+project.Link)
 
