@@ -19,18 +19,20 @@ func init() {
 
 func TickerHTTP(ticker *time.Ticker, project chan *[]models.Project) {
 	var endpoint = configs.Home
-	projects := models.GetProjects()
+	prev := models.GetProjects()
+
+	log.Info("Starting the timer")
 
 	for t := range ticker.C {
 		log.Infoln(t)
 
 		current := services.GetProjects(endpoint, models.Home)
-		if isNotEqualProjects(projects, &current) {
-			*PrevProject = *projects
-			*projects = current
+		if isNotEqualProjects(prev, &current) {
+			*PrevProject = *prev
+			*prev = current
 
 			log.Info("Sending data to notifier")
-			project <- projects
+			project <- &current
 		}
 
 	}
@@ -49,8 +51,10 @@ func isNotEqualProjects(prev *[]models.Project, current *[]models.Project) bool 
 		diff := int(math.Abs(float64(len(prevVal)) - float64(len(currentVal))))
 
 		currentSlice := currentVal[0:diff]
+		prevSlice := prevVal[0:diff]
+
 		for _, c := range currentSlice {
-			for _, p := range prevVal {
+			for _, p := range prevSlice {
 				if p.ID == c.ID {
 					log.Warnf("Previosly project %s[%s] is equal to current project %s[%s]",
 						p.Project, p.ID,

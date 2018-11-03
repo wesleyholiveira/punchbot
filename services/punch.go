@@ -44,7 +44,7 @@ func GetProjects(endpoint string, typ models.GetProjectsType) []models.Project {
 				log.Error(err)
 			}
 
-			helpers.Transverse(doc, &projects, projectMap, "")
+			helpers.Transverse(doc, &projects, projectMap, "", "")
 		} else {
 			helpers.JsonUpdateToStruct(body, &projects)
 		}
