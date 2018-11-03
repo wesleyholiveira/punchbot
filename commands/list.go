@@ -15,14 +15,14 @@ func animeList(projects *[]models.Project, callback sCallback) string {
 	list := ""
 	for _, project := range *projects {
 		if callback(&project) {
-			list += animeListFormat(project.IDProject, project.Project)
+			list += animeListFormat(project.IDProject, project.Project, project.Day)
 		}
 	}
 	return list
 }
 
-func animeListFormat(id, projectName string) string {
-	return fmt.Sprintf("**%s** - %s\n", id, projectName)
+func animeListFormat(id, projectName, day string) string {
+	return fmt.Sprintf("**%s** - %s (**%s**)\n", id, projectName, day)
 }
 
 func List(s *discordgo.Session, m *discordgo.MessageCreate, args []string) {
