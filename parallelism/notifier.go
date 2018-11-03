@@ -69,21 +69,27 @@ func Notifier(s *discordgo.Session, projects chan *[]models.Project) {
 				ch, _ := s.Channel(key)
 				myNots := myNotifications[key]
 
-				if ch.Type == discordgo.ChannelTypeDM {
-					for _, m := range guild.Members {
-						if myNots.UserID == m.User.ID {
-							log.Info("User found in punch's server")
-							for _, userRoleID := range m.Roles {
-								for _, role := range guild.Roles {
-									if role.Name == "VIP" && role.ID == userRoleID {
-										log.Info("The user is a vip!!")
-										log.Info("Sending notifications (if exists)")
-										go notify(s, p, PrevProject, *myNots.Projects, key, userMention)
+				if ch != nil {
+					if guild != nil {
+						if ch.Type == discordgo.ChannelTypeDM {
+							if myNots != nil {
+								for _, m := range guild.Members {
+									if myNots.UserID == m.User.ID {
+										log.Info("User found in punch's server")
+										for _, userRoleID := range m.Roles {
+											for _, role := range guild.Roles {
+												if role.Name == "VIP" && role.ID == userRoleID {
+													log.Info("The user is a vip!!")
+													log.Info("Sending notifications (if exists)")
+													go notify(s, p, PrevProject, *myNots.Projects, key, userMention)
+													break
+												}
+											}
+										}
 										break
 									}
 								}
 							}
-							break
 						}
 					}
 				}
