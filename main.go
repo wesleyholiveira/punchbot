@@ -46,6 +46,7 @@ func main() {
 	sc := make(chan os.Signal, 1)
 	signal.Notify(sc, syscall.SIGINT, syscall.SIGTERM, os.Interrupt, os.Kill)
 
+	go parallelism.Notify(rClient)
 	go parallelism.GetProjects()
 	go parallelism.GetProjectsCalendar()
 	go parallelism.TickerHTTP(timer, commands.ProjectChan)
