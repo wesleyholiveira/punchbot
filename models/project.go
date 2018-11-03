@@ -1,11 +1,13 @@
 package models
 
 type Project struct {
+	ID        string `json:"id"`
 	IDProject string `json:"id_projeto"`
 	Project   string `json:"projeto"`
 	Link      string `json:"link"`
-	Numero    string `json:"numero"`
+	Number    string `json:"numero"`
 	Screen    string `json:"screen"`
+	Day       string
 }
 
 var projects, calendarProjects *[]Project
