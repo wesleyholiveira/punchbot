@@ -57,7 +57,7 @@ func Notifier(s *discordgo.Session, projects chan *[]models.Project) {
 				}
 
 				projectsPunch := models.GetProjects()
-				notify(s, p, PrevProject, *projectsPunch, ch.ID, userMention)
+				go notify(s, p, PrevProject, *projectsPunch, ch.ID, userMention)
 			}
 		}
 
@@ -81,7 +81,7 @@ func Notifier(s *discordgo.Session, projects chan *[]models.Project) {
 												if role.Name == "VIP" && role.ID == userRoleID {
 													log.Info("The user is a vip!!")
 													log.Info("Sending notifications (if exists)")
-													notify(s, p, PrevProject, *myNots.Projects, key, userMention)
+													go notify(s, p, PrevProject, *myNots.Projects, key, userMention)
 													break
 												}
 											}
