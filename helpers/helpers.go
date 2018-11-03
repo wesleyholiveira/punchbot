@@ -1,9 +1,13 @@
 package helpers
 
 import (
+	"encoding/json"
+	"io"
+	"io/ioutil"
 	"regexp"
 	"strings"
 
+	log "github.com/sirupsen/logrus"
 	"github.com/wesleyholiveira/punchbot/models"
 	"golang.org/x/net/html"
 )
@@ -29,11 +33,26 @@ func Transverse(n *html.Node, projects *[]models.Project, projectMap map[string]
 
 		if n.Data == "li" {
 			for _, attr := range n.Attr {
-				if attr.Key == "data-id" {
-					key = attr.Key
-					project.IDProject = attr.Val
-					projectMap[key] = *project
-					break
+
+				if attr.Key == "class" {
+					if attr.Val == "events-group" {
+						for c := n.FirstChild; c != nil; c = c.NextSibling {
+							for l := c.LastChild; l != nil; l = l.NextSibling {
+								if l.Data == "span" {
+									project.Day = l.FirstChild.Data
+									break
+								}
+								for _, attr := range l.Attr {
+									if attr.Key == "data-id" {
+										key = attr.Val
+										project.IDProject = attr.Val
+										projectMap[key] = *project
+										break
+									}
+								}
+							}
+						}
+					}
 				}
 			}
 		}
@@ -44,9 +63,26 @@ func Transverse(n *html.Node, projects *[]models.Project, projectMap map[string]
 			*projects = append(*projects, prj)
 		}
 	}
+
 	for c := n.FirstChild; c != nil; c = c.NextSibling {
 		Transverse(c, projects, projectMap, key)
 	}
+}
+
+func JsonUpdateToStruct(body io.Reader, projects *[]models.Project) *[]models.Project {
+	r, _ := ioutil.ReadAll(body)
+	re := regexp.MustCompile(`(\[.+\];)`)
+	response := re.Find(r)
+
+	re = regexp.MustCompile(`\\\/`)
+	response = re.ReplaceAll(response, []byte(`/`))
+	response = response[:len(response)-1]
+
+	err := json.Unmarshal(response, projects)
+	if err != nil {
+		log.Error(err)
+	}
+	return projects
 }
 
 func ParseChannels(channels string) map[string]string {
