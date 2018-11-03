@@ -25,7 +25,7 @@ func RemoveDuplicates(elements []models.Project) []models.Project {
 	return result
 }
 
-func Transverse(n *html.Node, projects *[]models.Project, projectMap map[string]models.Project, key string) {
+func Transverse(n *html.Node, projects *[]models.Project, projectMap map[string]models.Project, key, day string) {
 
 	project := new(models.Project)
 
@@ -33,26 +33,17 @@ func Transverse(n *html.Node, projects *[]models.Project, projectMap map[string]
 
 		if n.Data == "li" {
 			for _, attr := range n.Attr {
-
 				if attr.Key == "class" {
 					if attr.Val == "events-group" {
-						for c := n.FirstChild; c != nil; c = c.NextSibling {
-							for l := c.LastChild; l != nil; l = l.NextSibling {
-								if l.Data == "span" {
-									project.Day = l.FirstChild.Data
-									break
-								}
-								for _, attr := range l.Attr {
-									if attr.Key == "data-id" {
-										key = attr.Val
-										project.IDProject = attr.Val
-										projectMap[key] = *project
-										break
-									}
-								}
-							}
-						}
+						day = n.FirstChild.FirstChild.LastChild.Data
 					}
+				}
+
+				if attr.Key == "data-id" {
+					key = attr.Val
+					project.IDProject = attr.Val
+					projectMap[key] = *project
+					break
 				}
 			}
 		}
@@ -60,12 +51,12 @@ func Transverse(n *html.Node, projects *[]models.Project, projectMap map[string]
 		if n.Data == "em" {
 			prj := projectMap[key]
 			prj.Project = n.FirstChild.Data
+			prj.Day = day
 			*projects = append(*projects, prj)
 		}
 	}
-
 	for c := n.FirstChild; c != nil; c = c.NextSibling {
-		Transverse(c, projects, projectMap, key)
+		Transverse(c, projects, projectMap, key, day)
 	}
 }
 
