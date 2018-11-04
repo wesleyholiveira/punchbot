@@ -8,6 +8,7 @@ type Project struct {
 	Number    string `json:"numero"`
 	Screen    string `json:"screen"`
 	Day       string
+	HashID    string
 }
 
 var projects, calendarProjects *[]Project

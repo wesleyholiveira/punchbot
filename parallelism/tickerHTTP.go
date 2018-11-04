@@ -50,15 +50,19 @@ func isNotEqualProjects(prev *[]models.Project, current *[]models.Project) bool 
 	if currentContent != content && len(currentVal) > 0 {
 		diff := int(math.Abs(float64(len(prevVal)) - float64(len(currentVal))))
 
+		if diff == 0 {
+			diff = 1
+		}
+
 		currentSlice := currentVal[0:diff]
 		prevSlice := prevVal[0:diff]
 
 		for _, c := range currentSlice {
 			for _, p := range prevSlice {
-				if p.ID == c.ID {
+				if p.HashID == c.HashID {
 					log.Warnf("Previosly project %s[%s] is equal to current project %s[%s]",
-						p.Project, p.ID,
-						c.Project, c.ID)
+						p.Project, p.HashID,
+						c.Project, c.HashID)
 					log.Warn("IGNORED!!")
 					return false
 				}

@@ -7,6 +7,7 @@ import (
 	"regexp"
 	"strings"
 
+	"github.com/cnf/structhash"
 	log "github.com/sirupsen/logrus"
 	"github.com/wesleyholiveira/punchbot/models"
 	"golang.org/x/net/html"
@@ -70,6 +71,12 @@ func JsonUpdateToStruct(body io.Reader, projects *[]models.Project) *[]models.Pr
 	response = response[:len(response)-1]
 
 	err := json.Unmarshal(response, projects)
+
+	for i, project := range *projects {
+		hash, _ := structhash.Hash(project.Project+project.Number, 0)
+		(*projects)[i].HashID = hash
+	}
+
 	if err != nil {
 		log.Error(err)
 	}
