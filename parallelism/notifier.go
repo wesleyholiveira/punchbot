@@ -111,9 +111,21 @@ func notify(s *discordgo.Session, current *[]models.Project, prev *[]models.Proj
 
 	log.Infof("Diff: %d, PREV PROJECTS: %d, CURRENT PROJECTS: %d", diff, pLen, cLen)
 
+	for _, c := range *current {
+		for _, p := range prevSlice {
+			if c.HashID == p.HashID {
+				log.Warnf("Previosly project %s[%s] is equal to current project %s[%s]",
+					p.Project, p.HashID,
+					c.Project, c.HashID)
+				log.Warn("IGNORED!!")
+				p.AlreadyReleased = true
+			}
+		}
+	}
+
 	for _, c := range currentSlice {
 		for _, p := range prevSlice {
-			if c.IDProject != p.IDProject {
+			if c.IDProject != p.IDProject && !p.AlreadyReleased {
 				log.Info("PROJECT MATCHED!")
 
 				screen := c.Screen
