@@ -22,6 +22,7 @@ func init() {
 func Notifier(s *discordgo.Session, projects chan *[]models.Project) {
 	for p := range projects {
 		var guildID string
+		prev := models.GetProjects()
 		log.Info("Notifier is on")
 
 		for key, tag := range channels {
@@ -55,9 +56,7 @@ func Notifier(s *discordgo.Session, projects chan *[]models.Project) {
 					}
 					userMention += " "
 				}
-
-				projectsPunch := models.GetProjects()
-				go notify(s, p, PrevProject, *projectsPunch, ch.ID, userMention)
+				go notify(s, p, prev, ch.ID, userMention)
 			}
 		}
 
@@ -81,7 +80,7 @@ func Notifier(s *discordgo.Session, projects chan *[]models.Project) {
 												if role.Name == "VIP" && role.ID == userRoleID {
 													log.Info("The user is a vip!!")
 													log.Info("Sending notifications (if exists)")
-													go notify(s, p, PrevProject, *myNots.Projects, key, userMention)
+													go notify(s, myNots.Projects, prev, key, userMention)
 													break
 												}
 											}
@@ -98,31 +97,31 @@ func Notifier(s *discordgo.Session, projects chan *[]models.Project) {
 	}
 }
 
-func notify(s *discordgo.Session, p *[]models.Project, prev *[]models.Project, prjs []models.Project, channelID, userMention string) error {
-	myProjects := make([]models.Project, len(prjs))
-	diff := int(math.Abs(float64(len(*p) - len(*prev))))
+func notify(s *discordgo.Session, current *[]models.Project, prev *[]models.Project, channelID, userMention string) error {
+	cLen := len(*current)
+	pLen := len(*prev)
+	diff := int(math.Abs(float64(cLen) - float64(pLen)))
 
 	if diff == 0 {
 		diff = 1
 	}
 
-	copy(myProjects, prjs)
+	currentSlice := (*current)[0:diff]
+	prevSlice := (*prev)[0:diff]
 
-	projectsSlice := *p
-	projectsSlice = projectsSlice[0:diff]
+	log.Infof("Diff: %d, PREV PROJECTS: %d, CURRENT PROJECTS: %d", diff, pLen, cLen)
 
-	log.Infof("Diff: %d, PREV PROJECTS: %d, CURRENT PROJECTS: %d, MY PROJECTS: %d", diff, len(*prev), len(*p), len(myProjects))
-
-	for _, myProject := range myProjects {
-		for _, project := range projectsSlice {
-			if project.IDProject == myProject.IDProject {
+	for _, c := range currentSlice {
+		for _, p := range prevSlice {
+			if c.IDProject != p.IDProject {
 				log.Info("PROJECT MATCHED!")
-				screen := project.Screen
+
+				screen := c.Screen
 				img := strings.Split(screen, "/")
 				imgName := img[len(img)-1]
 
-				if !strings.Contains(project.Screen, "http") {
-					screen = configs.PunchEndpoint + project.Screen
+				if !strings.Contains(c.Screen, "http") {
+					screen = configs.PunchEndpoint + c.Screen
 				}
 
 				httpImage, err := services.Get(screen)
@@ -134,14 +133,16 @@ func notify(s *discordgo.Session, p *[]models.Project, prev *[]models.Project, p
 
 					msg := fmt.Sprintf("%sO **%s** do anime **%s** acabou de ser lançado! -> %s\n",
 						userMention,
-						project.Number,
-						project.Project,
-						configs.PunchEndpoint+project.Link)
+						c.Number,
+						c.Project,
+						configs.PunchEndpoint+c.Link)
 
 					_, err := s.ChannelFileSendWithMessage(channelID, msg, imgName, respImage)
 					if err != nil {
 						log.Error(err)
 					}
+				} else {
+					log.Error("Image error: ", err)
 				}
 			}
 		}

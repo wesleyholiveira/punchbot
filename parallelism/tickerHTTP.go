@@ -1,7 +1,6 @@
 package parallelism
 
 import (
-	"math"
 	"time"
 
 	"github.com/cnf/structhash"
@@ -11,30 +10,32 @@ import (
 	"github.com/wesleyholiveira/punchbot/services"
 )
 
-var PrevProject *[]models.Project
+var backup *[]models.Project
 
 func init() {
-	PrevProject = new([]models.Project)
+	backup = new([]models.Project)
 }
 
 func TickerHTTP(ticker *time.Ticker, project chan *[]models.Project) {
 	var endpoint = configs.Home
-	prev := models.GetProjects()
 
 	log.Info("Starting the timer")
 
 	for t := range ticker.C {
 		log.Infoln(t)
 
-		current := services.GetProjects(endpoint, models.Home)
-		if isNotEqualProjects(prev, &current) {
-			*PrevProject = *prev
-			*prev = current
+		prev := backup
 
-			log.Info("Sending data to notifier")
-			project <- &current
+		if len(*prev) == 0 {
+			prev = models.GetProjects()
 		}
 
+		current := services.GetProjects(endpoint, models.Home)
+		if isNotEqualProjects(prev, &current) {
+			log.Info("Sending data to notifier")
+			project <- &current
+			*backup = current
+		}
 	}
 }
 
@@ -48,27 +49,6 @@ func isNotEqualProjects(prev *[]models.Project, current *[]models.Project) bool 
 	log.Infof("prev: [%s](%d), current: [%s](%d)", content, len(prevVal), currentContent, len(currentVal))
 
 	if currentContent != content && len(currentVal) > 0 {
-		diff := int(math.Abs(float64(len(prevVal)) - float64(len(currentVal))))
-
-		if diff == 0 {
-			diff = 1
-		}
-
-		currentSlice := currentVal[0:diff]
-		prevSlice := prevVal[0:diff]
-
-		for _, c := range currentSlice {
-			for _, p := range prevSlice {
-				if p.HashID == c.HashID {
-					log.Warnf("Previosly project %s[%s] is equal to current project %s[%s]",
-						p.Project, p.HashID,
-						c.Project, c.HashID)
-					log.Warn("IGNORED!!")
-					return false
-				}
-			}
-		}
-
 		return true
 	}
 

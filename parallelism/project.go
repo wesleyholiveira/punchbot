@@ -8,9 +8,9 @@ import (
 )
 
 func GetProjects() {
-	log.Info("Getting the latest releases")
 	projects := models.GetProjects()
 	if len(*projects) == 0 {
+		log.Info("Getting the latest releases")
 		*projects = services.GetProjects(configs.Home, models.Home)
 	}
 }
