@@ -75,6 +75,7 @@ func JsonUpdateToStruct(body io.Reader, projects *[]models.Project) *[]models.Pr
 	for i, project := range *projects {
 		hash, _ := structhash.Hash(project.Project+project.Number, 0)
 		(*projects)[i].HashID = hash
+		(*projects)[i].AlreadyReleased = false
 	}
 
 	if err != nil {

@@ -17,7 +17,7 @@ func init() {
 	ProjectChan = make(chan *[]models.Project, 0)
 	PrevProjectChan = make(chan *[]models.Project, 0)
 
-	except = []string{"help", "auth"}
+	except = []string{"help", "auth", "list"}
 
 	cmds["list"] = List
 	cmds["notify"] = Notify

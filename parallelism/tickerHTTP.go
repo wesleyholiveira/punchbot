@@ -31,6 +31,9 @@ func TickerHTTP(ticker *time.Ticker, project chan *[]models.Project) {
 		}
 
 		current := services.GetProjects(endpoint, models.Home)
+
+		changeAllAlreadyRelased(&current, prev)
+
 		if isNotEqualProjects(prev, &current) {
 			log.Info("Sending data to notifier")
 			project <- &current
@@ -53,4 +56,14 @@ func isNotEqualProjects(prev *[]models.Project, current *[]models.Project) bool 
 	}
 
 	return false
+}
+
+func changeAllAlreadyRelased(current *[]models.Project, prev *[]models.Project) {
+	for i, c := range *current {
+		for _, p := range *prev {
+			if c.ID == p.ID {
+				(*current)[i].AlreadyReleased = true
+			}
+		}
+	}
 }

@@ -80,7 +80,13 @@ func Notifier(s *discordgo.Session, projects chan *[]models.Project) {
 												if role.Name == "VIP" && role.ID == userRoleID {
 													log.Info("The user is a vip!!")
 													log.Info("Sending notifications (if exists)")
-													go notify(s, myNots.Projects, prev, key, userMention)
+													go notifyUser(s, p, myNots.Projects, key, userMention)
+													break
+												} else {
+													s.ChannelMessageSend(key,
+														fmt.Sprintf("Vejo que você possui interesse em receber notificações "+
+															"via DM mas isto é **exclusivo** para usuários **VIP** no Discord.\n"+
+															"Leia o canal #regras ou acesse: %s para adquirir seu **VIP!**", configs.PunchEndpoint))
 													break
 												}
 											}
@@ -97,7 +103,8 @@ func Notifier(s *discordgo.Session, projects chan *[]models.Project) {
 	}
 }
 
-func notify(s *discordgo.Session, current *[]models.Project, prev *[]models.Project, channelID, userMention string) error {
+func notify(s *discordgo.Session, current *[]models.Project, prev *[]models.Project, channelID, userMention string) (bool, error) {
+	punchReleases := models.GetProjects()
 	cLen := len(*current)
 	pLen := len(*prev)
 	diff := int(math.Abs(float64(cLen) - float64(pLen)))
@@ -106,58 +113,98 @@ func notify(s *discordgo.Session, current *[]models.Project, prev *[]models.Proj
 		diff = 1
 	}
 
-	currentSlice := (*current)[0:diff]
-	prevSlice := (*prev)[0:diff]
-
 	log.Infof("Diff: %d, PREV PROJECTS: %d, CURRENT PROJECTS: %d", diff, pLen, cLen)
 
-	for _, c := range *current {
-		for _, p := range prevSlice {
-			if c.HashID == p.HashID {
-				log.Warnf("Previosly project %s[%s] is equal to current project %s[%s]",
-					p.Project, p.HashID,
-					c.Project, c.HashID)
-				log.Warn("IGNORED!!")
-				p.AlreadyReleased = true
+	currentSlice := (*current)[0:diff]
+
+	for i, c := range currentSlice {
+		if !c.AlreadyReleased {
+			for _, p := range *prev {
+				if c.IDProject != p.IDProject {
+					sendMessage(s, &c, channelID, userMention)
+					(*current)[i].AlreadyReleased = true
+					break
+				}
 			}
+		} else {
+			log.Warnf("A previosly released project %s[%s] was already released.",
+				c.Project, c.HashID)
+			log.Warn("Ignoring...")
+			break
 		}
 	}
 
-	for _, c := range currentSlice {
-		for _, p := range prevSlice {
-			if c.IDProject != p.IDProject && !p.AlreadyReleased {
-				log.Info("PROJECT MATCHED!")
+	*punchReleases = *current
 
-				screen := c.Screen
-				img := strings.Split(screen, "/")
-				imgName := img[len(img)-1]
+	return true, nil
+}
 
-				if !strings.Contains(c.Screen, "http") {
-					screen = configs.PunchEndpoint + c.Screen
-				}
+func notifyUser(s *discordgo.Session, current *[]models.Project, prev *[]models.Project, channelID, userMention string) (bool, error) {
+	punchReleases := models.GetProjects()
+	cLen := len(*current)
+	pLen := len(*prev)
+	diff := int(math.Abs(float64(cLen) - float64(pLen)))
 
-				httpImage, err := services.Get(screen)
+	if diff == 0 {
+		diff = 1
+	}
 
-				if err == nil {
+	log.Infof("Diff: %d, PREV PROJECTS: %d, CURRENT PROJECTS: %d", diff, pLen, cLen)
+	currentSlice := (*current)[0:diff]
 
-					respImage := httpImage.Body
-					defer respImage.Close()
-
-					msg := fmt.Sprintf("%sO **%s** do anime **%s** acabou de ser lançado! -> %s\n",
-						userMention,
-						c.Number,
-						c.Project,
-						configs.PunchEndpoint+c.Link)
-
-					_, err := s.ChannelFileSendWithMessage(channelID, msg, imgName, respImage)
-					if err != nil {
-						log.Error(err)
-					}
-				} else {
-					log.Error("Image error: ", err)
+	for i, c := range currentSlice {
+		if !c.AlreadyReleased {
+			for _, p := range *prev {
+				if c.IDProject == p.IDProject {
+					sendMessage(s, &c, channelID, userMention)
+					(*current)[i].AlreadyReleased = true
+					break
 				}
 			}
+		} else {
+			log.Warnf("A previosly released project %s[%s] was already released.",
+				c.Project, c.HashID)
+			log.Warn("Ignoring...")
+			break
 		}
 	}
-	return nil
+
+	*punchReleases = *current
+
+	return true, nil
+}
+
+func sendMessage(s *discordgo.Session, c *models.Project, channelID, userMention string) (bool, error) {
+	log.Info("PROJECT MATCHED!")
+
+	screen := c.Screen
+	img := strings.Split(screen, "/")
+	imgName := img[len(img)-1]
+
+	if !strings.Contains(c.Screen, "http") {
+		screen = configs.PunchEndpoint + c.Screen
+	}
+
+	httpImage, err := services.Get(screen)
+
+	if err == nil {
+
+		respImage := httpImage.Body
+		defer respImage.Close()
+
+		msg := fmt.Sprintf("%sO **%s** do anime **%s** acabou de ser lançado! -> %s\n",
+			userMention,
+			c.Number,
+			c.Project,
+			configs.PunchEndpoint+c.Link)
+
+		_, err := s.ChannelFileSendWithMessage(channelID, msg, imgName, respImage)
+		if err != nil {
+			log.Error(err)
+		}
+	} else {
+		log.Errorf("[%s] Image error: %s", c.Project, err)
+	}
+
+	return true, nil
 }
