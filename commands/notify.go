@@ -33,11 +33,14 @@ func Notify(s *discordgo.Session, m *discordgo.MessageCreate, args []string) {
 			notifyUser[channel] = notifyRedis
 		}
 
-		msg := "Sua lista de animes a serem notificados:\n"
+		msg := "Não há nada para ser listado."
 
 		for key := range notifyUser {
-			for _, prj := range *notifyUser[key].Projects {
-				msg += fmt.Sprintf("**%s** - %s\n", prj.IDProject, prj.Project)
+			if nUser := notifyUser[key].Projects; nUser != nil {
+				msg = "Sua lista de animes a serem notificados:\n"
+				for _, prj := range *nUser {
+					msg += fmt.Sprintf("**%s** - %s\n", prj.IDProject, prj.Project)
+				}
 			}
 		}
 
