@@ -83,50 +83,50 @@
 		{
 			"checksumSHA1": "z2MU4ez5EKyZ8EJuE24j8Ip0WMo=",
 			"path": "github.com/wesleyholiveira/punchbot",
-			"revision": "fb22d629cce50b3289b8fbdf64589c8fa9ddd56c",
-			"revisionTime": "2018-11-14T13:23:22Z"
+			"revision": "b5b5e94a193dfe427b0416bd87ad5d63f99795d3",
+			"revisionTime": "2018-11-14T16:14:25Z"
 		},
 		{
 			"checksumSHA1": "Prva0WDr7lXWa3dpiPJ6TuQZN0w=",
 			"path": "github.com/wesleyholiveira/punchbot/commands",
-			"revision": "fb22d629cce50b3289b8fbdf64589c8fa9ddd56c",
-			"revisionTime": "2018-11-14T13:23:22Z"
+			"revision": "b5b5e94a193dfe427b0416bd87ad5d63f99795d3",
+			"revisionTime": "2018-11-14T16:14:25Z"
 		},
 		{
 			"checksumSHA1": "ygfdMXY/LGKzdP/IUvwCDVydfBo=",
 			"path": "github.com/wesleyholiveira/punchbot/configs",
-			"revision": "fb22d629cce50b3289b8fbdf64589c8fa9ddd56c",
-			"revisionTime": "2018-11-14T13:23:22Z"
+			"revision": "b5b5e94a193dfe427b0416bd87ad5d63f99795d3",
+			"revisionTime": "2018-11-14T16:14:25Z"
 		},
 		{
 			"checksumSHA1": "JJT3z1RUoiWHUmLsbRLzFmDu1wA=",
 			"path": "github.com/wesleyholiveira/punchbot/helpers",
-			"revision": "fb22d629cce50b3289b8fbdf64589c8fa9ddd56c",
-			"revisionTime": "2018-11-14T13:23:22Z"
+			"revision": "b5b5e94a193dfe427b0416bd87ad5d63f99795d3",
+			"revisionTime": "2018-11-14T16:14:25Z"
 		},
 		{
 			"checksumSHA1": "rbOe8hzcOECd17DmoJ5DUP7+pf0=",
 			"path": "github.com/wesleyholiveira/punchbot/models",
-			"revision": "fb22d629cce50b3289b8fbdf64589c8fa9ddd56c",
-			"revisionTime": "2018-11-14T13:23:22Z"
+			"revision": "b5b5e94a193dfe427b0416bd87ad5d63f99795d3",
+			"revisionTime": "2018-11-14T16:14:25Z"
 		},
 		{
 			"checksumSHA1": "HEVcQ8oKletkHt26ShQ3vnCojeU=",
 			"path": "github.com/wesleyholiveira/punchbot/parallelism",
-			"revision": "fb22d629cce50b3289b8fbdf64589c8fa9ddd56c",
-			"revisionTime": "2018-11-14T13:23:22Z"
+			"revision": "b5b5e94a193dfe427b0416bd87ad5d63f99795d3",
+			"revisionTime": "2018-11-14T16:14:25Z"
 		},
 		{
 			"checksumSHA1": "3me4mc45SsccBnkGQ+JOZL9hY+0=",
 			"path": "github.com/wesleyholiveira/punchbot/redis",
-			"revision": "fb22d629cce50b3289b8fbdf64589c8fa9ddd56c",
-			"revisionTime": "2018-11-14T13:23:22Z"
+			"revision": "b5b5e94a193dfe427b0416bd87ad5d63f99795d3",
+			"revisionTime": "2018-11-14T16:14:25Z"
 		},
 		{
 			"checksumSHA1": "ndgyy8QRpxicbIFhJGp/D00okT8=",
 			"path": "github.com/wesleyholiveira/punchbot/services",
-			"revision": "fb22d629cce50b3289b8fbdf64589c8fa9ddd56c",
-			"revisionTime": "2018-11-14T13:23:22Z"
+			"revision": "b5b5e94a193dfe427b0416bd87ad5d63f99795d3",
+			"revisionTime": "2018-11-14T16:14:25Z"
 		},
 		{
 			"checksumSHA1": "/U7f2gaH6DnEmLguVLDbipU6kXU=",
