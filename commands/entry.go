@@ -21,6 +21,7 @@ func init() {
 
 	cmds["list"] = List
 	cmds["notify"] = Notify
+	cmds["stopnotify"] = StopNotify
 	cmds["auth"] = Auth
 	cmds["help"] = Help
 }

@@ -1,6 +1,7 @@
 package parallelism
 
 import (
+	"errors"
 	"fmt"
 	"math"
 	"strings"
@@ -80,16 +81,14 @@ func Notifier(s *discordgo.Session, projects chan *[]models.Project) {
 												if role.Name == "VIP" && role.ID == userRoleID {
 													log.Info("The user is a vip!!")
 													log.Info("Sending notifications (if exists)")
-													go notifyUser(s, p, myNots.Projects, key, userMention)
-													break
-												} else {
-													s.ChannelMessageSend(key,
-														fmt.Sprintf("Vejo que você possui interesse em receber notificações "+
-															"via DM mas isto é **exclusivo** para usuários **VIP** no Discord.\n"+
-															"Leia o canal #regras ou acesse: %s para adquirir seu **VIP!**", configs.PunchEndpoint))
-													break
+
+													myNots.VIP = true
 												}
 											}
+										}
+
+										if _, err := notifyUser(s, p, myNots, key, userMention); err != nil {
+											log.Error(err)
 										}
 										break
 									}
@@ -139,7 +138,8 @@ func notify(s *discordgo.Session, current *[]models.Project, prev *[]models.Proj
 	return true, nil
 }
 
-func notifyUser(s *discordgo.Session, current *[]models.Project, prev *[]models.Project, channelID, userMention string) (bool, error) {
+func notifyUser(s *discordgo.Session, current *[]models.Project, myNots *models.Notify, channelID, userMention string) (bool, error) {
+	prev := myNots.Projects
 	punchReleases := models.GetProjects()
 	cLen := len(*current)
 	pLen := len(*prev)
@@ -156,6 +156,16 @@ func notifyUser(s *discordgo.Session, current *[]models.Project, prev *[]models.
 		if !c.AlreadyReleased {
 			for _, p := range *prev {
 				if c.IDProject == p.IDProject {
+					if !myNots.VIP {
+						user, _ := s.User(myNots.UserID)
+						s.ChannelMessageSend(channelID,
+							fmt.Sprintf("Vejo que você possui interesse em receber notificações "+
+								"via DM mas isto é **exclusivo** para usuários **VIP** no Discord.\n"+
+								"Leia o canal #regras ou acesse: %s para adquirir seu **VIP!**",
+								configs.PunchEndpoint))
+						return false, errors.New(fmt.Sprintf("%s Isn't a vip", user.Username))
+					}
+
 					sendMessage(s, &c, channelID, userMention)
 					(*current)[i].AlreadyReleased = true
 					break
