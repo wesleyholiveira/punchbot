@@ -46,7 +46,10 @@ func GetProjects(endpoint string, typ models.GetProjectsType) []models.Project {
 
 			helpers.Transverse(doc, &projects, projectMap, "", "")
 		} else {
-			helpers.JsonUpdateToStruct(body, &projects)
+			err = helpers.JsonUpdateToStruct(body, &projects)
+			if err != nil {
+				log.Error(err)
+			}
 		}
 	}
 	return helpers.RemoveDuplicates(projects)

@@ -8,7 +8,6 @@ import (
 	"strings"
 
 	"github.com/cnf/structhash"
-	log "github.com/sirupsen/logrus"
 	"github.com/wesleyholiveira/punchbot/models"
 	"golang.org/x/net/html"
 )
@@ -61,7 +60,7 @@ func Transverse(n *html.Node, projects *[]models.Project, projectMap map[string]
 	}
 }
 
-func JsonUpdateToStruct(body io.Reader, projects *[]models.Project) *[]models.Project {
+func JsonUpdateToStruct(body io.Reader, projects *[]models.Project) error {
 	r, _ := ioutil.ReadAll(body)
 	re := regexp.MustCompile(`(\[.+\];)`)
 	response := re.Find(r)
@@ -72,16 +71,16 @@ func JsonUpdateToStruct(body io.Reader, projects *[]models.Project) *[]models.Pr
 
 	err := json.Unmarshal(response, projects)
 
-	for i, project := range *projects {
-		hash, _ := structhash.Hash(project.Project+project.Number, 0)
-		(*projects)[i].HashID = hash
-		(*projects)[i].AlreadyReleased = false
+	if err == nil {
+		for i, project := range *projects {
+			hash, _ := structhash.Hash(project.Project+project.Number, 0)
+			(*projects)[i].HashID = hash
+			(*projects)[i].AlreadyReleased = false
+		}
+		return nil
 	}
 
-	if err != nil {
-		log.Error(err)
-	}
-	return projects
+	return err
 }
 
 func ParseChannels(channels string) map[string]string {
