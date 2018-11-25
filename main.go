@@ -7,6 +7,8 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/wesleyholiveira/punchbot/twitter"
+
 	"github.com/bwmarrin/discordgo"
 	log "github.com/sirupsen/logrus"
 	"github.com/wesleyholiveira/punchbot/commands"
@@ -42,6 +44,8 @@ func main() {
 	}
 
 	d.AddHandler(commands.Entry)
+
+	_, err = twitter.NewClient()
 
 	sc := make(chan os.Signal, 1)
 	signal.Notify(sc, syscall.SIGINT, syscall.SIGTERM, os.Interrupt, os.Kill)

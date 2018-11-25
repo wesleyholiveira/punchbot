@@ -11,6 +11,10 @@ var AuthURL = os.Getenv("AUTH_URL")
 var NotificationChannelsID = os.Getenv("NOTIFICATION_CHANNELS")
 var CommandChannelsID = os.Getenv("COMMAND_CHANNELS")
 var DiscordToken = os.Getenv("DISCORD_TOKEN")
+var TwitterConsumer = os.Getenv("TWITTER_CONSUMER")
+var TwitterConsumerSecret = os.Getenv("TWITTER_CONSUMER_SECRET")
+var TwitterAccessToken = os.Getenv("TWITTER_ACCESS_TOKEN")
+var TwitterAccessTokenSecret = os.Getenv("TWITTER_ACCESS_TOKEN_SECRET")
 
 // Site
 var PunchEndpoint = os.Getenv("PUNCHSITE")

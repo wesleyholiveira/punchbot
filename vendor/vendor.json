@@ -15,6 +15,24 @@
 			"revisionTime": "2018-01-04T16:16:10Z"
 		},
 		{
+			"checksumSHA1": "wQAOzoxEJpvog97VJ66++OGBpXY=",
+			"path": "github.com/dghubble/go-twitter/twitter",
+			"revision": "22773114c241a203bc3da6895f16480a4524cb81",
+			"revisionTime": "2018-11-18T09:59:17Z"
+		},
+		{
+			"checksumSHA1": "pTrVg4TTr4m9ODdwp5YuQ7fjJ5Y=",
+			"path": "github.com/dghubble/oauth1",
+			"revision": "f0fe2bff8fbf301b33359ca431e4afc90390aab0",
+			"revisionTime": "2018-11-18T06:55:38Z"
+		},
+		{
+			"checksumSHA1": "v9F1MncTnJkAmlSvXTAqR3XlzT8=",
+			"path": "github.com/dghubble/sling",
+			"revision": "e2624bf29a7de45ab0802b09aea94ca0a7815c5f",
+			"revisionTime": "2018-11-18T07:40:07Z"
+		},
+		{
 			"checksumSHA1": "ftEeWuT17fk6hvz82ELmniaMbz0=",
 			"path": "github.com/go-redis/redis",
 			"revision": "b3d9bf10f6666b2ee5100a6f3f84f4caf3b4e37d",
@@ -63,6 +81,12 @@
 			"revisionTime": "2018-10-25T06:51:40Z"
 		},
 		{
+			"checksumSHA1": "p3IB18uJRs4dL2K5yx24MrLYE9A=",
+			"path": "github.com/google/go-querystring/query",
+			"revision": "44c6ddd0a2342c386950e880b658017258da92fc",
+			"revisionTime": "2018-09-16T13:16:37Z"
+		},
+		{
 			"checksumSHA1": "lnXCQ0W+TUrintwU69ljmXf5o+k=",
 			"path": "github.com/gorilla/websocket",
 			"revision": "483fb8d7c32fcb4b5636cd293a92e3935932e2f4",
@@ -81,52 +105,58 @@
 			"revisionTime": "2018-11-01T07:55:17Z"
 		},
 		{
-			"checksumSHA1": "z2MU4ez5EKyZ8EJuE24j8Ip0WMo=",
+			"checksumSHA1": "eo2cF0Yw56jeLQL6fKpNFxd+gSI=",
 			"path": "github.com/wesleyholiveira/punchbot",
-			"revision": "0de1faa41d64f1b3d8508be9f2d5393b5fd998cb",
-			"revisionTime": "2018-11-20T03:08:05Z"
+			"revision": "329ff40fd2224cd2e42b5acb07c6dedb8335317c",
+			"revisionTime": "2018-11-20T03:09:04Z"
 		},
 		{
 			"checksumSHA1": "Prva0WDr7lXWa3dpiPJ6TuQZN0w=",
 			"path": "github.com/wesleyholiveira/punchbot/commands",
-			"revision": "0de1faa41d64f1b3d8508be9f2d5393b5fd998cb",
-			"revisionTime": "2018-11-20T03:08:05Z"
+			"revision": "329ff40fd2224cd2e42b5acb07c6dedb8335317c",
+			"revisionTime": "2018-11-20T03:09:04Z"
 		},
 		{
-			"checksumSHA1": "ygfdMXY/LGKzdP/IUvwCDVydfBo=",
+			"checksumSHA1": "NVTyOysKb1io03Ewr33FrgcPKs0=",
 			"path": "github.com/wesleyholiveira/punchbot/configs",
-			"revision": "0de1faa41d64f1b3d8508be9f2d5393b5fd998cb",
-			"revisionTime": "2018-11-20T03:08:05Z"
+			"revision": "329ff40fd2224cd2e42b5acb07c6dedb8335317c",
+			"revisionTime": "2018-11-20T03:09:04Z"
 		},
 		{
 			"checksumSHA1": "/f/ptfGk3gOphix3ExMkt66ExhY=",
 			"path": "github.com/wesleyholiveira/punchbot/helpers",
-			"revision": "0de1faa41d64f1b3d8508be9f2d5393b5fd998cb",
-			"revisionTime": "2018-11-20T03:08:05Z"
+			"revision": "329ff40fd2224cd2e42b5acb07c6dedb8335317c",
+			"revisionTime": "2018-11-20T03:09:04Z"
 		},
 		{
 			"checksumSHA1": "rbOe8hzcOECd17DmoJ5DUP7+pf0=",
 			"path": "github.com/wesleyholiveira/punchbot/models",
-			"revision": "0de1faa41d64f1b3d8508be9f2d5393b5fd998cb",
-			"revisionTime": "2018-11-20T03:08:05Z"
+			"revision": "329ff40fd2224cd2e42b5acb07c6dedb8335317c",
+			"revisionTime": "2018-11-20T03:09:04Z"
 		},
 		{
-			"checksumSHA1": "HEVcQ8oKletkHt26ShQ3vnCojeU=",
+			"checksumSHA1": "l6uTrHNTfvdrn5JjtiBNSlCNZrg=",
 			"path": "github.com/wesleyholiveira/punchbot/parallelism",
-			"revision": "0de1faa41d64f1b3d8508be9f2d5393b5fd998cb",
-			"revisionTime": "2018-11-20T03:08:05Z"
+			"revision": "329ff40fd2224cd2e42b5acb07c6dedb8335317c",
+			"revisionTime": "2018-11-20T03:09:04Z"
 		},
 		{
 			"checksumSHA1": "3me4mc45SsccBnkGQ+JOZL9hY+0=",
 			"path": "github.com/wesleyholiveira/punchbot/redis",
-			"revision": "0de1faa41d64f1b3d8508be9f2d5393b5fd998cb",
-			"revisionTime": "2018-11-20T03:08:05Z"
+			"revision": "329ff40fd2224cd2e42b5acb07c6dedb8335317c",
+			"revisionTime": "2018-11-20T03:09:04Z"
 		},
 		{
 			"checksumSHA1": "vO0bWRNBLAa0FWOcsytdZoPCO5M=",
 			"path": "github.com/wesleyholiveira/punchbot/services",
-			"revision": "0de1faa41d64f1b3d8508be9f2d5393b5fd998cb",
-			"revisionTime": "2018-11-20T03:08:05Z"
+			"revision": "329ff40fd2224cd2e42b5acb07c6dedb8335317c",
+			"revisionTime": "2018-11-20T03:09:04Z"
+		},
+		{
+			"checksumSHA1": "mA20jr7UjTFnaSiq9/TJPWI3rOA=",
+			"path": "github.com/wesleyholiveira/punchbot/twitter",
+			"revision": "329ff40fd2224cd2e42b5acb07c6dedb8335317c",
+			"revisionTime": "2018-11-20T03:09:04Z"
 		},
 		{
 			"checksumSHA1": "/U7f2gaH6DnEmLguVLDbipU6kXU=",
@@ -169,6 +199,18 @@
 			"path": "golang.org/x/net/html/atom",
 			"revision": "e11730110bbd884bbf19550bfafe9d69519ce29e",
 			"revisionTime": "2018-11-01T15:35:12Z"
+		},
+		{
+			"checksumSHA1": "5+Wlq4i/9BUFndiLq5QMPvATj4w=",
+			"path": "golang.org/x/oauth2",
+			"revision": "8f65e3013ebad444f13bc19536f7865efc793816",
+			"revisionTime": "2018-11-20T19:07:42Z"
+		},
+		{
+			"checksumSHA1": "w/v9CfU82E/yLVhfloh4vSn/9YA=",
+			"path": "golang.org/x/oauth2/internal",
+			"revision": "8f65e3013ebad444f13bc19536f7865efc793816",
+			"revisionTime": "2018-11-20T19:07:42Z"
 		},
 		{
 			"checksumSHA1": "b2oWuv1tpxlJBO7Dn8jh1iu8ZlA=",

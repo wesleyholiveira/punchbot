@@ -4,14 +4,17 @@ import (
 	"errors"
 	"fmt"
 	"math"
+	"net/http"
 	"strings"
 
 	"github.com/bwmarrin/discordgo"
+	"github.com/dghubble/go-twitter/twitter"
 	log "github.com/sirupsen/logrus"
 	"github.com/wesleyholiveira/punchbot/configs"
 	"github.com/wesleyholiveira/punchbot/helpers"
 	"github.com/wesleyholiveira/punchbot/models"
 	"github.com/wesleyholiveira/punchbot/services"
+	t "github.com/wesleyholiveira/punchbot/twitter"
 )
 
 var channels map[string]string
@@ -23,6 +26,7 @@ func init() {
 func Notifier(s *discordgo.Session, projects chan *[]models.Project) {
 	for p := range projects {
 		var guildID string
+		twitter := t.GetClient()
 		prev := models.GetProjects()
 		log.Info("Notifier is on")
 
@@ -57,7 +61,7 @@ func Notifier(s *discordgo.Session, projects chan *[]models.Project) {
 					}
 					userMention += " "
 				}
-				go notify(s, p, prev, ch.ID, userMention)
+				go notify(s, twitter, p, prev, ch.ID, userMention)
 			}
 		}
 
@@ -102,7 +106,7 @@ func Notifier(s *discordgo.Session, projects chan *[]models.Project) {
 	}
 }
 
-func notify(s *discordgo.Session, current *[]models.Project, prev *[]models.Project, channelID, userMention string) (bool, error) {
+func notify(s *discordgo.Session, t *twitter.Client, current *[]models.Project, prev *[]models.Project, channelID, userMention string) (bool, error) {
 	punchReleases := models.GetProjects()
 	cLen := len(*current)
 	pLen := len(*prev)
@@ -120,7 +124,11 @@ func notify(s *discordgo.Session, current *[]models.Project, prev *[]models.Proj
 		if !c.AlreadyReleased {
 			for _, p := range *prev {
 				if c.IDProject != p.IDProject {
-					sendMessage(s, &c, channelID, userMention)
+					log.Info("PROJECT MATCHED!")
+
+					pCurrent := &c
+					sendMessage(s, pCurrent, channelID, userMention)
+					sendMessageTwitter(t, pCurrent, channelID)
 					(*current)[i].AlreadyReleased = true
 					break
 				}
@@ -156,6 +164,8 @@ func notifyUser(s *discordgo.Session, current *[]models.Project, myNots *models.
 		if !c.AlreadyReleased {
 			for _, p := range *prev {
 				if c.IDProject == p.IDProject {
+					log.Info("PROJECT MATCHED!")
+
 					if !myNots.VIP {
 						user, _ := s.User(myNots.UserID)
 						s.ChannelMessageSend(channelID,
@@ -184,9 +194,21 @@ func notifyUser(s *discordgo.Session, current *[]models.Project, myNots *models.
 	return true, nil
 }
 
-func sendMessage(s *discordgo.Session, c *models.Project, channelID, userMention string) (bool, error) {
-	log.Info("PROJECT MATCHED!")
+func sendMessageTwitter(t *twitter.Client, c *models.Project, channelID string) {
+	r, _, err := getImage(c)
+	msg := fmt.Sprintf("O %s do anime %s acabou de ser lançado! -> %s\n%s\n",
+		c.Number,
+		c.Project,
+		configs.PunchEndpoint+c.Link,
+		r.Request.URL.String())
 
+	_, _, err = t.Statuses.Update(msg, nil)
+	if err != nil {
+		log.Error(err)
+	}
+}
+
+func getImage(c *models.Project) (*http.Response, string, error) {
 	screen := c.Screen
 	img := strings.Split(screen, "/")
 	imgName := img[len(img)-1]
@@ -196,10 +218,14 @@ func sendMessage(s *discordgo.Session, c *models.Project, channelID, userMention
 	}
 
 	httpImage, err := services.Get(screen)
+	return httpImage, imgName, err
+}
+
+func sendMessage(s *discordgo.Session, c *models.Project, channelID, userMention string) (bool, error) {
+	r, imgName, err := getImage(c)
 
 	if err == nil {
-
-		respImage := httpImage.Body
+		respImage := r.Body
 		defer respImage.Close()
 
 		msg := fmt.Sprintf("%sO **%s** do anime **%s** acabou de ser lançado! -> %s\n",
@@ -212,6 +238,7 @@ func sendMessage(s *discordgo.Session, c *models.Project, channelID, userMention
 		if err != nil {
 			log.Error(err)
 		}
+
 	} else {
 		log.Errorf("[%s] Image error: %s", c.Project, err)
 	}
