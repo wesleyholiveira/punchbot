@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 	"os"
 	"os/signal"
@@ -89,10 +90,13 @@ func webserver() {
 		t := time.Now()
 
 		token, err := db.Get("fbToken").Result()
+		pageID, _ = db.Get("pageID").Result()
 
 		if err != nil {
+			log.Warning("Token not found in Redis")
 			code := r.FormValue("code")
 			session, err = facebook.GetClient(fbOauth, code)
+			fmt.Println(session)
 
 			if err != nil {
 				log.WithFields(log.Fields{
@@ -136,6 +140,7 @@ func webserver() {
 				}
 			}
 		} else {
+			log.Infof("TOKEN FOUND! %s", token)
 			session = facebook.GetClientByToken(token)
 		}
 

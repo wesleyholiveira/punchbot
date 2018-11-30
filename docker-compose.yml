@@ -2,6 +2,8 @@ version: "3.3"
 services:
  app:
   image: punchbot_app:latest
+  ports:
+   - '443:443'
   build:
     context: .
   depends_on:
