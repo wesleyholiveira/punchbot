@@ -9,12 +9,13 @@ import (
 
 	"github.com/bwmarrin/discordgo"
 	"github.com/dghubble/go-twitter/twitter"
+	fb "github.com/huandu/facebook"
 	log "github.com/sirupsen/logrus"
 	"github.com/wesleyholiveira/punchbot/configs"
 	"github.com/wesleyholiveira/punchbot/helpers"
 	"github.com/wesleyholiveira/punchbot/models"
-	"github.com/wesleyholiveira/punchbot/services"
-	t "github.com/wesleyholiveira/punchbot/twitter"
+	"github.com/wesleyholiveira/punchbot/services/punch"
+	t "github.com/wesleyholiveira/punchbot/services/twitter"
 )
 
 var channels map[string]string
@@ -24,10 +25,13 @@ func init() {
 }
 
 func Notifier(s *discordgo.Session, projects chan *[]models.Project) {
+	block := false
 	for p := range projects {
 		var guildID string
 		twitter := t.GetClient()
+		face := models.GetFacebook()
 		prev := models.GetProjects()
+
 		log.Info("Notifier is on")
 
 		for key, tag := range channels {
@@ -61,8 +65,10 @@ func Notifier(s *discordgo.Session, projects chan *[]models.Project) {
 					}
 					userMention += " "
 				}
-				go notify(s, twitter, p, prev, ch.ID, userMention)
+				go notify(s, twitter, face, p, prev, ch.ID, userMention, block)
 			}
+
+			block = true
 		}
 
 		myNotifications := models.GetNotifyUser()
@@ -103,10 +109,11 @@ func Notifier(s *discordgo.Session, projects chan *[]models.Project) {
 				}
 			}
 		}
+		block = false
 	}
 }
 
-func notify(s *discordgo.Session, t *twitter.Client, current *[]models.Project, prev *[]models.Project, channelID, userMention string) (bool, error) {
+func notify(s *discordgo.Session, t *twitter.Client, f *models.Facebook, current *[]models.Project, prev *[]models.Project, channelID, userMention string, block bool) (bool, error) {
 	punchReleases := models.GetProjects()
 	cLen := len(*current)
 	pLen := len(*prev)
@@ -128,7 +135,12 @@ func notify(s *discordgo.Session, t *twitter.Client, current *[]models.Project, 
 
 					pCurrent := &c
 					sendMessage(s, pCurrent, channelID, userMention)
-					sendMessageTwitter(t, pCurrent, channelID)
+
+					if !block {
+						sendMessageTwitter(t, pCurrent, channelID)
+						sendMessageFacebook(f, pCurrent, channelID)
+					}
+
 					(*current)[i].AlreadyReleased = true
 					break
 				}
@@ -195,17 +207,63 @@ func notifyUser(s *discordgo.Session, current *[]models.Project, myNots *models.
 }
 
 func sendMessageTwitter(t *twitter.Client, c *models.Project, channelID string) {
-	r, _, err := getImage(c)
-	msg := fmt.Sprintf("O %s do anime %s acabou de ser lançado! -> %s\n%s\n",
+	msg := fmt.Sprintf("O %s do anime %s acabou de ser lançado! -> %s\n",
 		c.Number,
 		c.Project,
-		configs.PunchEndpoint+c.Link,
-		r.Request.URL.String())
+		configs.PunchEndpoint+c.Link)
 
-	_, _, err = t.Statuses.Update(msg, nil)
+	_, _, err := t.Statuses.Update(msg, nil)
+
 	if err != nil {
 		log.Error(err)
 	}
+}
+
+func sendMessageFacebook(f *models.Facebook, c *models.Project, channelID string) {
+	r, _, err := getImage(c)
+	fs := f.Session
+
+	if r != nil {
+		url := r.Request.URL.String()
+		log.Infof("Getting image to facebook: %s", url)
+
+		msg := fmt.Sprintf("O %s do anime %s acabou de ser lançado! -> %s\n",
+			c.Number,
+			c.Project,
+			configs.PunchEndpoint+c.Link)
+
+		r, err := fs.Post(fmt.Sprintf("/%s/photos", f.PageID), fb.Params{
+			"access_token": fs.AccessToken(),
+			"url":          url,
+		})
+
+		if err == nil {
+			id := new(string)
+			err = r.DecodeField("id", &id)
+
+			if err != nil {
+				log.Error(err)
+				return
+			}
+
+			_, err = fs.Post("/feed", fb.Params{
+				"access_token":      fs.AccessToken(),
+				"message":           msg,
+				"object_attachment": *id,
+			})
+
+			if err != nil {
+				log.Error(err)
+			}
+
+			return
+		}
+
+		log.Error(err)
+		return
+	}
+
+	log.Error(err)
 }
 
 func getImage(c *models.Project) (*http.Response, string, error) {
@@ -217,7 +275,7 @@ func getImage(c *models.Project) (*http.Response, string, error) {
 		screen = configs.PunchEndpoint + c.Screen
 	}
 
-	httpImage, err := services.Get(screen)
+	httpImage, err := punch.Get(screen)
 	return httpImage, imgName, err
 }
 

@@ -11,10 +11,17 @@ var AuthURL = os.Getenv("AUTH_URL")
 var NotificationChannelsID = os.Getenv("NOTIFICATION_CHANNELS")
 var CommandChannelsID = os.Getenv("COMMAND_CHANNELS")
 var DiscordToken = os.Getenv("DISCORD_TOKEN")
+
+// Twitter
 var TwitterConsumer = os.Getenv("TWITTER_CONSUMER")
 var TwitterConsumerSecret = os.Getenv("TWITTER_CONSUMER_SECRET")
 var TwitterAccessToken = os.Getenv("TWITTER_ACCESS_TOKEN")
 var TwitterAccessTokenSecret = os.Getenv("TWITTER_ACCESS_TOKEN_SECRET")
+
+// Facebook
+var FacebookAppID = os.Getenv("FACEBOOK_APPID")
+var FacebookAppSecret = os.Getenv("FACEBOOK_APPID_SECRET")
+var FacebookCallbackURL = "https://localhost/"
 
 // Site
 var PunchEndpoint = os.Getenv("PUNCHSITE")

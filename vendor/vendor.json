@@ -93,6 +93,12 @@
 			"revisionTime": "2018-10-30T14:45:53Z"
 		},
 		{
+			"checksumSHA1": "tWTFUZBsolN06G9iKiO/kjR8T/E=",
+			"path": "github.com/huandu/facebook",
+			"revision": "e344d22ede2e56e440409a185063808dde25a649",
+			"revisionTime": "2018-09-09T15:40:21Z"
+		},
+		{
 			"checksumSHA1": "r6ZMyP/HsdeToXIxvgP3ntL6Bds=",
 			"path": "github.com/konsorten/go-windows-terminal-sequences",
 			"revision": "5c8c8bd35d3832f5d134ae1e1e375b69a4d25242",
@@ -105,58 +111,70 @@
 			"revisionTime": "2018-11-01T07:55:17Z"
 		},
 		{
-			"checksumSHA1": "eo2cF0Yw56jeLQL6fKpNFxd+gSI=",
+			"checksumSHA1": "s1XaPaoY266FmxhEAB1dClCgkUg=",
 			"path": "github.com/wesleyholiveira/punchbot",
-			"revision": "329ff40fd2224cd2e42b5acb07c6dedb8335317c",
-			"revisionTime": "2018-11-20T03:09:04Z"
+			"revision": "f5df584d290ff7ece7e235f40ea393cd5de3a5ec",
+			"revisionTime": "2018-11-25T23:08:14Z"
 		},
 		{
 			"checksumSHA1": "Prva0WDr7lXWa3dpiPJ6TuQZN0w=",
 			"path": "github.com/wesleyholiveira/punchbot/commands",
-			"revision": "329ff40fd2224cd2e42b5acb07c6dedb8335317c",
-			"revisionTime": "2018-11-20T03:09:04Z"
+			"revision": "f5df584d290ff7ece7e235f40ea393cd5de3a5ec",
+			"revisionTime": "2018-11-25T23:08:14Z"
 		},
 		{
-			"checksumSHA1": "NVTyOysKb1io03Ewr33FrgcPKs0=",
+			"checksumSHA1": "o+zC0ovnAAs3K8Ss33Lk2e0WAB0=",
 			"path": "github.com/wesleyholiveira/punchbot/configs",
-			"revision": "329ff40fd2224cd2e42b5acb07c6dedb8335317c",
-			"revisionTime": "2018-11-20T03:09:04Z"
+			"revision": "f5df584d290ff7ece7e235f40ea393cd5de3a5ec",
+			"revisionTime": "2018-11-25T23:08:14Z"
 		},
 		{
 			"checksumSHA1": "/f/ptfGk3gOphix3ExMkt66ExhY=",
 			"path": "github.com/wesleyholiveira/punchbot/helpers",
-			"revision": "329ff40fd2224cd2e42b5acb07c6dedb8335317c",
-			"revisionTime": "2018-11-20T03:09:04Z"
+			"revision": "f5df584d290ff7ece7e235f40ea393cd5de3a5ec",
+			"revisionTime": "2018-11-25T23:08:14Z"
 		},
 		{
-			"checksumSHA1": "rbOe8hzcOECd17DmoJ5DUP7+pf0=",
+			"checksumSHA1": "ZO652fQMZUivG/ZQOQrfEsHg0XE=",
 			"path": "github.com/wesleyholiveira/punchbot/models",
-			"revision": "329ff40fd2224cd2e42b5acb07c6dedb8335317c",
-			"revisionTime": "2018-11-20T03:09:04Z"
+			"revision": "f5df584d290ff7ece7e235f40ea393cd5de3a5ec",
+			"revisionTime": "2018-11-25T23:08:14Z"
 		},
 		{
-			"checksumSHA1": "l6uTrHNTfvdrn5JjtiBNSlCNZrg=",
+			"checksumSHA1": "c43nWCgSrPpIhQ8O1jOocMltUHY=",
 			"path": "github.com/wesleyholiveira/punchbot/parallelism",
-			"revision": "329ff40fd2224cd2e42b5acb07c6dedb8335317c",
-			"revisionTime": "2018-11-20T03:09:04Z"
+			"revision": "f5df584d290ff7ece7e235f40ea393cd5de3a5ec",
+			"revisionTime": "2018-11-25T23:08:14Z"
 		},
 		{
 			"checksumSHA1": "3me4mc45SsccBnkGQ+JOZL9hY+0=",
 			"path": "github.com/wesleyholiveira/punchbot/redis",
-			"revision": "329ff40fd2224cd2e42b5acb07c6dedb8335317c",
-			"revisionTime": "2018-11-20T03:09:04Z"
+			"revision": "f5df584d290ff7ece7e235f40ea393cd5de3a5ec",
+			"revisionTime": "2018-11-25T23:08:14Z"
 		},
 		{
 			"checksumSHA1": "vO0bWRNBLAa0FWOcsytdZoPCO5M=",
 			"path": "github.com/wesleyholiveira/punchbot/services",
-			"revision": "329ff40fd2224cd2e42b5acb07c6dedb8335317c",
-			"revisionTime": "2018-11-20T03:09:04Z"
+			"revision": "f5df584d290ff7ece7e235f40ea393cd5de3a5ec",
+			"revisionTime": "2018-11-25T23:08:14Z"
 		},
 		{
-			"checksumSHA1": "mA20jr7UjTFnaSiq9/TJPWI3rOA=",
-			"path": "github.com/wesleyholiveira/punchbot/twitter",
-			"revision": "329ff40fd2224cd2e42b5acb07c6dedb8335317c",
-			"revisionTime": "2018-11-20T03:09:04Z"
+			"checksumSHA1": "9nMODov3ZnWjmNz8Wm3tU5OqN6o=",
+			"path": "github.com/wesleyholiveira/punchbot/services/facebook",
+			"revision": "f5df584d290ff7ece7e235f40ea393cd5de3a5ec",
+			"revisionTime": "2018-11-25T23:08:14Z"
+		},
+		{
+			"checksumSHA1": "X4MU13jyfG5c6T15oiPRuX7Q4mo=",
+			"path": "github.com/wesleyholiveira/punchbot/services/punch",
+			"revision": "f5df584d290ff7ece7e235f40ea393cd5de3a5ec",
+			"revisionTime": "2018-11-25T23:08:14Z"
+		},
+		{
+			"checksumSHA1": "aV9WyBJ3ArmAewTzCUgxsN3O0h8=",
+			"path": "github.com/wesleyholiveira/punchbot/services/twitter",
+			"revision": "f5df584d290ff7ece7e235f40ea393cd5de3a5ec",
+			"revisionTime": "2018-11-25T23:08:14Z"
 		},
 		{
 			"checksumSHA1": "/U7f2gaH6DnEmLguVLDbipU6kXU=",
@@ -203,6 +221,12 @@
 		{
 			"checksumSHA1": "5+Wlq4i/9BUFndiLq5QMPvATj4w=",
 			"path": "golang.org/x/oauth2",
+			"revision": "8f65e3013ebad444f13bc19536f7865efc793816",
+			"revisionTime": "2018-11-20T19:07:42Z"
+		},
+		{
+			"checksumSHA1": "FofteLTZpGATI65uXeB2vCLRUZI=",
+			"path": "golang.org/x/oauth2/facebook",
 			"revision": "8f65e3013ebad444f13bc19536f7865efc793816",
 			"revisionTime": "2018-11-20T19:07:42Z"
 		},

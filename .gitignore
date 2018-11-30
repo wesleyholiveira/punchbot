@@ -4,3 +4,5 @@ punchbot
 debug
 .env
 configs/configs_dev.go
+server.crt
+server.key

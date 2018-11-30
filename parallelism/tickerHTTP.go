@@ -7,7 +7,7 @@ import (
 	log "github.com/sirupsen/logrus"
 	"github.com/wesleyholiveira/punchbot/configs"
 	"github.com/wesleyholiveira/punchbot/models"
-	"github.com/wesleyholiveira/punchbot/services"
+	"github.com/wesleyholiveira/punchbot/services/punch"
 )
 
 var backup *[]models.Project
@@ -30,7 +30,7 @@ func TickerHTTP(ticker *time.Ticker, project chan *[]models.Project) {
 			prev = models.GetProjects()
 		}
 
-		current := services.GetProjects(endpoint, models.Home)
+		current := punch.GetProjects(endpoint, models.Home)
 
 		changeAllAlreadyRelased(&current, prev)
 

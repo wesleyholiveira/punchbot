@@ -1,21 +1,28 @@
 package main
 
 import (
+	"net/http"
 	"os"
 	"os/signal"
 	"strconv"
 	"syscall"
 	"time"
 
-	"github.com/wesleyholiveira/punchbot/twitter"
+	"github.com/wesleyholiveira/punchbot/models"
+	"golang.org/x/oauth2"
 
 	"github.com/bwmarrin/discordgo"
+	fb "github.com/huandu/facebook"
 	log "github.com/sirupsen/logrus"
 	"github.com/wesleyholiveira/punchbot/commands"
 	"github.com/wesleyholiveira/punchbot/configs"
 	"github.com/wesleyholiveira/punchbot/parallelism"
 	"github.com/wesleyholiveira/punchbot/redis"
+	"github.com/wesleyholiveira/punchbot/services/facebook"
+	"github.com/wesleyholiveira/punchbot/services/twitter"
 )
+
+var fbOauth *oauth2.Config
 
 func main() {
 	rClient := redis.NewClient()
@@ -46,10 +53,16 @@ func main() {
 	d.AddHandler(commands.Entry)
 
 	_, err = twitter.NewClient()
+	fbOauth = facebook.NewClient()
+
+	if err != nil {
+		log.Error(err)
+	}
 
 	sc := make(chan os.Signal, 1)
 	signal.Notify(sc, syscall.SIGINT, syscall.SIGTERM, os.Interrupt, os.Kill)
 
+	go webserver()
 	go parallelism.Notify(rClient)
 	go parallelism.GetProjects()
 	go parallelism.GetProjectsCalendar()
@@ -59,4 +72,85 @@ func main() {
 	<-sc
 	defer rClient.Close()
 	defer d.Close()
+}
+
+func webserver() {
+	var session *fb.Session
+	var pageID, accessToken string
+
+	db := redis.GetClient()
+	authURL := fbOauth.AuthCodeURL(time.Now().String())
+
+	log.Infof("Auth URL: %s", authURL)
+
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		log.Info("Receiving a request")
+
+		t := time.Now()
+
+		token, err := db.Get("fbToken").Result()
+
+		if err != nil {
+			code := r.FormValue("code")
+			session, err = facebook.GetClient(fbOauth, code)
+
+			if err != nil {
+				log.WithFields(log.Fields{
+					"time": t,
+					"err":  err.Error(),
+				}).Error("Facebook OAuth error")
+			} else {
+				if session != nil {
+
+					r, err := session.Get("/me/accounts", fb.Params{
+						"access_token": session.AccessToken(),
+					})
+
+					if err != nil {
+						log.Error(err)
+					} else {
+						var items []fb.Result
+
+						err := r.DecodeField("data", &items)
+
+						if err != nil {
+							log.Error(err)
+						} else {
+
+							pageID = items[0]["id"].(string)
+							accessToken = items[0]["access_token"].(string)
+
+							err = db.Set("fbToken", accessToken, 0).Err()
+							if err != nil {
+								log.Error(err)
+							}
+
+							err = db.Set("pageID", pageID, 0).Err()
+							if err != nil {
+								log.Error(err)
+							}
+
+							db.Save()
+						}
+					}
+				}
+			}
+		} else {
+			session = facebook.GetClientByToken(token)
+		}
+
+		f := models.GetFacebook()
+
+		session.SetAccessToken(accessToken)
+
+		f.PageID = pageID
+		f.Session = session
+
+		w.WriteHeader(http.StatusOK)
+	})
+
+	err := http.ListenAndServeTLS(":443", "server.crt", "server.key", nil)
+	if err != nil {
+		log.Error(err)
+	}
 }
