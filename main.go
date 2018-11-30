@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"net/http"
 	"os"
 	"os/signal"
@@ -84,19 +83,26 @@ func webserver() {
 
 	log.Infof("Auth URL: %s", authURL)
 
+	f := models.GetFacebook()
+	token, err := db.Get("fbToken").Result()
+	pageID, _ = db.Get("pageID").Result()
+
+	if err == nil {
+		session = facebook.GetClientByToken(token)
+		session.SetAccessToken(token)
+		f.PageID = pageID
+		f.Session = session
+	}
+
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		log.Info("Receiving a request")
 
 		t := time.Now()
 
-		token, err := db.Get("fbToken").Result()
-		pageID, _ = db.Get("pageID").Result()
-
 		if err != nil {
 			log.Warning("Token not found in Redis")
 			code := r.FormValue("code")
 			session, err = facebook.GetClient(fbOauth, code)
-			fmt.Println(session)
 
 			if err != nil {
 				log.WithFields(log.Fields{
@@ -139,12 +145,7 @@ func webserver() {
 					}
 				}
 			}
-		} else {
-			log.Infof("TOKEN FOUND! %s", token)
-			session = facebook.GetClientByToken(token)
 		}
-
-		f := models.GetFacebook()
 
 		session.SetAccessToken(accessToken)
 
@@ -154,7 +155,7 @@ func webserver() {
 		w.WriteHeader(http.StatusOK)
 	})
 
-	err := http.ListenAndServeTLS(":443", "server.crt", "server.key", nil)
+	err = http.ListenAndServeTLS(":443", "server.crt", "server.key", nil)
 	if err != nil {
 		log.Error(err)
 	}

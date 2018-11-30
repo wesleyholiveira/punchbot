@@ -232,24 +232,25 @@ func sendMessageFacebook(f *models.Facebook, c *models.Project, channelID string
 			c.Project,
 			configs.PunchEndpoint+c.Link)
 
+		log.Info("Publishing the image at page")
 		r, err := fs.Post(fmt.Sprintf("/%s/photos", f.PageID), fb.Params{
 			"access_token": fs.AccessToken(),
 			"url":          url,
 		})
 
 		if err == nil {
-			id := new(string)
-			err = r.DecodeField("id", &id)
+			id := r.GetField("id")
 
 			if err != nil {
 				log.Error(err)
 				return
 			}
 
+			log.Info("Publishing the post at page")
 			_, err = fs.Post("/feed", fb.Params{
 				"access_token":      fs.AccessToken(),
 				"message":           msg,
-				"object_attachment": *id,
+				"object_attachment": id,
 			})
 
 			if err != nil {
