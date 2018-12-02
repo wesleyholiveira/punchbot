@@ -20,6 +20,7 @@ func init() {
 	except = []string{"help", "auth", "list"}
 
 	cmds["list"] = List
+	cmds["hyped"] = Hyped
 	cmds["notify"] = Notify
 	cmds["stopnotify"] = StopNotify
 	cmds["auth"] = Auth

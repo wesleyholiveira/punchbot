@@ -23,12 +23,14 @@ var FacebookAppID = os.Getenv("FACEBOOK_APPID")
 var FacebookAppSecret = os.Getenv("FACEBOOK_APPID_SECRET")
 var FacebookCallbackURL = "https://localhost/"
 
-// Site
+// // Site
 var PunchEndpoint = os.Getenv("PUNCHSITE")
 var Home = PunchEndpoint + "/home"
 var Calendar = PunchEndpoint + "/calendario"
 
-// Redis
+// // Redis
 var RedisHost = os.Getenv("REDIS_HOST")
 var RedisPort = os.Getenv("REDIS_PORT")
 var RedisPassword = os.Getenv("REDIS_PASSWORD")
+
+var AllowedUsers = os.Getenv("PUNCHBOT_ALLOWERDUSERS_HYPED")

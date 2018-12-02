@@ -1,11 +1,14 @@
 package parallelism
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"math"
 	"net/http"
 	"strings"
+
+	"github.com/wesleyholiveira/punchbot/redis"
 
 	"github.com/bwmarrin/discordgo"
 	"github.com/dghubble/go-twitter/twitter"
@@ -220,51 +223,76 @@ func sendMessageTwitter(t *twitter.Client, c *models.Project, channelID string) 
 }
 
 func sendMessageFacebook(f *models.Facebook, c *models.Project, channelID string) {
-	r, _, err := getImage(c)
-	fs := f.Session
+	re := redis.GetClient()
 
-	if r != nil {
-		url := r.Request.URL.String()
-		log.Infof("Getting image to facebook: %s", url)
+	data, err := re.Get("fbWhiteList").Result()
+	if err != nil {
+		log.Error("Facebook notifier: ", err)
+		return
+	} else {
+		projects := make([]models.Project, 0)
 
-		msg := fmt.Sprintf("O %s do anime %s acabou de ser lançado! -> %s\n",
-			c.Number,
-			c.Project,
-			configs.PunchEndpoint+c.Link)
-
-		log.Info("Publishing the image at page")
-		r, err := fs.Post(fmt.Sprintf("/%s/photos", f.PageID), fb.Params{
-			"access_token": fs.AccessToken(),
-			"url":          url,
-		})
-
-		if err == nil {
-			id := r.GetField("id")
-
-			if err != nil {
-				log.Error(err)
-				return
-			}
-
-			log.Info("Publishing the post at page")
-			_, err = fs.Post("/feed", fb.Params{
-				"access_token":      fs.AccessToken(),
-				"message":           msg,
-				"object_attachment": id,
-			})
-
-			if err != nil {
-				log.Error(err)
-			}
-
+		err := json.Unmarshal([]byte(data), &projects)
+		if err != nil {
+			log.Error("Facebook notifier: ", err)
 			return
+		}
+
+		for _, project := range projects {
+			p := *c
+			if project.IDProject == p.IDProject {
+				r, _, err := getImage(c)
+				fs := f.Session
+
+				if err == nil {
+					url := r.Request.URL.String()
+					log.Infof("Getting image to facebook: %s", url)
+
+					msg := fmt.Sprintf("O %s do anime %s acabou de ser lançado! -> %s\n",
+						c.Number,
+						c.Project,
+						configs.PunchEndpoint+c.Link)
+
+					log.Info("Publishing the image at the page")
+					r, err := fs.Post(fmt.Sprintf("/%s/photos", f.PageID), fb.Params{
+						"access_token": fs.AccessToken(),
+						"url":          url,
+					})
+
+					if err == nil {
+						id := r.GetField("id")
+
+						if err != nil {
+							log.Error(err)
+							return
+						}
+
+						log.Info("Publishing the post at the page")
+						_, err = fs.Post("/feed", fb.Params{
+							"access_token":      fs.AccessToken(),
+							"message":           msg,
+							"object_attachment": id,
+						})
+
+						if err != nil {
+							log.Error(err)
+						}
+
+						return
+					}
+
+					log.Error(err)
+					return
+				}
+				break
+			} else {
+				log.Warnf("The %s isn't a hyped anime. Ignoring...\n", p.Project)
+			}
 		}
 
 		log.Error(err)
 		return
 	}
-
-	log.Error(err)
 }
 
 func getImage(c *models.Project) (*http.Response, string, error) {
