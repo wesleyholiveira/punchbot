@@ -257,14 +257,26 @@ func sendMessageFacebook(f *models.Facebook, c *models.Project, channelID string
 					r, err := fs.Post(fmt.Sprintf("/%s/photos", f.PageID), fb.Params{
 						"access_token": fs.AccessToken(),
 						"url":          url,
+						"is_hidden":    "true",
 					})
 
 					if err == nil {
 						id := r.GetField("id")
+						postID := r.GetField("post_id")
 
 						if err != nil {
 							log.Error(err)
 							return
+						}
+
+						log.Infof("Hidding the image of the feed %s", postID)
+						_, err = fs.Post(fmt.Sprintf("/%s/", postID), fb.Params{
+							"access_token":        fs.AccessToken(),
+							"timeline_visibility": "hidden",
+						})
+
+						if err != nil {
+							log.Error("Hidding error: ", err)
 						}
 
 						log.Info("Publishing the post at the page")
