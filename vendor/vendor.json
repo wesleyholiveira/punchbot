@@ -3,12 +3,6 @@
 	"ignore": "test",
 	"package": [
 		{
-			"checksumSHA1": "ZokZNfnMkZnBt/pdwJoSm2knTXE=",
-			"path": "github.com/benbjohnson/phantomjs",
-			"revision": "1b81734f7877b51cadd82ee32663ae88f630469c",
-			"revisionTime": "2017-04-10T14:45:07Z"
-		},
-		{
 			"checksumSHA1": "8cFUIC7dY7m1yeCurLl1MdGSaPI=",
 			"path": "github.com/bwmarrin/discordgo",
 			"revision": "73f6772a2b7cc95e29c462e4f15bf07cbe0d3854",
