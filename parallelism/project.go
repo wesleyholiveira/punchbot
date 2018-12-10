@@ -34,44 +34,43 @@ func GetExtraInfos(projects *[]models.Project) []models.Project {
 
 			req, err := punch.Get(descEndpoint)
 			if err != nil {
-				log.Error("Fail to get the page of project: ", err)
-			}
+				log.Errorf("Fail to get the page of project %s: ", p.Project)
+				log.Error(err)
+			} else {
+				body := req.Body
+				defer body.Close()
 
-			body := req.Body
-			defer body.Close()
-
-			doc, err := html.Parse(body)
-			if err != nil {
-				log.Error("Fail to parse HTML:", err)
-			}
-
-			helpers.Transverse(doc, &p)
-
-			values.Set("id", p.ID)
-			values.Set("projeto", p.IDProject)
-
-			r, err := http.PostForm(link, values)
-			if err != nil {
-				log.Error("Request error:", err)
-			}
-
-			body = r.Body
-			defer body.Close()
-
-			if body != nil {
-				infos, _ := ioutil.ReadAll(body)
-				extraInfos := &models.Infos{}
-				err := json.Unmarshal(infos, extraInfos)
+				doc, err := html.Parse(body)
 				if err != nil {
-					log.Error("Parse error: ", err)
+					log.Error("Fail to parse HTML:", err)
 				}
 
-				for _, itens := range extraInfos.Infos {
-					p.ExtraInfos = append(p.ExtraInfos, itens)
-				}
+				helpers.Transverse(doc, &p)
 
-				(*projects)[i].Description = p.Description
-				(*projects)[i].ExtraInfos = p.ExtraInfos
+				values.Set("id", p.ID)
+				values.Set("projeto", p.IDProject)
+
+				r, err := http.PostForm(link, values)
+				if err != nil {
+					log.Error("Request error:", err)
+				} else {
+					body = r.Body
+					defer body.Close()
+
+					infos, _ := ioutil.ReadAll(body)
+					extraInfos := &models.Infos{}
+					err = json.Unmarshal(infos, extraInfos)
+					if err != nil {
+						log.Error("Parse error: ", err)
+					} else {
+						for _, itens := range extraInfos.Infos {
+							p.ExtraInfos = append(p.ExtraInfos, itens)
+						}
+
+						(*projects)[i].Description = p.Description
+						(*projects)[i].ExtraInfos = p.ExtraInfos
+					}
+				}
 			}
 		}
 	}
