@@ -22,9 +22,15 @@ import (
 )
 
 var channels map[string]string
+var mirrors map[string]string
 
 func init() {
+	mirrors = make(map[string]string)
 	channels = helpers.ParseChannels(configs.NotificationChannelsID)
+
+	mirrors["stream"] = configs.PunchEndpoint + "/download-stream/"
+	mirrors["zippyshare"] = configs.PunchEndpoint + "/download-zippyshare/"
+	mirrors["openload"] = configs.PunchEndpoint + "/download-openload/"
 }
 
 func Notifier(s *discordgo.Session, projects chan *[]models.Project) {
@@ -321,19 +327,45 @@ func getImage(c *models.Project) (*http.Response, string, error) {
 }
 
 func sendMessage(s *discordgo.Session, c *models.Project, channelID, userMention string) (bool, error) {
-	r, imgName, err := getImage(c)
+	r, _, err := getImage(c)
+	field := &discordgo.MessageEmbedField{
+		Name:  "**Novo episódio**",
+		Value: fmt.Sprintf("%s", c.Number),
+	}
+
+	arrayFields := make([]*discordgo.MessageEmbedField, 0)
+	arrayFields = append(arrayFields, field)
+
+	for _, info := range c.ExtraInfos {
+		name := fmt.Sprintf("**%s - %s mb**", strings.ToUpper(info.Format), info.Size)
+		values := ""
+
+		for key, val := range mirrors {
+			values += fmt.Sprintf("[%s](%s)", strings.ToUpper(key), val+info.ID) + " | "
+		}
+
+		values = strings.TrimSuffix(values, " | ")
+		extraFields := &discordgo.MessageEmbedField{
+			Name:  name,
+			Value: values,
+		}
+		arrayFields = append(arrayFields, extraFields)
+	}
 
 	if err == nil {
 		respImage := r.Body
 		defer respImage.Close()
 
-		msg := fmt.Sprintf("%sO **%s** do anime **%s** acabou de ser lançado! -> %s\n",
-			userMention,
-			c.Number,
-			c.Project,
-			configs.PunchEndpoint+c.Link)
+		_, err := s.ChannelMessageSendEmbed(channelID, &discordgo.MessageEmbed{
+			Title:       fmt.Sprintf("**%s**", c.Project),
+			Description: fmt.Sprintf("%s", c.Description),
+			Color:       65280,
+			Thumbnail: &discordgo.MessageEmbedThumbnail{
+				URL: r.Request.URL.String(),
+			},
+			Fields: arrayFields,
+		})
 
-		_, err := s.ChannelFileSendWithMessage(channelID, msg, imgName, respImage)
 		if err != nil {
 			log.Error(err)
 		}

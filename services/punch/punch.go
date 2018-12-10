@@ -26,7 +26,6 @@ func Get(endpoint string) (*http.Response, error) {
 }
 
 func GetProjects(endpoint string, typ models.GetProjectsType) []models.Project {
-
 	projectMap := make(map[string]models.Project)
 	projects := make([]models.Project, 0)
 
@@ -44,7 +43,7 @@ func GetProjects(endpoint string, typ models.GetProjectsType) []models.Project {
 				log.Error(err)
 			}
 
-			helpers.Transverse(doc, &projects, projectMap, "", "")
+			helpers.TransverseCalendar(doc, &projects, projectMap, "", "")
 		} else {
 			err = helpers.JsonUpdateToStruct(body, &projects)
 			if err != nil {

@@ -33,9 +33,9 @@ func TickerHTTP(ticker *time.Ticker, project chan *[]models.Project) {
 		current := punch.GetProjects(endpoint, models.Home)
 
 		changeAllAlreadyRelased(&current, prev)
-
 		if isNotEqualProjects(prev, &current) {
 			log.Info("Sending data to notifier")
+			current = GetExtraInfos(&current)
 			project <- &current
 			*backup = current
 		}

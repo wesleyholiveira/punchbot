@@ -7,9 +7,11 @@ type Project struct {
 	Link            string `json:"link"`
 	Number          string `json:"numero"`
 	Screen          string `json:"screen"`
+	Description     string
 	Day             string
 	HashID          string
 	AlreadyReleased bool
+	ExtraInfos      []Info
 }
 
 var projects, calendarProjects *[]Project

@@ -3,6 +3,12 @@
 	"ignore": "test",
 	"package": [
 		{
+			"checksumSHA1": "ZokZNfnMkZnBt/pdwJoSm2knTXE=",
+			"path": "github.com/benbjohnson/phantomjs",
+			"revision": "1b81734f7877b51cadd82ee32663ae88f630469c",
+			"revisionTime": "2017-04-10T14:45:07Z"
+		},
+		{
 			"checksumSHA1": "8cFUIC7dY7m1yeCurLl1MdGSaPI=",
 			"path": "github.com/bwmarrin/discordgo",
 			"revision": "73f6772a2b7cc95e29c462e4f15bf07cbe0d3854",
@@ -117,46 +123,46 @@
 			"revisionTime": "2018-11-01T07:55:17Z"
 		},
 		{
-			"checksumSHA1": "tJnVTGbYRfR1x20vyAoPj2HWGPo=",
+			"checksumSHA1": "2SsF/LfDbocws9GMwuIa0TB3/gg=",
 			"path": "github.com/wesleyholiveira/punchbot",
-			"revision": "8bcbdf394188f05491cd5582dd32dbc85e6dca8c",
-			"revisionTime": "2018-12-04T23:50:18Z"
+			"revision": "ed87e3f85e4ebf2ae6b1f275fbefdd0048df7edd",
+			"revisionTime": "2018-12-04T23:50:41Z"
 		},
 		{
 			"checksumSHA1": "QoxF6w8gcJKwWYFAwTwfNjViwHg=",
 			"path": "github.com/wesleyholiveira/punchbot/commands",
-			"revision": "8bcbdf394188f05491cd5582dd32dbc85e6dca8c",
-			"revisionTime": "2018-12-04T23:50:18Z"
+			"revision": "ed87e3f85e4ebf2ae6b1f275fbefdd0048df7edd",
+			"revisionTime": "2018-12-04T23:50:41Z"
 		},
 		{
-			"checksumSHA1": "6abjLJniscYaovl3T3iJqdhYaD4=",
+			"checksumSHA1": "++PMVfLjG81oRXxWoGI/d5sHXXo=",
 			"path": "github.com/wesleyholiveira/punchbot/configs",
-			"revision": "8bcbdf394188f05491cd5582dd32dbc85e6dca8c",
-			"revisionTime": "2018-12-04T23:50:18Z"
+			"revision": "ed87e3f85e4ebf2ae6b1f275fbefdd0048df7edd",
+			"revisionTime": "2018-12-04T23:50:41Z"
 		},
 		{
-			"checksumSHA1": "/f/ptfGk3gOphix3ExMkt66ExhY=",
+			"checksumSHA1": "LAGJWXkJo91O1SHUuMH0+3U8HcA=",
 			"path": "github.com/wesleyholiveira/punchbot/helpers",
-			"revision": "8bcbdf394188f05491cd5582dd32dbc85e6dca8c",
-			"revisionTime": "2018-12-04T23:50:18Z"
+			"revision": "ed87e3f85e4ebf2ae6b1f275fbefdd0048df7edd",
+			"revisionTime": "2018-12-04T23:50:41Z"
 		},
 		{
-			"checksumSHA1": "ZO652fQMZUivG/ZQOQrfEsHg0XE=",
+			"checksumSHA1": "yrtu8Y+1OS4vCnu95itMF3sWXcg=",
 			"path": "github.com/wesleyholiveira/punchbot/models",
-			"revision": "8bcbdf394188f05491cd5582dd32dbc85e6dca8c",
-			"revisionTime": "2018-12-04T23:50:18Z"
+			"revision": "ed87e3f85e4ebf2ae6b1f275fbefdd0048df7edd",
+			"revisionTime": "2018-12-04T23:50:41Z"
 		},
 		{
-			"checksumSHA1": "3MBfjpEwnV+CoAU9mwhfKAAXypo=",
+			"checksumSHA1": "yJ4LammgG8n0sswB0JzB8W270DM=",
 			"path": "github.com/wesleyholiveira/punchbot/parallelism",
-			"revision": "8bcbdf394188f05491cd5582dd32dbc85e6dca8c",
-			"revisionTime": "2018-12-04T23:50:18Z"
+			"revision": "ed87e3f85e4ebf2ae6b1f275fbefdd0048df7edd",
+			"revisionTime": "2018-12-04T23:50:41Z"
 		},
 		{
 			"checksumSHA1": "3me4mc45SsccBnkGQ+JOZL9hY+0=",
 			"path": "github.com/wesleyholiveira/punchbot/redis",
-			"revision": "8bcbdf394188f05491cd5582dd32dbc85e6dca8c",
-			"revisionTime": "2018-12-04T23:50:18Z"
+			"revision": "ed87e3f85e4ebf2ae6b1f275fbefdd0048df7edd",
+			"revisionTime": "2018-12-04T23:50:41Z"
 		},
 		{
 			"checksumSHA1": "vO0bWRNBLAa0FWOcsytdZoPCO5M=",
@@ -167,20 +173,20 @@
 		{
 			"checksumSHA1": "9nMODov3ZnWjmNz8Wm3tU5OqN6o=",
 			"path": "github.com/wesleyholiveira/punchbot/services/facebook",
-			"revision": "8bcbdf394188f05491cd5582dd32dbc85e6dca8c",
-			"revisionTime": "2018-12-04T23:50:18Z"
+			"revision": "ed87e3f85e4ebf2ae6b1f275fbefdd0048df7edd",
+			"revisionTime": "2018-12-04T23:50:41Z"
 		},
 		{
-			"checksumSHA1": "X4MU13jyfG5c6T15oiPRuX7Q4mo=",
+			"checksumSHA1": "jae3Lub6kLLwCml3Zr2GDg+cgCE=",
 			"path": "github.com/wesleyholiveira/punchbot/services/punch",
-			"revision": "8bcbdf394188f05491cd5582dd32dbc85e6dca8c",
-			"revisionTime": "2018-12-04T23:50:18Z"
+			"revision": "ed87e3f85e4ebf2ae6b1f275fbefdd0048df7edd",
+			"revisionTime": "2018-12-04T23:50:41Z"
 		},
 		{
 			"checksumSHA1": "aV9WyBJ3ArmAewTzCUgxsN3O0h8=",
 			"path": "github.com/wesleyholiveira/punchbot/services/twitter",
-			"revision": "8bcbdf394188f05491cd5582dd32dbc85e6dca8c",
-			"revisionTime": "2018-12-04T23:50:18Z"
+			"revision": "ed87e3f85e4ebf2ae6b1f275fbefdd0048df7edd",
+			"revisionTime": "2018-12-04T23:50:41Z"
 		},
 		{
 			"checksumSHA1": "/U7f2gaH6DnEmLguVLDbipU6kXU=",

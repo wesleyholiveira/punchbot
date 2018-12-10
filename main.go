@@ -4,9 +4,13 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"runtime"
 	"strconv"
+	"sync"
 	"syscall"
 	"time"
+
+	"github.com/benbjohnson/phantomjs"
 
 	"github.com/wesleyholiveira/punchbot/models"
 	"golang.org/x/oauth2"
@@ -25,6 +29,11 @@ import (
 var fbOauth *oauth2.Config
 
 func main() {
+	runtime.GOMAXPROCS(runtime.NumCPU())
+
+	var wg sync.WaitGroup
+	wg.Add(runtime.NumCPU())
+
 	rClient := redis.NewClient()
 	loc, _ := time.LoadLocation("America/Sao_Paulo")
 
@@ -59,6 +68,11 @@ func main() {
 		log.Error(err)
 	}
 
+	if err := phantomjs.DefaultProcess.Open(); err != nil {
+		log.Error(err)
+		os.Exit(1)
+	}
+
 	sc := make(chan os.Signal, 1)
 	signal.Notify(sc, syscall.SIGINT, syscall.SIGTERM, os.Interrupt, os.Kill)
 
@@ -72,6 +86,7 @@ func main() {
 	<-sc
 	defer rClient.Close()
 	defer d.Close()
+	defer phantomjs.DefaultProcess.Close()
 }
 
 func webserver() {

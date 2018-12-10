@@ -25,7 +25,7 @@ func RemoveDuplicates(elements []models.Project) []models.Project {
 	return result
 }
 
-func Transverse(n *html.Node, projects *[]models.Project, projectMap map[string]models.Project, key, day string) {
+func TransverseCalendar(n *html.Node, projects *[]models.Project, projectMap map[string]models.Project, key, day string) {
 
 	project := new(models.Project)
 
@@ -55,8 +55,31 @@ func Transverse(n *html.Node, projects *[]models.Project, projectMap map[string]
 			*projects = append(*projects, prj)
 		}
 	}
+
 	for c := n.FirstChild; c != nil; c = c.NextSibling {
-		Transverse(c, projects, projectMap, key, day)
+		TransverseCalendar(c, projects, projectMap, key, day)
+	}
+}
+
+func Transverse(n *html.Node, project *models.Project) {
+	if n.Type == html.ElementNode {
+
+		if n.Data == "p" {
+			for _, attr := range n.Attr {
+				if attr.Key == "class" {
+					if strings.Contains(attr.Val, "projeto-box-sinopse") {
+						if data := n.FirstChild; data != nil {
+							project.Description = data.Data
+							break
+						}
+					}
+				}
+			}
+		}
+	}
+
+	for c := n.FirstChild; c != nil; c = c.NextSibling {
+		Transverse(c, project)
 	}
 }
 
