@@ -333,6 +333,7 @@ func sendMessage(s *discordgo.Session, c *models.Project, channelID, userMention
 		Value: fmt.Sprintf("%s", c.Number),
 	}
 
+	icon := fmt.Sprintf("%s/imagens/favicon-96x96.png", configs.PunchEndpoint)
 	msgID := c.ExtraInfos[0].MessageID
 
 	arrayFields := make([]*discordgo.MessageEmbedField, 0)
@@ -359,13 +360,21 @@ func sendMessage(s *discordgo.Session, c *models.Project, channelID, userMention
 		defer respImage.Close()
 
 		embed := &discordgo.MessageEmbed{
-			Title:       fmt.Sprintf("**%s**", c.Project),
+			Author: &discordgo.MessageEmbedAuthor{
+				Name:    "Punch! Fansub",
+				IconURL: icon,
+			},
+			Title:       fmt.Sprintf("%s", c.Project),
 			Description: fmt.Sprintf("%s", c.Description),
 			Color:       65280,
 			Thumbnail: &discordgo.MessageEmbedThumbnail{
 				URL: r.Request.URL.String(),
 			},
 			Fields: arrayFields,
+			Footer: &discordgo.MessageEmbedFooter{
+				Text:    "Punch! Fansub",
+				IconURL: icon,
+			},
 		}
 
 		var msg *discordgo.Message = new(discordgo.Message)
