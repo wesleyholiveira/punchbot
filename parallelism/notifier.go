@@ -361,10 +361,10 @@ func sendMessage(s *discordgo.Session, c *models.Project, channelID, userMention
 
 		embed := &discordgo.MessageEmbed{
 			Author: &discordgo.MessageEmbedAuthor{
-				Name:    "Punch! Fansub",
+				Name:    "PUNCH! Fansubs",
 				IconURL: icon,
 			},
-			Title:       fmt.Sprintf("%s", c.Project),
+			Title:       fmt.Sprintf("**%s**", c.Project),
 			Description: fmt.Sprintf("%s", c.Description),
 			Color:       65280,
 			Thumbnail: &discordgo.MessageEmbedThumbnail{
@@ -372,7 +372,7 @@ func sendMessage(s *discordgo.Session, c *models.Project, channelID, userMention
 			},
 			Fields: arrayFields,
 			Footer: &discordgo.MessageEmbedFooter{
-				Text:    "Punch! Fansub",
+				Text:    "PUNCH! Fansubs",
 				IconURL: icon,
 			},
 		}
