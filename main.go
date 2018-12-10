@@ -10,8 +10,6 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/benbjohnson/phantomjs"
-
 	"github.com/wesleyholiveira/punchbot/models"
 	"golang.org/x/oauth2"
 
@@ -68,11 +66,6 @@ func main() {
 		log.Error(err)
 	}
 
-	if err := phantomjs.DefaultProcess.Open(); err != nil {
-		log.Error(err)
-		os.Exit(1)
-	}
-
 	sc := make(chan os.Signal, 1)
 	signal.Notify(sc, syscall.SIGINT, syscall.SIGTERM, os.Interrupt, os.Kill)
 
@@ -86,7 +79,6 @@ func main() {
 	<-sc
 	defer rClient.Close()
 	defer d.Close()
-	defer phantomjs.DefaultProcess.Close()
 }
 
 func webserver() {
