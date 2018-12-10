@@ -5,6 +5,7 @@ type Infos struct {
 }
 
 type Info struct {
+	MessageID  string
 	ID         string `json:"id"`
 	Format     string `json:"versao"`
 	Size       string `json:"tamanho"`

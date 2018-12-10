@@ -333,6 +333,8 @@ func sendMessage(s *discordgo.Session, c *models.Project, channelID, userMention
 		Value: fmt.Sprintf("%s", c.Number),
 	}
 
+	msgID := c.ExtraInfos[0].MessageID
+
 	arrayFields := make([]*discordgo.MessageEmbedField, 0)
 	arrayFields = append(arrayFields, field)
 
@@ -356,7 +358,7 @@ func sendMessage(s *discordgo.Session, c *models.Project, channelID, userMention
 		respImage := r.Body
 		defer respImage.Close()
 
-		_, err := s.ChannelMessageSendEmbed(channelID, &discordgo.MessageEmbed{
+		embed := &discordgo.MessageEmbed{
 			Title:       fmt.Sprintf("**%s**", c.Project),
 			Description: fmt.Sprintf("%s", c.Description),
 			Color:       65280,
@@ -364,12 +366,20 @@ func sendMessage(s *discordgo.Session, c *models.Project, channelID, userMention
 				URL: r.Request.URL.String(),
 			},
 			Fields: arrayFields,
-		})
+		}
+
+		var msg *discordgo.Message = new(discordgo.Message)
+		fmt.Println(msgID)
+		if msgID != "" {
+			msg, err = s.ChannelMessageEditEmbed(channelID, msgID, embed)
+		} else {
+			msg, err = s.ChannelMessageSendEmbed(channelID, embed)
+			c.ExtraInfos[0].MessageID = msg.ID
+		}
 
 		if err != nil {
 			log.Error(err)
 		}
-
 	} else {
 		log.Errorf("[%s] Image error: %s", c.Project, err)
 	}

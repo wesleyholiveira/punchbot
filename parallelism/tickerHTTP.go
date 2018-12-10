@@ -31,6 +31,12 @@ func TickerHTTP(ticker *time.Ticker, project chan *[]models.Project) {
 		}
 
 		current := punch.GetProjects(endpoint, models.Home)
+		for i, p := range (*prev)[0:2] {
+			if p.ID == current[i].ID {
+				current[i].Description = p.Description
+				current[i].ExtraInfos = p.ExtraInfos
+			}
+		}
 
 		changeAllAlreadyRelased(&current, prev)
 		if isNotEqualProjects(prev, &current) {
