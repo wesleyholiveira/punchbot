@@ -10,9 +10,11 @@ import (
 	"github.com/wesleyholiveira/punchbot/services/punch"
 )
 
+var change bool
 var backup *[]models.Project
 
 func init() {
+	change = false
 	backup = new([]models.Project)
 }
 
@@ -31,17 +33,21 @@ func TickerHTTP(ticker *time.Ticker, project chan *[]models.Project) {
 		}
 
 		current := punch.GetProjects(endpoint, models.Home)
-		for i, p := range (*prev)[0:2] {
-			if p.ID == current[i].ID {
+		if change {
+			changeAllAlreadyRelased(&current, prev)
+		}
+
+		current = GetExtraInfos(&current)
+
+		for i, p := range (*prev)[:2] {
+			c := current[i]
+			if p.ID == c.ID {
 				current[i].Description = p.Description
-				current[i].ExtraInfos = p.ExtraInfos
 			}
 		}
 
-		changeAllAlreadyRelased(&current, prev)
 		if isNotEqualProjects(prev, &current) {
 			log.Info("Sending data to notifier")
-			current = GetExtraInfos(&current)
 			project <- &current
 			*backup = current
 		}
@@ -58,9 +64,26 @@ func isNotEqualProjects(prev *[]models.Project, current *[]models.Project) bool 
 	log.Infof("prev: [%s](%d), current: [%s](%d)", content, len(prevVal), currentContent, len(currentVal))
 
 	if currentContent != content && len(currentVal) > 0 {
+		log.Info("ExtraInfos Length: ", len(currentVal[0].ExtraInfos))
+		fhd := false
+		for _, extra := range currentVal[0].ExtraInfos {
+			if extra.Format == "fullhd" {
+				fhd = true
+				change = true
+				break
+			}
+		}
+
+		if !fhd {
+			if len(currentVal[0].ExtraInfos) > 2 {
+				change = true
+			}
+		}
+
 		return true
 	}
 
+	change = false
 	return false
 }
 

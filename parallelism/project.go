@@ -25,10 +25,10 @@ func GetProjects() {
 }
 
 func GetExtraInfos(projects *[]models.Project) []models.Project {
-	link := "https://punchsubs.net/buscarVersoes"
+	link := configs.PunchEndpoint + "/buscarVersoes"
 	for i, p := range (*projects)[0:2] {
 		log.Infof("Getting extra informations for %s project", p.Project)
-		if len(p.ExtraInfos) <= 3 {
+		if !p.AlreadyReleased {
 			descEndpoint := configs.PunchEndpoint + p.Link
 			values := url.Values{}
 

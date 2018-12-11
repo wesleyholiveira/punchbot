@@ -21,10 +21,13 @@ import (
 	t "github.com/wesleyholiveira/punchbot/services/twitter"
 )
 
+var msgID map[string]string
+
 var channels map[string]string
 var mirrors map[string]string
 
 func init() {
+	msgID = make(map[string]string)
 	mirrors = make(map[string]string)
 	channels = helpers.ParseChannels(configs.NotificationChannelsID)
 
@@ -185,7 +188,7 @@ func notifyUser(s *discordgo.Session, current *[]models.Project, myNots *models.
 		if !c.AlreadyReleased {
 			for _, p := range *prev {
 				if c.IDProject == p.IDProject {
-					log.Info("PROJECT MATCHED!")
+					log.Info("PROJECT MATCHED! [USER]")
 
 					if !myNots.VIP {
 						user, _ := s.User(myNots.UserID)
@@ -329,12 +332,11 @@ func getImage(c *models.Project) (*http.Response, string, error) {
 func sendMessage(s *discordgo.Session, c *models.Project, channelID, userMention string) (bool, error) {
 	r, _, err := getImage(c)
 	field := &discordgo.MessageEmbedField{
-		Name:  "**Novo episódio**",
+		Name:  fmt.Sprintf("**Novo episódio**"),
 		Value: fmt.Sprintf("%s", c.Number),
 	}
 
 	icon := fmt.Sprintf("%s/imagens/favicon-96x96.png", configs.PunchEndpoint)
-	msgID := c.ExtraInfos[0].MessageID
 
 	arrayFields := make([]*discordgo.MessageEmbedField, 0)
 	arrayFields = append(arrayFields, field)
@@ -364,7 +366,7 @@ func sendMessage(s *discordgo.Session, c *models.Project, channelID, userMention
 				Name:    "PUNCH! Fansubs",
 				IconURL: icon,
 			},
-			Title:       fmt.Sprintf("**%s**", c.Project),
+			Title:       fmt.Sprintf("%s", c.Project),
 			Description: fmt.Sprintf("%s", c.Description),
 			Color:       65280,
 			Thumbnail: &discordgo.MessageEmbedThumbnail{
@@ -378,16 +380,22 @@ func sendMessage(s *discordgo.Session, c *models.Project, channelID, userMention
 		}
 
 		var msg *discordgo.Message = new(discordgo.Message)
-		fmt.Println(msgID)
-		if msgID != "" {
-			msg, err = s.ChannelMessageEditEmbed(channelID, msgID, embed)
+		if msgID[channelID] != "" {
+			msg, err = s.ChannelMessageEditEmbed(channelID, msgID[channelID], embed)
 		} else {
+			if userMention != "" {
+				_, err = s.ChannelMessageSend(channelID, userMention)
+				if err != nil {
+					log.Error(err)
+				}
+			}
 			msg, err = s.ChannelMessageSendEmbed(channelID, embed)
-			c.ExtraInfos[0].MessageID = msg.ID
 		}
 
 		if err != nil {
-			log.Error(err)
+			log.Error(err, msgID)
+		} else {
+			msgID[channelID] = msg.ID
 		}
 	} else {
 		log.Errorf("[%s] Image error: %s", c.Project, err)
