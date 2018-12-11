@@ -146,7 +146,7 @@ func notify(s *discordgo.Session, t *twitter.Client, f *models.Facebook, current
 					log.Info("PROJECT MATCHED!")
 
 					pCurrent := &c
-					sendMessage(s, pCurrent, channelID, userMention)
+					sendMessage(s, pCurrent, &p, channelID, userMention)
 
 					if !block {
 						sendMessageTwitter(t, pCurrent, channelID)
@@ -200,7 +200,7 @@ func notifyUser(s *discordgo.Session, current *[]models.Project, myNots *models.
 						return false, errors.New(fmt.Sprintf("%s Isn't a vip", user.Username))
 					}
 
-					sendMessage(s, &c, channelID, userMention)
+					sendMessage(s, &c, &p, channelID, userMention)
 					(*current)[i].AlreadyReleased = true
 					break
 				}
@@ -329,7 +329,7 @@ func getImage(c *models.Project) (*http.Response, string, error) {
 	return httpImage, imgName, err
 }
 
-func sendMessage(s *discordgo.Session, c *models.Project, channelID, userMention string) (bool, error) {
+func sendMessage(s *discordgo.Session, c *models.Project, p *models.Project, channelID, userMention string) (bool, error) {
 	r, _, err := getImage(c)
 	field := &discordgo.MessageEmbedField{
 		Name:  fmt.Sprintf("**Novo episódio**"),
@@ -345,11 +345,11 @@ func sendMessage(s *discordgo.Session, c *models.Project, channelID, userMention
 		name := fmt.Sprintf("**%s - %s mb**", strings.ToUpper(info.Format), info.Size)
 		values := ""
 
-		for key, val := range mirrors {
-			values += fmt.Sprintf("[%s](%s)", strings.ToUpper(key), val+info.ID) + " | "
-		}
-
+		values += fmt.Sprintf("[%s](%s)", strings.ToUpper("stream"), mirrors["stream"]+info.ID) + " | "
+		values += fmt.Sprintf("[%s](%s)", strings.ToUpper("zippyshare"), mirrors["zippyshare"]+info.ID) + " | "
+		values += fmt.Sprintf("[%s](%s)", strings.ToUpper("openload"), mirrors["openload"]+info.ID) + " | "
 		values = strings.TrimSuffix(values, " | ")
+
 		extraFields := &discordgo.MessageEmbedField{
 			Name:  name,
 			Value: values,
@@ -357,31 +357,41 @@ func sendMessage(s *discordgo.Session, c *models.Project, channelID, userMention
 		arrayFields = append(arrayFields, extraFields)
 	}
 
+	embed := &discordgo.MessageEmbed{
+		Author: &discordgo.MessageEmbedAuthor{
+			Name:    "PUNCH! Fansubs",
+			IconURL: icon,
+		},
+		Title:       fmt.Sprintf("%s", c.Project),
+		Description: fmt.Sprintf("%s", c.Description),
+		Color:       65280,
+		Thumbnail: &discordgo.MessageEmbedThumbnail{
+			URL: r.Request.URL.String(),
+		},
+		Fields: arrayFields,
+		Footer: &discordgo.MessageEmbedFooter{
+			Text:    "PUNCH! Fansubs",
+			IconURL: icon,
+		},
+	}
+
 	if err == nil {
 		respImage := r.Body
 		defer respImage.Close()
 
-		embed := &discordgo.MessageEmbed{
-			Author: &discordgo.MessageEmbedAuthor{
-				Name:    "PUNCH! Fansubs",
-				IconURL: icon,
-			},
-			Title:       fmt.Sprintf("%s", c.Project),
-			Description: fmt.Sprintf("%s", c.Description),
-			Color:       65280,
-			Thumbnail: &discordgo.MessageEmbedThumbnail{
-				URL: r.Request.URL.String(),
-			},
-			Fields: arrayFields,
-			Footer: &discordgo.MessageEmbedFooter{
-				Text:    "PUNCH! Fansubs",
-				IconURL: icon,
-			},
-		}
+		msg := new(discordgo.Message)
 
-		var msg *discordgo.Message = new(discordgo.Message)
-		if msgID[channelID] != "" {
-			msg, err = s.ChannelMessageEditEmbed(channelID, msgID[channelID], embed)
+		ch := channelID + c.ID
+		if msgID[ch] != "" {
+			if len(p.ExtraInfos) != len(c.ExtraInfos) {
+				msg, err = s.ChannelMessageEditEmbed(channelID, msgID[ch], embed)
+
+				if err != nil {
+					log.Error("Error edit embed: ", err)
+				} else {
+					msgID[ch] = msg.ID
+				}
+			}
 		} else {
 			if userMention != "" {
 				_, err = s.ChannelMessageSend(channelID, userMention)
@@ -389,13 +399,14 @@ func sendMessage(s *discordgo.Session, c *models.Project, channelID, userMention
 					log.Error(err)
 				}
 			}
-			msg, err = s.ChannelMessageSendEmbed(channelID, embed)
-		}
 
-		if err != nil {
-			log.Error(err, msgID)
-		} else {
-			msgID[channelID] = msg.ID
+			msg, err = s.ChannelMessageSendEmbed(channelID, embed)
+
+			if err != nil {
+				log.Error("Error create embed: ", err)
+			} else {
+				msgID[ch] = msg.ID
+			}
 		}
 	} else {
 		log.Errorf("[%s] Image error: %s", c.Project, err)

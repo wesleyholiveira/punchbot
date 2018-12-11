@@ -10,11 +10,9 @@ import (
 	"github.com/wesleyholiveira/punchbot/services/punch"
 )
 
-var change bool
 var backup *[]models.Project
 
 func init() {
-	change = false
 	backup = new([]models.Project)
 }
 
@@ -33,11 +31,21 @@ func TickerHTTP(ticker *time.Ticker, project chan *[]models.Project) {
 		}
 
 		current := punch.GetProjects(endpoint, models.Home)
-		if change {
-			changeAllAlreadyRelased(&current, prev)
+
+		for i, p := range (*prev)[:2] {
+			c := current[i]
+			if p.ID == c.ID {
+				if len(p.ExtraInfos) == 4 {
+					current[i].ExtraInfos = p.ExtraInfos
+				}
+			}
 		}
 
-		current = GetExtraInfos(&current)
+		if len(current[0].ExtraInfos) == 4 {
+			changeAllAlreadyRelased(&current, prev)
+		} else {
+			current = GetExtraInfos(&current)
+		}
 
 		for i, p := range (*prev)[:2] {
 			c := current[i]
@@ -65,25 +73,9 @@ func isNotEqualProjects(prev *[]models.Project, current *[]models.Project) bool 
 
 	if currentContent != content && len(currentVal) > 0 {
 		log.Info("ExtraInfos Length: ", len(currentVal[0].ExtraInfos))
-		fhd := false
-		for _, extra := range currentVal[0].ExtraInfos {
-			if extra.Format == "fullhd" {
-				fhd = true
-				change = true
-				break
-			}
-		}
-
-		if !fhd {
-			if len(currentVal[0].ExtraInfos) > 2 {
-				change = true
-			}
-		}
-
 		return true
 	}
 
-	change = false
 	return false
 }
 
