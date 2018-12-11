@@ -365,14 +365,17 @@ func sendMessage(s *discordgo.Session, c *models.Project, p *models.Project, cha
 		Title:       fmt.Sprintf("%s", c.Project),
 		Description: fmt.Sprintf("%s", c.Description),
 		Color:       65280,
-		Thumbnail: &discordgo.MessageEmbedThumbnail{
-			URL: r.Request.URL.String(),
-		},
-		Fields: arrayFields,
+		Fields:      arrayFields,
 		Footer: &discordgo.MessageEmbedFooter{
 			Text:    "PUNCH! Fansubs",
 			IconURL: icon,
 		},
+	}
+
+	if r.StatusCode == 200 {
+		embed.Thumbnail = &discordgo.MessageEmbedThumbnail{
+			URL: r.Request.URL.String(),
+		}
 	}
 
 	if err == nil {
