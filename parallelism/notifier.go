@@ -372,7 +372,7 @@ func sendMessage(s *discordgo.Session, c *models.Project, p *models.Project, cha
 		},
 	}
 
-	if r.StatusCode == 200 {
+	if r != nil {
 		embed.Thumbnail = &discordgo.MessageEmbedThumbnail{
 			URL: r.Request.URL.String(),
 		}
