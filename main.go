@@ -6,7 +6,6 @@ import (
 	"os/signal"
 	"runtime"
 	"strconv"
-	"sync"
 	"syscall"
 	"time"
 
@@ -28,9 +27,6 @@ var fbOauth *oauth2.Config
 
 func main() {
 	runtime.GOMAXPROCS(runtime.NumCPU())
-
-	var wg sync.WaitGroup
-	wg.Add(runtime.NumCPU())
 
 	rClient := redis.NewClient()
 	loc, _ := time.LoadLocation("America/Sao_Paulo")

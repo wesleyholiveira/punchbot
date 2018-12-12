@@ -11,6 +11,10 @@ func GetProjectsCalendar() {
 	log.Info("Getting the projects from the calendars' page")
 	projectsCalendar := models.GetCalendarProjects()
 	if len(*projectsCalendar) == 0 {
-		*projectsCalendar = punch.GetProjects(configs.Calendar, models.Calendar)
+		p, err := punch.GetProjects(configs.Calendar, models.Calendar)
+		if err != nil {
+			log.Error(err)
+		}
+		*projectsCalendar = p
 	}
 }

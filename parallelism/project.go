@@ -19,8 +19,13 @@ func GetProjects() {
 	projects := models.GetProjects()
 	if len(*projects) == 0 {
 		log.Info("Getting the latest releases")
-		*projects = punch.GetProjects(configs.Home, models.Home)
-		*projects = GetExtraInfos(projects)
+		p, err := punch.GetProjects(configs.Home, models.Home)
+		if err != nil {
+			log.Error(err)
+		} else {
+			*projects = p
+			*projects = GetExtraInfos(projects)
+		}
 	}
 }
 

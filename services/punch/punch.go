@@ -25,14 +25,14 @@ func Get(endpoint string) (*http.Response, error) {
 	return resp, nil
 }
 
-func GetProjects(endpoint string, typ models.GetProjectsType) []models.Project {
+func GetProjects(endpoint string, typ models.GetProjectsType) ([]models.Project, error) {
 	projectMap := make(map[string]models.Project)
 	projects := make([]models.Project, 0)
 
 	sResponse, err := Get(endpoint)
 
 	if err != nil {
-		log.Error(err)
+		return nil, err
 	} else {
 		body := sResponse.Body
 		defer body.Close()
@@ -40,16 +40,16 @@ func GetProjects(endpoint string, typ models.GetProjectsType) []models.Project {
 		if typ == models.Calendar {
 			doc, err := html.Parse(body)
 			if err != nil {
-				log.Error(err)
+				return nil, err
 			}
 
 			helpers.TransverseCalendar(doc, &projects, projectMap, "", "")
 		} else {
 			err = helpers.JsonUpdateToStruct(body, &projects)
 			if err != nil {
-				log.Error(err)
+				return nil, err
 			}
 		}
 	}
-	return helpers.RemoveDuplicates(projects)
+	return helpers.RemoveDuplicates(projects), nil
 }

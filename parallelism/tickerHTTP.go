@@ -30,34 +30,38 @@ func TickerHTTP(ticker *time.Ticker, project chan *[]models.Project) {
 			prev = models.GetProjects()
 		}
 
-		current := punch.GetProjects(endpoint, models.Home)
+		current, err := punch.GetProjects(endpoint, models.Home)
 
-		for i, p := range (*prev)[:2] {
-			c := current[i]
-			if p.ID == c.ID {
-				if len(p.ExtraInfos) == 4 {
-					current[i].ExtraInfos = p.ExtraInfos
+		if err == nil {
+			for i, p := range (*prev)[:2] {
+				c := current[i]
+				if p.ID == c.ID {
+					if len(p.ExtraInfos) == 4 {
+						current[i].ExtraInfos = p.ExtraInfos
+					}
 				}
 			}
-		}
 
-		if len(current[0].ExtraInfos) == 4 {
-			changeAllAlreadyRelased(&current, prev)
-		} else {
-			current = GetExtraInfos(&current)
-		}
-
-		for i, p := range (*prev)[:2] {
-			c := current[i]
-			if p.ID == c.ID {
-				current[i].Description = p.Description
+			if len(current[0].ExtraInfos) == 4 {
+				changeAllAlreadyRelased(&current, prev)
+			} else {
+				current = GetExtraInfos(&current)
 			}
-		}
 
-		if isNotEqualProjects(prev, &current) {
-			log.Info("Sending data to notifier")
-			project <- &current
-			*backup = current
+			for i, p := range (*prev)[:2] {
+				c := current[i]
+				if p.ID == c.ID {
+					current[i].Description = p.Description
+				}
+			}
+
+			if isNotEqualProjects(prev, &current) {
+				log.Info("Sending data to notifier")
+				project <- &current
+				*backup = current
+			}
+		} else {
+			log.Error(err)
 		}
 	}
 }
