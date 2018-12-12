@@ -8,6 +8,8 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/cnf/structhash"
+
 	"github.com/wesleyholiveira/punchbot/redis"
 
 	"github.com/bwmarrin/discordgo"
@@ -337,6 +339,8 @@ func sendMessage(s *discordgo.Session, c *models.Project, p *models.Project, cha
 	}
 
 	icon := fmt.Sprintf("%s/imagens/favicon-96x96.png", configs.PunchEndpoint)
+	prevHash, _ := structhash.Hash(p.ExtraInfos, 0)
+	currentHash, _ := structhash.Hash(c.ExtraInfos, 0)
 
 	arrayFields := make([]*discordgo.MessageEmbedField, 0)
 	arrayFields = append(arrayFields, field)
@@ -386,7 +390,8 @@ func sendMessage(s *discordgo.Session, c *models.Project, p *models.Project, cha
 
 		ch := channelID + c.ID
 		if msgID[ch] != "" {
-			if len(p.ExtraInfos) != len(c.ExtraInfos) {
+			if prevHash != currentHash {
+				log.Warn("Editing the message embed")
 				msg, err = s.ChannelMessageEditEmbed(channelID, msgID[ch], embed)
 
 				if err != nil {
