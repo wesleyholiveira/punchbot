@@ -338,6 +338,7 @@ func sendMessage(s *discordgo.Session, c *models.Project, p *models.Project, cha
 		Value: fmt.Sprintf("%s", c.Number),
 	}
 
+	link := configs.PunchEndpoint + c.Link
 	icon := fmt.Sprintf("%s/imagens/favicon-96x96.png", configs.PunchEndpoint)
 	prevHash, _ := structhash.Hash(p.ExtraInfos, 0)
 	currentHash, _ := structhash.Hash(c.ExtraInfos, 0)
@@ -368,6 +369,7 @@ func sendMessage(s *discordgo.Session, c *models.Project, p *models.Project, cha
 		},
 		Title:       fmt.Sprintf("%s", c.Project),
 		Description: fmt.Sprintf("%s", c.Description),
+		URL:         link,
 		Color:       65280,
 		Fields:      arrayFields,
 		Footer: &discordgo.MessageEmbedFooter{
