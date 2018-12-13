@@ -33,7 +33,7 @@ func TickerHTTP(ticker *time.Ticker, project chan *[]models.Project) {
 		current, err := punch.GetProjects(endpoint, models.Home)
 
 		if err == nil {
-			for i, p := range (*prev)[:2] {
+			for i, p := range (*prev)[:1] {
 				c := current[i]
 				if p.ID == c.ID {
 					if len(p.ExtraInfos) == 4 {
@@ -48,7 +48,7 @@ func TickerHTTP(ticker *time.Ticker, project chan *[]models.Project) {
 				current = GetExtraInfos(&current)
 			}
 
-			for i, p := range (*prev)[:2] {
+			for i, p := range (*prev)[:1] {
 				c := current[i]
 				if p.ID == c.ID {
 					current[i].Description = p.Description
