@@ -31,7 +31,7 @@ func GetProjects() {
 
 func GetExtraInfos(projects *[]models.Project) []models.Project {
 	link := configs.PunchEndpoint + "/buscarVersoes"
-	for i, p := range (*projects)[0:2] {
+	for i, p := range (*projects)[:2] {
 		if !p.AlreadyReleased {
 			log.Infof("Getting extra informations for %s project", p.Project)
 			descEndpoint := configs.PunchEndpoint + p.Link
