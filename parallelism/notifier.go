@@ -410,7 +410,6 @@ func sendMessage(s *discordgo.Session, c *models.Project, p *models.Project, cha
 			}
 
 			msg, err = s.ChannelMessageSendEmbed(channelID, embed)
-
 			if err != nil {
 				log.Error("Error create embed: ", err)
 			} else {
