@@ -44,7 +44,7 @@ func Notifier(s *discordgo.Session, projects chan *[]models.Project) {
 		face := models.GetFacebook()
 		prev := models.GetProjects()
 
-		log.Info("Notifier is on")
+		log.Infof("Notifier is on")
 
 		for key, tag := range channels {
 
@@ -77,6 +77,8 @@ func Notifier(s *discordgo.Session, projects chan *[]models.Project) {
 					}
 					userMention += " "
 				}
+
+				log.Infof("Notifing for %s channel", ch.Name)
 				go notify(s, twitter, face, p, prev, ch.ID, userMention, block)
 			}
 
@@ -391,7 +393,7 @@ func sendMessage(s *discordgo.Session, c *models.Project, p *models.Project, cha
 		ch := channelID + c.ID
 		if msgID[ch] != "" {
 			log.Infof("ExtraInfos: current: %d, prev: %d", lenCurrent, lenPrev)
-			if lenCurrent != lenPrev && lenCurrent != 4 {
+			if lenCurrent > lenPrev && lenCurrent <= 4 {
 				log.Warn("Editing the message embed")
 				msg, err = s.ChannelMessageEditEmbed(channelID, msgID[ch], embed)
 
