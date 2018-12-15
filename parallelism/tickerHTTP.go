@@ -1,7 +1,6 @@
 package parallelism
 
 import (
-	"fmt"
 	"time"
 
 	"github.com/cnf/structhash"
@@ -37,7 +36,6 @@ func TickerHTTP(ticker *time.Ticker, project chan *[]models.Project) {
 			for i, p := range (*prev)[:1] {
 				c := current[i]
 				if p.ID == c.ID {
-					fmt.Println(len(p.ExtraInfos))
 					if len(p.ExtraInfos) == 4 {
 						current[i].ExtraInfos = p.ExtraInfos
 					}

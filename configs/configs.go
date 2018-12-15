@@ -3,7 +3,7 @@ package configs
 import "os"
 
 // Settings
-var AllowedUsers = os.Getenv("PUNCHBOT_ALLOWERDUSERS_HYPED")
+var AllowedUsers = os.Getenv("PUNCHBOT_ALLOWERDUSERS_HYPED")
 var Timer = os.Getenv("TIMER")
 
 // Discord

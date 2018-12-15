@@ -393,7 +393,7 @@ func sendMessage(s *discordgo.Session, c *models.Project, p *models.Project, cha
 		ch := channelID + c.ID
 		if msgID[ch] != "" {
 			log.Infof("ExtraInfos: current: %d, prev: %d", lenCurrent, lenPrev)
-			if lenCurrent > lenPrev && lenCurrent <= 4 {
+			if lenCurrent > lenPrev {
 				log.Warn("Editing the message embed")
 				msg, err = s.ChannelMessageEditEmbed(channelID, msgID[ch], embed)
 
