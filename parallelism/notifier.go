@@ -8,6 +8,8 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/cnf/structhash"
+
 	"github.com/wesleyholiveira/punchbot/redis"
 
 	"github.com/bwmarrin/discordgo"
@@ -147,12 +149,12 @@ func notify(s *discordgo.Session, t *twitter.Client, f *models.Facebook, current
 				if c.IDProject != p.IDProject {
 					log.Info("PROJECT MATCHED!")
 
-					pCurrent := &c
-					sendMessage(s, pCurrent, &p, channelID, userMention)
+					fmt.Println(p.ExtraInfos, len(p.ExtraInfos))
+					sendMessage(s, c, p, channelID, userMention)
 
 					if !block {
-						sendMessageTwitter(t, pCurrent, channelID)
-						sendMessageFacebook(f, pCurrent, channelID)
+						sendMessageTwitter(t, &c, channelID)
+						sendMessageFacebook(f, &c, channelID)
 					}
 
 					(*current)[i].AlreadyReleased = true
@@ -202,7 +204,7 @@ func notifyUser(s *discordgo.Session, current *[]models.Project, myNots *models.
 						return false, errors.New(fmt.Sprintf("%s Isn't a vip", user.Username))
 					}
 
-					sendMessage(s, &c, &p, channelID, userMention)
+					sendMessage(s, c, p, channelID, userMention)
 					(*current)[i].AlreadyReleased = true
 					break
 				}
@@ -252,7 +254,7 @@ func sendMessageFacebook(f *models.Facebook, c *models.Project, channelID string
 		for _, project := range projects {
 			p := *c
 			if project.IDProject == p.IDProject {
-				r, _, err := getImage(c)
+				r, _, err := getImage(p)
 				fs := f.Session
 
 				if err == nil {
@@ -318,7 +320,7 @@ func sendMessageFacebook(f *models.Facebook, c *models.Project, channelID string
 	}
 }
 
-func getImage(c *models.Project) (*http.Response, string, error) {
+func getImage(c models.Project) (*http.Response, string, error) {
 	screen := c.Screen
 	img := strings.Split(screen, "/")
 	imgName := img[len(img)-1]
@@ -331,7 +333,10 @@ func getImage(c *models.Project) (*http.Response, string, error) {
 	return httpImage, imgName, err
 }
 
-func sendMessage(s *discordgo.Session, c *models.Project, p *models.Project, channelID, userMention string) (bool, error) {
+func sendMessage(s *discordgo.Session, c models.Project, p models.Project, channelID, userMention string) (bool, error) {
+	currentHash, _ := structhash.Hash(c.ExtraInfos, 0)
+	prevHash, _ := structhash.Hash(p.ExtraInfos, 0)
+
 	r, _, err := getImage(c)
 	field := &discordgo.MessageEmbedField{
 		Name:  fmt.Sprintf("**Novo episódio**"),
@@ -393,7 +398,7 @@ func sendMessage(s *discordgo.Session, c *models.Project, p *models.Project, cha
 		ch := channelID + c.ID
 		if msgID[ch] != "" {
 			log.Infof("ExtraInfos: current: %d, prev: %d", lenCurrent, lenPrev)
-			if lenCurrent > lenPrev {
+			if currentHash != prevHash && len(c.ExtraInfos) <= 5 {
 				log.Warn("Editing the message embed")
 				msg, err = s.ChannelMessageEditEmbed(channelID, msgID[ch], embed)
 
