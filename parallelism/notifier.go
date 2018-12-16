@@ -80,7 +80,7 @@ func Notifier(s *discordgo.Session, projects chan *[]models.Project) {
 					userMention += " "
 				}
 
-				log.Infof("Notifing for %s channel", ch.Name)
+				log.Infof("Notifing for #%s channel", ch.Name)
 				go notify(s, twitter, face, p, prev, ch.ID, userMention, block)
 			}
 
@@ -152,7 +152,6 @@ func notify(s *discordgo.Session, t *twitter.Client, f *models.Facebook, current
 				} else {
 					log.Info("PROJECT MATCHED!")
 
-					fmt.Println(p.ExtraInfos, len(p.ExtraInfos))
 					sendMessage(s, c, pr, channelID, userMention)
 
 					if !block {
@@ -401,7 +400,7 @@ func sendMessage(s *discordgo.Session, c models.Project, p models.Project, chann
 		ch := channelID + c.ID
 		if msgID[ch] != "" {
 			log.Infof("ExtraInfos: current: %d, prev: %d", lenCurrent, lenPrev)
-			if currentHash != prevHash && len(c.ExtraInfos) <= 5 {
+			if currentHash != prevHash {
 				log.Warn("Editing the message embed")
 				msg, err = s.ChannelMessageEditEmbed(channelID, msgID[ch], embed)
 
