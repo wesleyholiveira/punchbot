@@ -48,7 +48,6 @@ func Notify(s *discordgo.Session, m *discordgo.MessageCreate, args []string) {
 		s.ChannelMessageSend(channel, msg)
 	} else {
 		projects := models.GetCalendarProjects()
-		fmt.Println(projects)
 		projectsUser := make([]models.Project, 0, len(args))
 
 		for _, project := range *projects {
