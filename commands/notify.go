@@ -22,8 +22,6 @@ func Notify(s *discordgo.Session, m *discordgo.MessageCreate, args []string) {
 		log.Errorln("Redis GET", err)
 	}
 
-	fmt.Println(args, len(args))
-
 	if len(args) == 0 || args[0] == "" {
 
 		if len(redisGet) > 0 {
@@ -54,7 +52,6 @@ func Notify(s *discordgo.Session, m *discordgo.MessageCreate, args []string) {
 
 		for _, project := range *projects {
 			for _, arg := range args {
-				fmt.Println(arg)
 				if project.IDProject == strings.TrimSpace(arg) {
 					projectsUser = append(projectsUser, project)
 				}

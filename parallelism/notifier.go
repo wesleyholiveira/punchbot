@@ -2,7 +2,6 @@ package parallelism
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 	"math"
 	"net/http"
@@ -192,7 +191,7 @@ func notifyUser(s *discordgo.Session, current *[]models.Project, myNots *models.
 
 	for i, c := range currentSlice {
 		if !c.AlreadyReleased {
-			for _, p := range *prev {
+			for _, p := range (*prev)[:1] {
 				if c.IDProject == p.IDProject {
 					log.Info("PROJECT MATCHED! [USER]")
 
@@ -204,7 +203,7 @@ func notifyUser(s *discordgo.Session, current *[]models.Project, myNots *models.
 								"via DM mas isto é **exclusivo** para usuários **VIP** no Discord.\n"+
 								"Leia o canal #regras ou acesse: %s para adquirir seu **VIP!**",
 								configs.PunchEndpoint))
-						return false, errors.New(fmt.Sprintf("%s Isn't a vip", user.Username))
+						return false, fmt.Errorf("%s Isn't a vip", user.Username)
 					}
 
 					sendMessage(s, c, p, channelID, userMention)

@@ -9,4 +9,5 @@ type Info struct {
 	Format     string `json:"versao"`
 	Size       string `json:"tamanho"`
 	Resolution string `json:"resolucao"`
+	VIPLink    string `json:"vipLink"`
 }
