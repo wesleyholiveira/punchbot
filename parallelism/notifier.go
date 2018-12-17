@@ -193,7 +193,7 @@ func notifyUser(s *discordgo.Session, current *[]models.Project, myNots *models.
 		if !c.AlreadyReleased {
 			for _, p := range (*prev)[:1] {
 				if c.IDProject == p.IDProject {
-					log.Info("PROJECT MATCHED! [USER]")
+					log.Info("PROJECT MATCHED! [USER] %s", p.Project)
 
 					myNots.VIP = true
 					if !myNots.VIP {

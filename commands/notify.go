@@ -48,11 +48,15 @@ func Notify(s *discordgo.Session, m *discordgo.MessageCreate, args []string) {
 		s.ChannelMessageSend(channel, msg)
 	} else {
 		projects := models.GetCalendarProjects()
+		fmt.Println(projects)
 		projectsUser := make([]models.Project, 0, len(args))
 
 		for _, project := range *projects {
 			for _, arg := range args {
-				if project.IDProject == strings.TrimSpace(arg) {
+				p := strings.TrimSpace(strings.ToLower(project.Project))
+				c := strings.TrimSpace(strings.ToLower(arg))
+
+				if strings.Contains(p, c) {
 					projectsUser = append(projectsUser, project)
 				}
 			}

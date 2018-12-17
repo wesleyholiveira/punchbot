@@ -43,7 +43,6 @@ func TransverseCalendar(n *html.Node, projects *[]models.Project, projectMap map
 					key = attr.Val
 					project.IDProject = attr.Val
 					projectMap[key] = *project
-					break
 				}
 			}
 		}
