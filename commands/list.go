@@ -29,7 +29,7 @@ func List(s *discordgo.Session, m *discordgo.MessageCreate, args []string) {
 	projects := models.GetCalendarProjects()
 	list := ""
 
-	if len(args) > 0 {
+	if len(args) > 0 && args[0] != "" {
 		list = AnimeList(projects, func(project *models.Project) bool {
 			for _, arg := range args {
 				if strings.Contains(strings.ToLower(project.Project), strings.ToLower(arg)) {
@@ -41,7 +41,7 @@ func List(s *discordgo.Session, m *discordgo.MessageCreate, args []string) {
 	} else if len(*projects) > 0 {
 		list = AnimeList(projects, func(project *models.Project) bool { return true })
 		rows := strings.Split(list, "\n")
-		list = strings.Join(rows[0:9], "\n")
+		list = strings.Join(rows[:9], "\n")
 	}
 
 	if len(list) < 1 {
