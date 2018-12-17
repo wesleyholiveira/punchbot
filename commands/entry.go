@@ -36,7 +36,7 @@ func Entry(s *discordgo.Session, m *discordgo.MessageCreate) {
 		if _, ok := cmds[cmd]; ok {
 			ch, _ := s.Channel(m.ChannelID)
 			guild, _ := s.Guild(ch.GuildID)
-			args := command[1:]
+			args := strings.Split(strings.Join(command[1:], " "), ",")
 
 			if guild == nil {
 				cmds[cmd](s, m, args)

@@ -3,6 +3,7 @@ package commands
 import (
 	"encoding/json"
 	"fmt"
+	"strings"
 
 	"github.com/bwmarrin/discordgo"
 	log "github.com/sirupsen/logrus"
@@ -51,7 +52,7 @@ func Notify(s *discordgo.Session, m *discordgo.MessageCreate, args []string) {
 
 		for _, project := range *projects {
 			for _, arg := range args {
-				if project.IDProject == arg {
+				if project.IDProject == strings.TrimSpace(arg) {
 					projectsUser = append(projectsUser, project)
 				}
 			}

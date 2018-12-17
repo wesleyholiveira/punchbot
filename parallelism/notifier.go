@@ -105,7 +105,7 @@ func Notifier(s *discordgo.Session, projects chan *[]models.Project) {
 										for _, userRoleID := range m.Roles {
 											for _, role := range guild.Roles {
 												if role.Name == "VIP" && role.ID == userRoleID {
-													log.Info("The user is a vip!!")
+													log.Infof("The user %s is a vip!!", m.User.Username)
 													log.Info("Sending notifications (if exists)")
 
 													myNots.VIP = true
@@ -196,6 +196,7 @@ func notifyUser(s *discordgo.Session, current *[]models.Project, myNots *models.
 				if c.IDProject == p.IDProject {
 					log.Info("PROJECT MATCHED! [USER]")
 
+					myNots.VIP = true
 					if !myNots.VIP {
 						user, _ := s.User(myNots.UserID)
 						s.ChannelMessageSend(channelID,
