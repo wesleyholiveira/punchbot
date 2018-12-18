@@ -63,30 +63,25 @@ func Notify(s *discordgo.Session, m *discordgo.MessageCreate, args []string) {
 
 		notify := &models.Notify{UserID: m.Author.ID, Projects: &projectsUser}
 
-		err = redis.Del(channel).Err()
+		notifyUser[channel] = notify
+		notifyMarshal, err := json.Marshal(notify)
+
 		if err != nil {
-			log.Errorln("Redis DEL", err)
-		} else {
-			notifyUser[channel] = notify
-			notifyMarshal, err := json.Marshal(notify)
-
-			if err != nil {
-				log.Errorln("Marshal", err)
-			}
-
-			notifyMarshalStr := string(notifyMarshal)
-			err = redis.Set(channel, notifyMarshalStr, 0).Err()
-
-			if err != nil {
-				log.Errorln("Redis SET", err)
-			}
-
-			err = redis.Save().Err()
-			if err != nil {
-				log.Errorln("Redis SAVE", err)
-			}
-
-			s.ChannelMessageSend(channel, "Você será notificado quando um episódio novo dos itens selecionados aparecerem no site.")
+			log.Errorln("Marshal", err)
 		}
+
+		notifyMarshalStr := string(notifyMarshal)
+		err = redis.Set(channel, notifyMarshalStr, 0).Err()
+
+		if err != nil {
+			log.Errorln("Redis SET", err)
+		}
+
+		err = redis.Save().Err()
+		if err != nil {
+			log.Errorln("Redis SAVE", err)
+		}
+
+		s.ChannelMessageSend(channel, "Você será notificado quando um episódio novo dos itens selecionados aparecerem no site.")
 	}
 }

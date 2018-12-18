@@ -180,7 +180,7 @@ func notifyUser(s *discordgo.Session, current *[]models.Project, myNots *models.
 	punchReleases := models.GetProjects()
 	cLen := len(*current)
 	pLen := len(*prev)
-	diff := int(math.Abs(float64(cLen) - float64(pLen)))
+	diff := pLen
 
 	if diff == 0 {
 		diff = 1
@@ -190,32 +190,26 @@ func notifyUser(s *discordgo.Session, current *[]models.Project, myNots *models.
 	currentSlice := (*current)[0:diff]
 
 	for i, c := range currentSlice {
-		if !c.AlreadyReleased {
-			for _, p := range (*prev)[:1] {
-				if c.IDProject == p.IDProject {
-					log.Info("PROJECT MATCHED! [USER] %s", p.Project)
+		for j, p := range *prev {
+			if c.IDProject == p.IDProject {
+				user, _ := s.User(myNots.UserID)
+				log.Infof("PROJECT MATCHED! [USER] (%s) -> [%s]", user.Username, p.Project)
 
-					myNots.VIP = true
-					if !myNots.VIP {
-						user, _ := s.User(myNots.UserID)
-						s.ChannelMessageSend(channelID,
-							fmt.Sprintf("Vejo que você possui interesse em receber notificações "+
-								"via DM mas isto é **exclusivo** para usuários **VIP** no Discord.\n"+
-								"Leia o canal #regras ou acesse: %s para adquirir seu **VIP!**",
-								configs.PunchEndpoint))
-						return false, fmt.Errorf("%s Isn't a vip", user.Username)
-					}
-
-					sendMessage(s, c, p, channelID, userMention)
-					(*current)[i].AlreadyReleased = true
-					break
+				myNots.VIP = true
+				if !myNots.VIP {
+					s.ChannelMessageSend(channelID,
+						fmt.Sprintf("Vejo que você possui interesse em receber notificações "+
+							"via DM mas isto é **exclusivo** para usuários **VIP** no Discord.\n"+
+							"Leia o canal #regras ou acesse: %s para adquirir seu **VIP!**",
+							configs.PunchEndpoint))
+					return false, fmt.Errorf("%s Isn't a vip", user.Username)
 				}
+
+				sendMessage(s, c, p, channelID, userMention)
+				(*current)[i].AlreadyReleased = true
+				(*prev)[j].ExtraInfos = c.ExtraInfos
+				break
 			}
-		} else {
-			log.Warnf("A previosly released project %s[%s] was already released.",
-				c.Project, c.HashID)
-			log.Warn("Ignoring...")
-			break
 		}
 	}
 
