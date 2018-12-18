@@ -17,12 +17,13 @@ func Notify(s *discordgo.Session, m *discordgo.MessageCreate, args []string) {
 	notifyUser := models.GetNotifyUser()
 	notifyRedis := &models.Notify{}
 
-	redisGet, err := redis.Get(channel).Result()
-	if err != nil {
-		log.Errorln("Redis GET", err)
-	}
-
 	if len(args) == 0 || args[0] == "" {
+
+		redisGet, err := redis.Get(channel).Result()
+
+		if err != nil {
+			log.Errorln("Redis GET", err)
+		}
 
 		if len(redisGet) > 0 {
 			err = json.Unmarshal([]byte(redisGet), notifyRedis)
@@ -36,12 +37,10 @@ func Notify(s *discordgo.Session, m *discordgo.MessageCreate, args []string) {
 
 		msg := "Não há nada para ser listado."
 
-		for key := range notifyUser {
-			if nUser := notifyUser[key].Projects; nUser != nil {
-				msg = "Sua lista de animes a serem notificados:\n"
-				for _, prj := range *nUser {
-					msg += fmt.Sprintf("**%s** - %s\n", prj.IDProject, prj.Project)
-				}
+		if nUser := notifyUser[channel].Projects; nUser != nil {
+			msg = "Sua lista de animes a serem notificados:\n"
+			for _, prj := range *nUser {
+				msg += fmt.Sprintf("**%s** - %s\n", prj.IDProject, prj.Project)
 			}
 		}
 
