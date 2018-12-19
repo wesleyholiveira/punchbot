@@ -195,7 +195,6 @@ func notifyUser(s *discordgo.Session, current *[]models.Project, myNots *models.
 				user, _ := s.User(myNots.UserID)
 				log.Infof("PROJECT MATCHED! [USER] (%s) -> [%s]", user.Username, p.Project)
 
-				myNots.VIP = true
 				if !myNots.VIP {
 					s.ChannelMessageSend(channelID,
 						fmt.Sprintf("Vejo que você possui interesse em receber notificações "+
