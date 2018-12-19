@@ -83,23 +83,26 @@ func Transverse(n *html.Node, project *models.Project) {
 }
 
 func JsonUpdateToStruct(body io.Reader, projects *[]models.Project) error {
-	r, _ := ioutil.ReadAll(body)
-	re := regexp.MustCompile(`(\[.+\];)`)
-	response := re.Find(r)
-
-	re = regexp.MustCompile(`\\\/`)
-	response = re.ReplaceAll(response, []byte(`/`))
-	response = response[:len(response)-1]
-
-	err := json.Unmarshal(response, projects)
+	r, err := ioutil.ReadAll(body)
 
 	if err == nil {
-		for i, project := range *projects {
-			hash, _ := structhash.Hash(project.Project+project.Number, 0)
-			(*projects)[i].HashID = hash
-			(*projects)[i].AlreadyReleased = false
+		re := regexp.MustCompile(`(\[.+\];)`)
+		response := re.Find(r)
+
+		re = regexp.MustCompile(`\\\/`)
+		response = re.ReplaceAll(response, []byte(`/`))
+		response = response[:len(response)-1]
+
+		err = json.Unmarshal(response, projects)
+
+		if err == nil {
+			for i, project := range *projects {
+				hash, _ := structhash.Hash(project.Project+project.Number, 0)
+				(*projects)[i].HashID = hash
+				(*projects)[i].AlreadyReleased = false
+			}
+			return nil
 		}
-		return nil
 	}
 
 	return err
