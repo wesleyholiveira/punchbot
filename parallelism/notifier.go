@@ -22,12 +22,13 @@ import (
 	t "github.com/wesleyholiveira/punchbot/services/twitter"
 )
 
+var alreadyVIP map[string]bool
 var msgID map[string]string
-
 var channels map[string]string
 var mirrors map[string]string
 
 func init() {
+	alreadyVIP = make(map[string]bool)
 	msgID = make(map[string]string)
 	mirrors = make(map[string]string)
 	channels = helpers.ParseChannels(configs.NotificationChannelsID)
@@ -193,14 +194,17 @@ func notifyUser(s *discordgo.Session, current *[]models.Project, myNots *models.
 		for j, p := range *prev {
 			if c.IDProject == p.IDProject {
 				user, _ := s.User(myNots.UserID)
-				log.Infof("PROJECT MATCHED! [USER] (%s) -> [%s]", user.Username, p.Project)
+				log.Infof("PROJECT MATCHED! (%s) -> [%s]", user.Username, p.Project)
 
 				if !myNots.VIP {
-					s.ChannelMessageSend(channelID,
-						fmt.Sprintf("Vejo que você possui interesse em receber notificações "+
-							"via DM mas isto é **exclusivo** para usuários **VIP** no Discord.\n"+
-							"Leia o canal #regras ou acesse: %s para adquirir seu **VIP!**",
-							configs.PunchEndpoint))
+					if !alreadyVIP[channelID] {
+						s.ChannelMessageSend(channelID,
+							fmt.Sprintf("Vejo que você possui interesse em receber notificações "+
+								"via DM mas isto é **exclusivo** para usuários **VIP** no Discord.\n"+
+								"Leia o canal #regras ou acesse: %s para adquirir seu **VIP!**",
+								configs.PunchEndpoint))
+						alreadyVIP[channelID] = true
+					}
 					return false, fmt.Errorf("%s Isn't a vip", user.Username)
 				}
 

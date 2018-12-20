@@ -37,7 +37,8 @@ func Notify(s *discordgo.Session, m *discordgo.MessageCreate, args []string) {
 
 		msg := "Não há nada para ser listado."
 
-		if nUser := notifyUser[channel].Projects; nUser != nil {
+		if user := notifyUser[channel]; user != nil {
+			nUser := user.Projects
 			msg = "Sua lista de animes a serem notificados:\n"
 			for _, prj := range *nUser {
 				msg += fmt.Sprintf("**%s** - %s\n", prj.IDProject, prj.Project)
