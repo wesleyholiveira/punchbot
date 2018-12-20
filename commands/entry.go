@@ -41,7 +41,7 @@ func Entry(s *discordgo.Session, m *discordgo.MessageCreate) {
 			if guild == nil {
 				cmds[cmd](s, m, args)
 			} else if isException(cmd) &&
-				strings.Contains(m.ChannelID, configs.CommandChannelsID) {
+				strings.Contains(configs.CommandChannelsID, m.ChannelID) {
 				cmds[cmd](s, m, args)
 			}
 
