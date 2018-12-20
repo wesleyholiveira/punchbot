@@ -32,8 +32,9 @@ func List(s *discordgo.Session, m *discordgo.MessageCreate, args []string) {
 	if len(args) > 0 && args[0] != "" {
 		list = AnimeList(projects, func(project *models.Project) bool {
 			for _, arg := range args {
-				contains := strings.Contains(strings.ToLower(project.Project), strings.ToLower(arg))
-				if contains || arg == project.Day {
+				lArg := strings.ToLower(arg)
+				contains := strings.Contains(strings.ToLower(project.Project), lArg)
+				if contains || lArg == strings.ToLower(project.Day) {
 					return true
 				}
 			}
