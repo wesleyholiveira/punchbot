@@ -23,32 +23,30 @@ func Notify(s *discordgo.Session, m *discordgo.MessageCreate, args []string) {
 	notifyRedis := &models.Notify{}
 
 	user := m.Author
-	if n, ok := notifyUser[channel]; !ok {
-		for key, _ := range parallelism.Channels {
-			ch, err := s.Channel(key)
+	for key := range parallelism.Channels {
+		ch, err := s.Channel(key)
+		if err != nil {
+			log.Error(err)
+		} else {
+			guild, err := s.Guild(ch.GuildID)
 			if err != nil {
 				log.Error(err)
 			} else {
-				guild, err := s.Guild(ch.GuildID)
-				if err != nil {
-					log.Error(err)
-				} else {
-					if ch != nil {
-						if guild != nil {
-							if t == discordgo.ChannelTypeDM {
-								for _, gm := range guild.Members {
-									if gm.User.ID == user.ID {
-										log.Infof("User found %s in punch's server", user.Username)
-										for _, userRoleID := range gm.Roles {
-											for _, role := range guild.Roles {
-												if strings.ToUpper(role.Name) == "VIP" && role.ID == userRoleID {
-													log.Infof("The user %s is a vip!!", gm.User.Username)
-													vip = true
-												}
+				if ch != nil {
+					if guild != nil {
+						if t == discordgo.ChannelTypeDM {
+							for _, gm := range guild.Members {
+								if gm.User.ID == user.ID {
+									log.Infof("User found %s in punch's server", user.Username)
+									for _, userRoleID := range gm.Roles {
+										for _, role := range guild.Roles {
+											if strings.ToUpper(role.Name) == "VIP" && role.ID == userRoleID {
+												log.Infof("The user %s is a vip!!", gm.User.Username)
+												vip = true
 											}
 										}
-										break
 									}
+									break
 								}
 							}
 						}
@@ -56,8 +54,10 @@ func Notify(s *discordgo.Session, m *discordgo.MessageCreate, args []string) {
 				}
 			}
 		}
-	} else {
-		vip = n.VIP
+	}
+
+	if n, ok := notifyUser[channel]; ok {
+		n.VIP = vip
 	}
 
 	if vip {

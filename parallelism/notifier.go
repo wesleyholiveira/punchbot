@@ -110,7 +110,7 @@ func notify(s *discordgo.Session, t *twitter.Client, f *models.Facebook, current
 		diff = 1
 	}
 
-	log.Infof("Diff: %d, PREV PROJECTS: %d, CURRENT PROJECTS: %d", diff, pLen, cLen)
+	log.Infof("Diff: %d, PREV PROJECTS: %d, CURRENT PROJECTS: %d (GLOBAL)", diff, pLen, cLen)
 
 	currentSlice := (*current)[0:diff]
 
@@ -158,7 +158,7 @@ func notifyUser(s *discordgo.Session, current *[]models.Project, myNots *models.
 		diff = 1
 	}
 
-	log.Infof("Diff: %d, PREV PROJECTS: %d, CURRENT PROJECTS: %d", diff, pLen, cLen)
+	log.Infof("Diff: %d, PREV PROJECTS: %d, CURRENT PROJECTS: %d (USER)", diff, pLen, cLen)
 	currentSlice := (*current)[0:diff]
 
 	for i, c := range currentSlice {
