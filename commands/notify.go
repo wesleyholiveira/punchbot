@@ -39,12 +39,12 @@ func Notify(s *discordgo.Session, m *discordgo.MessageCreate, args []string) {
 										if role.Name == "VIP" && role.ID == userRoleID {
 											log.Infof("The user %s is a vip!!", m.User.Username)
 											vip = true
+											break
 										} else {
 											vip = false
 										}
 									}
 								}
-								break
 							}
 						}
 					}
