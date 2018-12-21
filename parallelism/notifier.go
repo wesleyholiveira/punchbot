@@ -24,14 +24,14 @@ import (
 
 var alreadyVIP map[string]bool
 var msgID map[string]string
-var channels map[string]string
+var Channels map[string]string
 var mirrors map[string]string
 
 func init() {
 	alreadyVIP = make(map[string]bool)
 	msgID = make(map[string]string)
 	mirrors = make(map[string]string)
-	channels = helpers.ParseChannels(configs.NotificationChannelsID)
+	Channels = helpers.ParseChannels(configs.NotificationChannelsID)
 
 	mirrors["stream"] = configs.PunchEndpoint + "/download-stream/"
 	mirrors["zippyshare"] = configs.PunchEndpoint + "/download-zippyshare/"
@@ -41,20 +41,18 @@ func init() {
 func Notifier(s *discordgo.Session, projects chan *[]models.Project) {
 	block := false
 	for p := range projects {
-		var guildID string
 		twitter := t.GetClient()
 		face := models.GetFacebook()
 		prev := models.GetProjects()
 
 		log.Infof("Notifier is on")
 
-		for key, tag := range channels {
+		for key, tag := range Channels {
 
 			ch, _ := s.Channel(key)
 
 			if ch != nil {
 				guild, _ := s.Guild(ch.GuildID)
-				guildID = guild.ID
 
 				userMention := ""
 				if tag != "" {
@@ -89,39 +87,12 @@ func Notifier(s *discordgo.Session, projects chan *[]models.Project) {
 
 		myNotifications := models.GetNotifyUser()
 		if myNotifications != nil {
-			guild, _ := s.Guild(guildID)
 			userMention := ""
 			for key := range myNotifications {
-				ch, _ := s.Channel(key)
 				myNots := myNotifications[key]
 
-				if ch != nil {
-					if guild != nil {
-						if ch.Type == discordgo.ChannelTypeDM {
-							if myNots != nil {
-								for _, m := range guild.Members {
-									if myNots.UserID == m.User.ID {
-										log.Info("User found in punch's server")
-										for _, userRoleID := range m.Roles {
-											for _, role := range guild.Roles {
-												if role.Name == "VIP" && role.ID == userRoleID {
-													log.Infof("The user %s is a vip!!", m.User.Username)
-													log.Info("Sending notifications (if exists)")
-
-													myNots.VIP = true
-												}
-											}
-										}
-
-										if _, err := notifyUser(s, p, myNots, key, userMention); err != nil {
-											log.Error(err)
-										}
-										break
-									}
-								}
-							}
-						}
-					}
+				if _, err := notifyUser(s, p, myNots, key, userMention); err != nil {
+					log.Error(err)
 				}
 			}
 		}
@@ -197,14 +168,6 @@ func notifyUser(s *discordgo.Session, current *[]models.Project, myNots *models.
 				log.Infof("PROJECT MATCHED! (%s) -> [%s]", user.Username, p.Project)
 
 				if !myNots.VIP {
-					if !alreadyVIP[channelID] {
-						s.ChannelMessageSend(channelID,
-							fmt.Sprintf("Vejo que você possui interesse em receber notificações "+
-								"via DM mas isto é **exclusivo** para usuários **VIP** no Discord.\n"+
-								"Leia o canal #regras ou acesse: %s para adquirir seu **VIP!**",
-								configs.PunchEndpoint))
-						alreadyVIP[channelID] = true
-					}
 					return false, fmt.Errorf("%s Isn't a vip", user.Username)
 				}
 
