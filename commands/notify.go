@@ -23,26 +23,31 @@ func Notify(s *discordgo.Session, m *discordgo.MessageCreate, args []string) {
 	notifyRedis := &models.Notify{}
 
 	user := m.Author
-	if _, ok := notifyUser[channel]; !ok {
+	if n, ok := notifyUser[channel]; !ok {
 		for key, _ := range parallelism.Channels {
-			ch, _ := s.Channel(key)
-			guild, _ := s.Guild(ch.GuildID)
-
-			if ch != nil {
-				if guild != nil {
-					if t == discordgo.ChannelTypeDM {
-						for _, m := range guild.Members {
-							if m.User.ID == user.ID {
-								log.Infof("User found %s in punch's server", user.Username)
-								for _, userRoleID := range m.Roles {
-									for _, role := range guild.Roles {
-										if role.Name == "VIP" && role.ID == userRoleID {
-											log.Infof("The user %s is a vip!!", m.User.Username)
-											vip = true
-											break
-										} else {
-											vip = false
+			ch, err := s.Channel(key)
+			if err != nil {
+				log.Error(err)
+			} else {
+				guild, err := s.Guild(ch.GuildID)
+				if err != nil {
+					log.Error(err)
+				} else {
+					if ch != nil {
+						if guild != nil {
+							if t == discordgo.ChannelTypeDM {
+								for _, gm := range guild.Members {
+									if gm.User.ID == user.ID {
+										log.Infof("User found %s in punch's server", user.Username)
+										for _, userRoleID := range gm.Roles {
+											for _, role := range guild.Roles {
+												if role.Name == "VIP" && role.ID == userRoleID {
+													log.Infof("The user %s is a vip!!", gm.User.Username)
+													vip = true
+												}
+											}
 										}
+										break
 									}
 								}
 							}
@@ -51,6 +56,8 @@ func Notify(s *discordgo.Session, m *discordgo.MessageCreate, args []string) {
 				}
 			}
 		}
+	} else {
+		vip = n.VIP
 	}
 
 	if vip {
@@ -122,6 +129,11 @@ func Notify(s *discordgo.Session, m *discordgo.MessageCreate, args []string) {
 		}
 	} else {
 		log.Infof("The user %s isn't a vip!!", user.Username)
+
+		if _, ok := notifyUser[channel]; ok {
+			notifyUser[channel].VIP = false
+		}
+
 		s.ChannelMessageSend(channel,
 			fmt.Sprintf("Vejo que você possui interesse em receber notificações "+
 				"via DM mas isto é **exclusivo** para usuários **VIP** no Discord.\n"+
