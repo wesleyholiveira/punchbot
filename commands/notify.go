@@ -41,7 +41,7 @@ func Notify(s *discordgo.Session, m *discordgo.MessageCreate, args []string) {
 										log.Infof("User found %s in punch's server", user.Username)
 										for _, userRoleID := range gm.Roles {
 											for _, role := range guild.Roles {
-												if role.Name == "VIP" && role.ID == userRoleID {
+												if strings.ToUpper(role.Name) == "VIP" && role.ID == userRoleID {
 													log.Infof("The user %s is a vip!!", gm.User.Username)
 													vip = true
 												}
