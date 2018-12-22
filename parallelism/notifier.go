@@ -22,13 +22,11 @@ import (
 	t "github.com/wesleyholiveira/punchbot/services/twitter"
 )
 
-var alreadyVIP map[string]bool
 var msgID map[string]string
 var Channels map[string]string
 var mirrors map[string]string
 
 func init() {
-	alreadyVIP = make(map[string]bool)
 	msgID = make(map[string]string)
 	mirrors = make(map[string]string)
 	Channels = helpers.ParseChannels(configs.NotificationChannelsID)
@@ -79,7 +77,7 @@ func Notifier(s *discordgo.Session, projects chan *[]models.Project) {
 				}
 
 				log.Infof("Notifing for #%s channel", ch.Name)
-				go notify(s, twitter, face, p, prev, ch.ID, userMention, block)
+				notify(s, twitter, face, p, prev, ch.ID, userMention, block)
 			}
 
 			block = true
@@ -88,8 +86,7 @@ func Notifier(s *discordgo.Session, projects chan *[]models.Project) {
 		myNotifications := models.GetNotifyUser()
 		if myNotifications != nil {
 			userMention := ""
-			for key := range myNotifications {
-				myNots := myNotifications[key]
+			for key, myNots := range myNotifications {
 
 				if _, err := notifyUser(s, p, myNots, key, userMention); err != nil {
 					log.Error(err)
@@ -116,14 +113,11 @@ func notify(s *discordgo.Session, t *twitter.Client, f *models.Facebook, current
 
 	for i, c := range currentSlice {
 		if !c.AlreadyReleased {
-			pr := (*prev)[0]
 			for _, p := range *prev {
-				if c.IDProject == p.IDProject {
-					pr = p
-				} else {
+				if c.IDProject != p.IDProject {
 					log.Info("PROJECT MATCHED!")
 
-					sendMessage(s, c, pr, channelID, userMention)
+					sendMessage(s, c, p, channelID, userMention)
 
 					if !block {
 						sendMessageTwitter(t, &c, channelID)
