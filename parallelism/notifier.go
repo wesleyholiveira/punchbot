@@ -114,10 +114,11 @@ func notify(s *discordgo.Session, t *twitter.Client, f *models.Facebook, current
 	for i, c := range currentSlice {
 		if !c.AlreadyReleased {
 			for _, p := range *prev {
+				pr := p
 				if c.IDProject != p.IDProject {
 					log.Info("PROJECT MATCHED!")
 
-					sendMessage(s, c, p, channelID, userMention)
+					sendMessage(s, c, pr, channelID, userMention)
 
 					if !block {
 						sendMessageTwitter(t, &c, channelID)
