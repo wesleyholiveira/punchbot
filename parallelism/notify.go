@@ -19,8 +19,8 @@ func Notify(redis *redis.Client) {
 		log.Error(err)
 	}
 
-	for _, key := range redisKeys {
-		redisGet, err := redis.Get(key).Result()
+	for _, channel := range redisKeys {
+		redisGet, err := redis.Get(channel).Result()
 		if err != nil {
 			log.Errorln("Redis GET", err)
 		}
@@ -31,6 +31,6 @@ func Notify(redis *redis.Client) {
 			log.Errorln("Unmarshal", err)
 		}
 
-		notifyUser[key] = notifyRedis
+		notifyUser[channel] = notifyRedis
 	}
 }

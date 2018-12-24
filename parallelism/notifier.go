@@ -87,7 +87,6 @@ func Notifier(s *discordgo.Session, projects chan *[]models.Project) {
 		if myNotifications != nil {
 			userMention := ""
 			for key, myNots := range myNotifications {
-
 				if _, err := notifyUser(s, p, myNots, key, userMention); err != nil {
 					log.Error(err)
 				}
@@ -143,6 +142,7 @@ func notify(s *discordgo.Session, t *twitter.Client, f *models.Facebook, current
 }
 
 func notifyUser(s *discordgo.Session, current *[]models.Project, myNots *models.Notify, channelID, userMention string) (bool, error) {
+	red := redis.GetClient()
 	prev := myNots.Projects
 	punchReleases := models.GetProjects()
 	cLen := len(*current)
@@ -154,23 +154,39 @@ func notifyUser(s *discordgo.Session, current *[]models.Project, myNots *models.
 	}
 
 	log.Infof("Diff: %d, PREV PROJECTS: %d, CURRENT PROJECTS: %d (USER)", diff, pLen, cLen)
-	currentSlice := (*current)[0:diff]
+	currentSlice := (*current)[0]
 
-	for i, c := range currentSlice {
-		for j, p := range *prev {
-			if c.IDProject == p.IDProject {
-				user, _ := s.User(myNots.UserID)
-				log.Infof("PROJECT MATCHED! (%s) -> [%s]", user.Username, p.Project)
+	for i, p := range *prev {
+		if currentSlice.IDProject == p.IDProject && !p.AlreadyReleased {
+			user, _ := s.User(myNots.UserID)
+			log.Infof("PROJECT MATCHED! (%s) -> [%s]", user.Username, p.Project)
 
-				if !myNots.VIP {
-					return false, fmt.Errorf("%s Isn't a vip", user.Username)
-				}
-
-				sendMessage(s, c, p, channelID, userMention)
-				(*current)[i].AlreadyReleased = true
-				(*prev)[j].ExtraInfos = c.ExtraInfos
-				break
+			if !myNots.VIP {
+				return false, fmt.Errorf("%s Isn't a vip", user.Username)
 			}
+
+			sendMessage(s, currentSlice, p, channelID, userMention)
+			(*current)[0].AlreadyReleased = true
+			(*prev)[i].AlreadyReleased = true
+			(*prev)[i].ExtraInfos = currentSlice.ExtraInfos
+
+			notify := &models.Notify{UserID: myNots.UserID, Projects: myNots.Projects}
+			notify.VIP = myNots.VIP
+			notifyMarshal, err := json.Marshal(notify)
+
+			if err != nil {
+				return false, fmt.Errorf("NotifierUser Redis Marshal %s", err)
+			}
+
+			notifyMarshalStr := string(notifyMarshal)
+			err = red.Set(channelID, notifyMarshalStr, 0).Err()
+
+			if err != nil {
+				return false, fmt.Errorf("NotifierUser Redis Set %s", err)
+			}
+
+			red.Save().Err()
+			break
 		}
 	}
 
@@ -355,7 +371,7 @@ func sendMessage(s *discordgo.Session, c models.Project, p models.Project, chann
 		ch := channelID + c.ID
 		if msgID[ch] != "" {
 			log.Infof("ExtraInfos: current: %d, prev: %d", lenCurrent, lenPrev)
-			if currentHash != prevHash {
+			if currentHash != prevHash && lenCurrent > 0 {
 				log.Warn("Editing the message embed")
 				msg, err = s.ChannelMessageEditEmbed(channelID, msgID[ch], embed)
 
