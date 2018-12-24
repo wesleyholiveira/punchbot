@@ -30,7 +30,7 @@ func Notify(s *discordgo.Session, m *discordgo.MessageCreate, args []string) {
 		} else {
 			guild, err := s.Guild(ch.GuildID)
 			if err != nil {
-				log.Error(err)
+				log.Error("Notify command: ", err)
 			} else {
 				if ch != nil {
 					if guild != nil {
