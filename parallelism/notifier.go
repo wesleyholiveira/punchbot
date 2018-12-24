@@ -167,8 +167,11 @@ func notifyUser(s *discordgo.Session, current *[]models.Project, myNots *models.
 
 			sendMessage(s, currentSlice, p, channelID, userMention)
 			(*current)[0].AlreadyReleased = true
-			(*prev)[i].AlreadyReleased = true
 			(*prev)[i].ExtraInfos = currentSlice.ExtraInfos
+
+			if len((*prev)[i].ExtraInfos) == 4 {
+				(*prev)[i].AlreadyReleased = true
+			}
 
 			notify := &models.Notify{UserID: myNots.UserID, Projects: myNots.Projects}
 			notify.VIP = myNots.VIP
