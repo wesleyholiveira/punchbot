@@ -115,7 +115,6 @@ func notify(s *discordgo.Session, t *twitter.Client, f *models.Facebook, current
 			for _, p := range *prev {
 				if c.IDProject != p.IDProject {
 					log.Info("PROJECT MATCHED!")
-					fmt.Println(len(c.ExtraInfos), len(p.ExtraInfos))
 
 					sendMessage(s, c, p, channelID, userMention)
 
