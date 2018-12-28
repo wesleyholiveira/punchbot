@@ -25,6 +25,7 @@ services:
    - REDIS_PORT=${REDIS_PORT}
    - REDIS_PASSWORD=${REDIS_PASSWORD}
    - PUNCHBOT_ALLOWEDUSERS_HYPED=${PUNCHBOT_ALLOWEDUSERS_HYPED}
+  restart: always
 
  redis:
   image: redis:latest
