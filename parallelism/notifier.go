@@ -7,8 +7,6 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/cnf/structhash"
-
 	"github.com/wesleyholiveira/punchbot/redis"
 
 	"github.com/bwmarrin/discordgo"
@@ -77,6 +75,7 @@ func Notifier(s *discordgo.Session, projects chan *[]models.Project) {
 				}
 
 				log.Infof("Notifing for #%s channel", ch.Name)
+				fmt.Println(len((*prev)[0].ExtraInfos))
 				notify(s, twitter, face, p, prev, ch.ID, userMention, block)
 			}
 
@@ -109,11 +108,13 @@ func notify(s *discordgo.Session, t *twitter.Client, f *models.Facebook, current
 	log.Infof("Diff: %d, PREV PROJECTS: %d, CURRENT PROJECTS: %d (GLOBAL)", diff, pLen, cLen)
 
 	currentSlice := (*current)[0:diff]
+	prevSlice := (*prev)[1:]
 
 	for i, c := range currentSlice {
 		if !c.AlreadyReleased {
-			for _, p := range *prev {
+			for j, p := range prevSlice {
 				if c.IDProject != p.IDProject {
+					fmt.Println(len(p.ExtraInfos), j)
 					log.Info("PROJECT MATCHED!")
 
 					sendMessage(s, c, p, channelID, userMention)
@@ -309,9 +310,6 @@ func getImage(c models.Project) (*http.Response, string, error) {
 }
 
 func sendMessage(s *discordgo.Session, c models.Project, p models.Project, channelID, userMention string) (bool, error) {
-	currentHash, _ := structhash.Hash(c.ExtraInfos, 0)
-	prevHash, _ := structhash.Hash(p.ExtraInfos, 0)
-
 	r, _, err := getImage(c)
 	field := &discordgo.MessageEmbedField{
 		Name:  fmt.Sprintf("**Novo episódio**"),
@@ -373,7 +371,7 @@ func sendMessage(s *discordgo.Session, c models.Project, p models.Project, chann
 		ch := channelID + c.ID
 		if msgID[ch] != "" {
 			log.Infof("ExtraInfos: current: %d, prev: %d", lenCurrent, lenPrev)
-			if currentHash != prevHash && lenCurrent > 0 {
+			if lenCurrent > 0 && lenCurrent > lenPrev {
 				log.Warn("Editing the message embed")
 				msg, err = s.ChannelMessageEditEmbed(channelID, msgID[ch], embed)
 
