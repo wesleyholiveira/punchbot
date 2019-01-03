@@ -75,7 +75,6 @@ func Notifier(s *discordgo.Session, projects chan *[]models.Project) {
 				}
 
 				log.Infof("Notifing for #%s channel", ch.Name)
-				fmt.Println(len((*prev)[0].ExtraInfos))
 				notify(s, twitter, face, p, prev, ch.ID, userMention, block)
 			}
 
@@ -108,13 +107,12 @@ func notify(s *discordgo.Session, t *twitter.Client, f *models.Facebook, current
 	log.Infof("Diff: %d, PREV PROJECTS: %d, CURRENT PROJECTS: %d (GLOBAL)", diff, pLen, cLen)
 
 	currentSlice := (*current)[0:diff]
-	prevSlice := (*prev)[1:]
+	prevSlice := (*current)[1:diff]
 
 	for i, c := range currentSlice {
 		if !c.AlreadyReleased {
-			for j, p := range prevSlice {
+			for _, p := range prevSlice {
 				if c.IDProject != p.IDProject {
-					fmt.Println(len(p.ExtraInfos), j)
 					log.Info("PROJECT MATCHED!")
 
 					sendMessage(s, c, p, channelID, userMention)
