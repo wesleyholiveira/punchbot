@@ -107,11 +107,10 @@ func notify(s *discordgo.Session, t *twitter.Client, f *models.Facebook, current
 	log.Infof("Diff: %d, PREV PROJECTS: %d, CURRENT PROJECTS: %d (GLOBAL)", diff, pLen, cLen)
 
 	currentSlice := (*current)[0:diff]
-	prevSlice := (*current)[1:diff]
 
 	for i, c := range currentSlice {
 		if !c.AlreadyReleased {
-			for _, p := range prevSlice {
+			for _, p := range *prev {
 				if c.IDProject != p.IDProject {
 					log.Info("PROJECT MATCHED!")
 
