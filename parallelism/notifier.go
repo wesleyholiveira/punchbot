@@ -110,21 +110,19 @@ func notify(s *discordgo.Session, t *twitter.Client, f *models.Facebook, current
 
 	for i, c := range currentSlice {
 		if !c.AlreadyReleased {
-			for _, p := range *prev {
-				if c.IDProject != p.IDProject {
-					log.Info("PROJECT MATCHED!")
+			log.Info("PROJECT MATCHED!")
 
-					sendMessage(s, c, p, channelID, userMention)
+			sendMessage(s, c, (*prev)[0], channelID, userMention)
 
-					if !block {
-						sendMessageTwitter(t, &c, channelID)
-						sendMessageFacebook(f, &c, channelID)
-					}
-
-					(*current)[i].AlreadyReleased = true
-					break
-				}
+			if !block {
+				sendMessageTwitter(t, &c, channelID)
+				sendMessageFacebook(f, &c, channelID)
 			}
+
+			if len(c.ExtraInfos) == 4 {
+				(*current)[i].AlreadyReleased = true
+			}
+			break
 		} else {
 			log.Warnf("A previosly released project %s[%s] was already released.",
 				c.Project, c.HashID)
@@ -368,7 +366,7 @@ func sendMessage(s *discordgo.Session, c models.Project, p models.Project, chann
 		ch := channelID + c.ID
 		if msgID[ch] != "" {
 			log.Infof("ExtraInfos: current: %d, prev: %d", lenCurrent, lenPrev)
-			if lenCurrent > 0 && lenCurrent > lenPrev {
+			if lenCurrent > 0 && lenCurrent > lenPrev && lenPrev != 4 {
 				log.Warn("Editing the message embed")
 				msg, err = s.ChannelMessageEditEmbed(channelID, msgID[ch], embed)
 
