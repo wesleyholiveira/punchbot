@@ -3,7 +3,6 @@ package parallelism
 import (
 	"encoding/json"
 	"io/ioutil"
-	"net/http"
 	"net/url"
 
 	"github.com/wesleyholiveira/punchbot/helpers"
@@ -55,7 +54,7 @@ func GetExtraInfos(projects *[]models.Project) []models.Project {
 				values.Set("id", p.ID)
 				values.Set("projeto", p.IDProject)
 
-				r, err := http.PostForm(link, values)
+				r, err := punch.HttpClient.PostForm(link, values)
 				if err != nil {
 					log.Error("Request error:", err)
 				} else {
@@ -66,8 +65,6 @@ func GetExtraInfos(projects *[]models.Project) []models.Project {
 					extraInfos := &models.Infos{}
 					err = json.Unmarshal(infos, extraInfos)
 					if err != nil {
-						log.Warn(descEndpoint)
-						log.Error(string(infos))
 						log.Error("Parse error: ", err)
 					} else {
 						for _, itens := range extraInfos.Infos {
