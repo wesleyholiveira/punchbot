@@ -3,28 +3,26 @@ package punch
 import (
 	"errors"
 	"net/http"
-	"net/url"
 
 	log "github.com/sirupsen/logrus"
-	"github.com/wesleyholiveira/punchbot/configs"
 	"github.com/wesleyholiveira/punchbot/helpers"
 	"github.com/wesleyholiveira/punchbot/models"
 	"golang.org/x/net/html"
 )
 
-var client *http.Client
+// var client *http.Client
 
-func init() {
-	url, _ := url.Parse(configs.ProxyURL)
-	client = &http.Client{
-		Transport: &http.Transport{
-			Proxy: http.ProxyURL(url),
-		},
-	}
-}
+// func init() {
+// 	url, _ := url.Parse(configs.ProxyURL)
+// 	client = &http.Client{
+// 		Transport: &http.Transport{
+// 			Proxy: http.ProxyURL(url),
+// 		},
+// 	}
+// }
 
 func Get(endpoint string) (*http.Response, error) {
-	resp, err := client.Get(endpoint)
+	resp, err := http.Get(endpoint)
 
 	if err != nil {
 		log.Error(err)
