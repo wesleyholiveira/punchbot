@@ -66,6 +66,8 @@ func GetExtraInfos(projects *[]models.Project) []models.Project {
 					extraInfos := &models.Infos{}
 					err = json.Unmarshal(infos, extraInfos)
 					if err != nil {
+						log.Warn(descEndpoint)
+						log.Error(string(infos))
 						log.Error("Parse error: ", err)
 					} else {
 						for _, itens := range extraInfos.Infos {

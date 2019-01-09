@@ -24,10 +24,7 @@ func init() {
 }
 
 func Get(endpoint string) (*http.Response, error) {
-	req, _ := http.NewRequest("GET", endpoint, nil)
-	req.Header.Set("Content-Type", "application/json")
-
-	resp, err := client.Do(req)
+	resp, err := client.Get(endpoint)
 
 	if err != nil {
 		log.Error(err)
