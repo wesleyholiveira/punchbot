@@ -23,6 +23,7 @@ func init() {
 	cmds["hyped"] = Hyped
 	cmds["notify"] = Notify
 	cmds["stopnotify"] = StopNotify
+	cmds["sinopse"] = Sinopse
 	cmds["auth"] = Auth
 	cmds["help"] = Help
 }
