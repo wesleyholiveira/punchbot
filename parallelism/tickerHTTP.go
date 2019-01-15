@@ -33,11 +33,13 @@ func TickerHTTP(ticker *time.Ticker, project chan *[]models.Project) {
 		current, err := punch.GetProjects(endpoint, models.Home)
 
 		if err == nil {
-			for i, p := range (*prev)[:1] {
-				c := current[i]
-				if p.ID == c.ID {
-					if len(p.ExtraInfos) == 4 {
-						current[i].ExtraInfos = p.ExtraInfos
+			if len(*prev) > 1 {
+				for i, p := range (*prev)[:1] {
+					c := current[i]
+					if p.ID == c.ID {
+						if len(p.ExtraInfos) == 4 {
+							current[i].ExtraInfos = p.ExtraInfos
+						}
 					}
 				}
 			}
@@ -45,7 +47,8 @@ func TickerHTTP(ticker *time.Ticker, project chan *[]models.Project) {
 			if len(current[0].ExtraInfos) == 4 {
 				changeAllAlreadyRelased(&current, prev)
 			} else {
-				current = GetExtraInfos(&current)
+				nCurrent := current[:2]
+				current = GetExtraInfos(&nCurrent)
 				for i, p := range (*prev)[:1] {
 					c := current[i]
 					if p.ID == c.ID {

@@ -8,11 +8,34 @@ import (
 	log "github.com/sirupsen/logrus"
 	"github.com/wesleyholiveira/punchbot/configs"
 	"github.com/wesleyholiveira/punchbot/models"
+	"github.com/wesleyholiveira/punchbot/parallelism"
 )
 
+var sinCache map[string]models.Project
+
+func init() {
+	sinCache = make(map[string]models.Project)
+}
+
 func DescriptionList(projects *[]models.Project, callback sCallback) *discordgo.MessageEmbed {
+	var extraInfosProject models.Project
 	for _, project := range *projects {
 		if callback(&project) {
+			if c, ok := sinCache[project.ID]; !ok {
+				prj := make([]models.Project, 1)
+				prj[0] = project
+				extraInfosProject = parallelism.GetExtraInfos(&prj)[0]
+				sinCache[project.ID] = extraInfosProject
+			} else {
+				extraInfosProject = c
+			}
+
+			for _, p := range *projects {
+				if p.ID == project.ID {
+					project.Description = extraInfosProject.Description
+					project.ExtraInfos = extraInfosProject.ExtraInfos
+				}
+			}
 			return descriptionFormat(project.Project, project.Description, project.Link)
 		}
 	}
