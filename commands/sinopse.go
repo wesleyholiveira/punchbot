@@ -21,11 +21,12 @@ func DescriptionList(projects *[]models.Project, callback sCallback) *discordgo.
 	var extraInfosProject models.Project
 	for _, project := range *projects {
 		if callback(&project) {
-			if c, ok := sinCache[project.ID]; !ok {
+			if c, ok := sinCache[project.IDProject]; !ok {
+				project.AlreadyReleased = false
 				prj := make([]models.Project, 1)
 				prj[0] = project
 				extraInfosProject = parallelism.GetExtraInfos(&prj)[0]
-				sinCache[project.ID] = extraInfosProject
+				sinCache[project.IDProject] = extraInfosProject
 			} else {
 				extraInfosProject = c
 			}
