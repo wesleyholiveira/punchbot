@@ -3,6 +3,7 @@ package parallelism
 import (
 	"encoding/json"
 	"fmt"
+	"html"
 	"math"
 	"net/http"
 	"strings"
@@ -107,22 +108,25 @@ func notify(s *discordgo.Session, t *twitter.Client, f *models.Facebook, current
 	log.Infof("Diff: %d, PREV PROJECTS: %d, CURRENT PROJECTS: %d (GLOBAL)", diff, pLen, cLen)
 
 	currentSlice := (*current)[0:diff]
+	prevSlice := (*prev)[1:]
 
 	for i, c := range currentSlice {
 		if !c.AlreadyReleased {
-			log.Info("PROJECT MATCHED!")
+			for _, p := range prevSlice {
+				if c.IDProject != p.IDProject {
+					log.Info("PROJECT MATCHED!")
 
-			sendMessage(s, c, (*prev)[0], channelID, userMention)
+					sendMessage(s, c, p, channelID, userMention)
 
-			if !block {
-				sendMessageTwitter(t, &c, channelID)
-				sendMessageFacebook(f, &c, channelID)
+					if !block {
+						sendMessageTwitter(t, &c, channelID)
+						sendMessageFacebook(f, &c, channelID)
+					}
+
+					(*current)[i].AlreadyReleased = true
+					break
+				}
 			}
-
-			if len(c.ExtraInfos) == 4 {
-				(*current)[i].AlreadyReleased = true
-			}
-			break
 		} else {
 			log.Warnf("A previosly released project %s[%s] was already released.",
 				c.Project, c.HashID)
@@ -340,7 +344,7 @@ func sendMessage(s *discordgo.Session, c models.Project, p models.Project, chann
 			Name:    "PUNCH! Fansubs",
 			IconURL: icon,
 		},
-		Title:       fmt.Sprintf("%s", c.Project),
+		Title:       fmt.Sprintf("%s", html.UnescapeString(c.Project)),
 		Description: fmt.Sprintf("%s", c.Description),
 		URL:         link,
 		Color:       65280,
@@ -366,7 +370,7 @@ func sendMessage(s *discordgo.Session, c models.Project, p models.Project, chann
 		ch := channelID + c.ID
 		if msgID[ch] != "" {
 			log.Infof("ExtraInfos: current: %d, prev: %d", lenCurrent, lenPrev)
-			if lenCurrent > 0 && lenCurrent > lenPrev && lenPrev != 4 {
+			if lenCurrent > 0 && lenCurrent >= lenPrev {
 				log.Warn("Editing the message embed")
 				msg, err = s.ChannelMessageEditEmbed(channelID, msgID[ch], embed)
 
