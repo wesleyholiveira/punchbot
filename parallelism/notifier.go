@@ -105,37 +105,41 @@ func notify(s *discordgo.Session, t *twitter.Client, f *models.Facebook, current
 		diff = 1
 	}
 
-	log.Infof("Diff: %d, PREV PROJECTS: %d, CURRENT PROJECTS: %d (GLOBAL)", diff, pLen, cLen)
+	if len(*current) > 0 {
+		log.Infof("Diff: %d, PREV PROJECTS: %d, CURRENT PROJECTS: %d (GLOBAL)", diff, pLen, cLen)
 
-	currentSlice := (*current)[0:diff]
-	prevSlice := (*prev)[1:]
+		currentSlice := (*current)[0:diff]
+		prevSlice := (*prev)[1:]
 
-	for i, c := range currentSlice {
-		if !c.AlreadyReleased {
-			for _, p := range prevSlice {
-				if c.IDProject != p.IDProject {
-					log.Info("PROJECT MATCHED!")
+		for i, c := range currentSlice {
+			if !c.AlreadyReleased {
+				for _, p := range prevSlice {
+					if c.IDProject != p.IDProject {
+						log.Info("PROJECT MATCHED!")
 
-					sendMessage(s, c, p, channelID, userMention)
+						sendMessage(s, c, p, channelID, userMention)
 
-					if !block {
-						sendMessageTwitter(t, &c, channelID)
-						sendMessageFacebook(f, &c, channelID)
+						if !block {
+							sendMessageTwitter(t, &c, channelID)
+							sendMessageFacebook(f, &c, channelID)
+						}
+
+						(*current)[i].AlreadyReleased = true
+						break
 					}
-
-					(*current)[i].AlreadyReleased = true
-					break
 				}
+			} else {
+				log.Warnf("A previosly released project %s[%s] was already released.",
+					c.Project, c.HashID)
+				log.Warn("Ignoring...")
+				break
 			}
-		} else {
-			log.Warnf("A previosly released project %s[%s] was already released.",
-				c.Project, c.HashID)
-			log.Warn("Ignoring...")
-			break
 		}
-	}
 
-	*punchReleases = *current
+		*punchReleases = *current
+	} else {
+		log.Warn("There is no current anime list")
+	}
 
 	return true, nil
 }
