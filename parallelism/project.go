@@ -25,6 +25,9 @@ func GetProjects() {
 			*projects = p
 			aprojects := (*projects)[:2]
 			*projects = GetExtraInfos(&aprojects)
+			for _, el := range p {
+				*projects = append(*projects, el)
+			}
 		}
 	}
 }

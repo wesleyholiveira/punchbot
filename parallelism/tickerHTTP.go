@@ -48,7 +48,15 @@ func TickerHTTP(ticker *time.Ticker, project chan *[]models.Project) {
 				changeAllAlreadyRelased(&current, prev)
 			} else {
 				nCurrent := current[:2]
-				current = GetExtraInfos(&nCurrent)
+				newCurrent := GetExtraInfos(&nCurrent)
+				for _, el := range newCurrent {
+					for _, c := range current {
+						if el.ID == c.ID {
+							c.ExtraInfos = el.ExtraInfos
+						}
+					}
+				}
+
 				for i, p := range (*prev)[:1] {
 					c := current[i]
 					if p.ID == c.ID {
